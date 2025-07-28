@@ -1,0 +1,7 @@
+www.mechardo3d.xyz {
+    reverse_proxy mechardo4d-mechardo4d-1:3000
+}
+
+mechardo3d.xyz {
+    reverse_proxy mechardo4d-mechardo4d-1:3000
+}
