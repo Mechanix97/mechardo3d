@@ -14,7 +14,7 @@ stop-image:
 	@docker stop mechardo3d
 	@docker remove mechardo3d
 
-run-prod:
+run-prod: build-image
 	@docker compose up -d
 
 stop-prod:
