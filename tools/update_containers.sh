@@ -50,7 +50,7 @@ if [ "$PREV_HASH" != "$CURRENT_HASH" ]; then
     log "Changes detected, update required"
     
     log "Building new image"
-    make build-image >> "$LOG_FILE" 2>&1
+    make build-image-prod >> "$LOG_FILE" 2>&1
     [ $? -eq 0 ] || {
         log "ERROR building image"
         exit 1
