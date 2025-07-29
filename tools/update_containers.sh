@@ -1,8 +1,7 @@
 #!/bin/bash
 
 REPO_DIR="/home/lucas/MECHARDO/mechardo3d"
-LOG_FILE="/home/lucas/update_containers.log"
-MAKEFILE="$REPO_DIR/Makefile"
+LOG_FILE="$REPO_DIR/log/update_containers.log"
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 
@@ -27,11 +26,6 @@ cd "$REPO_DIR" || {
     exit 1
 }
 
-[ ! -f "$MAKEFILE" ] && {
-    log "ERROR: file $MAKEFILE does not exist"
-    exit 1
-}
-
 PREV_HASH=$(git rev-parse HEAD 2>/dev/null) || {
     log "ERROR: cannot get initial commit hash"
     exit 1
@@ -39,7 +33,7 @@ PREV_HASH=$(git rev-parse HEAD 2>/dev/null) || {
 log "Hash before pull: $PREV_HASH"
 
 log "Doing git pull"
-git pull origin main >> "$LOG_FILE" 2>&1
+git pull origin master >> "$LOG_FILE" 2>&1
 [ $? -eq 0 ] || {
     log "ERROR during git pull"
     exit 1
