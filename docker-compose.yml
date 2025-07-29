@@ -1,0 +1,35 @@
+services:
+  mechardo3d:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - RUST_LOG=info
+    networks:
+      - proxy  
+
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - mechardo3d
+    networks:
+      - proxy 
+
+networks:
+  proxy: 
+
+volumes:
+  caddy_data:
+  caddy_config:
