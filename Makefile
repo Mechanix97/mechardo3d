@@ -11,7 +11,4 @@ run-image: build-image
 	@docker run -p 3000:3000 --name mechardo3d -d mechardo3d
 
 stop-image:
-	@docker ps -a -q --filter ancestor=mechardo3d > temp.txt && \
-	if exist temp.txt ( \
-		for /f %%i in (temp.txt) do docker rm -f %%i \
-	) && if exist temp.txt (del temp.txt)
+	@docker stop mechardo3d
