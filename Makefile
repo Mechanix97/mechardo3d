@@ -16,3 +16,9 @@ stop-image:
 
 run-prod:
 	@docker compose up -d
+
+stop-prod:
+	@docker stop mechardo3d-caddy-1
+	@docker remove mechardo3d-caddy-1
+	@docker stop mechardo3d-mechardo3d-1
+	@docker remove mechardo3d-mechardo3d-1
