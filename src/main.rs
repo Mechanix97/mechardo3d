@@ -31,7 +31,7 @@ async fn main() {
         .route("/blog", get(routes::blog::blog))
         .route("/blog/{id}", get(routes::blog::blog_post))
         .route("/contact", get(routes::contact::contact))
-        .route("/about", get(routes::about::about))
+        .route("/me", get(routes::about::about))
         .route("/static/{*path}", get(serve_static))
         .layer(Extension(tera));
 
