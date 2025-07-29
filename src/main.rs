@@ -36,7 +36,7 @@ async fn main() {
         .layer(Extension(tera));
 
     // Inicia el servidor
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     println!("Servidor corriendo en http://{}", addr);
     axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
         .await
