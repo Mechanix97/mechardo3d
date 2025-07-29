@@ -8,7 +8,7 @@ build-image:
 	@docker build -t mechardo3d .
 
 run-image: build-image
-	@docker run -p 3000:3000 -d mechardo3d
+	@docker run -p 3000:3000 mechardo3d -d
 
 stop-image:
 	@docker ps -a -q --filter ancestor=mechardo3d > temp.txt && \
