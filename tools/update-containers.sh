@@ -1,65 +1,85 @@
 #!/bin/bash
 
-LOG_FILE="../log/update_containers.log"  
+REPO_DIR="/home/lucas/MECHARDO/mechardo3d"
+LOG_FILE="/home/lucas/update_containers.log"
+MAKEFILE="$REPO_DIR/Makefile"
+
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE" 2>/dev/null
 }
-
-cd ..
 
 touch "$LOG_FILE" || {
     echo "ERROR: cannot create log file: $LOG_FILE" >&2
     exit 1
 }
 
-PREV_HASH=$(git rev-parse HEAD)
+log "Starting script execution"
+
+[ ! -d "$REPO_DIR" ] && {
+    log "ERROR: directory $REPO_DIR does not exist"
+    exit 1
+}
+
+cd "$REPO_DIR" || {
+    log "ERROR: cannot access directory $REPO_DIR"
+    exit 1
+}
+
+[ ! -f "$MAKEFILE" ] && {
+    log "ERROR: file $MAKEFILE does not exist"
+    exit 1
+}
+
+PREV_HASH=$(git rev-parse HEAD 2>/dev/null) || {
+    log "ERROR: cannot get initial commit hash"
+    exit 1
+}
 log "Hash before pull: $PREV_HASH"
 
-# Intentar hacer pull del repositorio
 log "Doing git pull"
-git pull origin main > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    log "Git pull exitoso"
-else
+git pull origin main >> "$LOG_FILE" 2>&1
+[ $? -eq 0 ] || {
     log "ERROR during git pull"
     exit 1
-fi
+}
+log "Git pull successful"
 
-CURRENT_HASH=$(git rev-parse HEAD)
+CURRENT_HASH=$(git rev-parse HEAD 2>/dev/null) || {
+    log "ERROR: cannot get final commit hash"
+    exit 1
+}
 log "Hash after pull: $CURRENT_HASH"
 
-
 if [ "$PREV_HASH" != "$CURRENT_HASH" ]; then
-    log "Changes detected, update requiered"
+    log "Changes detected, update required"
     
     log "Building new image"
     make build-image >> "$LOG_FILE" 2>&1
-    if [ $? -eq 0 ]; then
-        log "Image built succesfully"
-    else
+    [ $? -eq 0 ] || {
         log "ERROR building image"
         exit 1
-    fi
+    }
+    log "Image built successfully"
 
-    log "Stoping containers"
+    log "Stopping containers"
     make stop-pod >> "$LOG_FILE" 2>&1
-    if [ $? -eq 0 ]; then
-        log "Containers stopped succesfully"
-    else
+    [ $? -eq 0 ] || {
         log "ERROR stopping containers"
         exit 1
-    fi
+    }
+    log "Containers stopped successfully"
  
     log "Starting containers"
     make run-pod >> "$LOG_FILE" 2>&1
-    if [ $? -eq 0 ]; then
-        log "Containers started succesfully"
-    else
+    [ $? -eq 0 ] || {
         log "ERROR starting containers"
         exit 1
-    fi
-
+    }
+    log "Containers started successfully"
 else
     log "No changes detected, no update required"
 fi
+
+log "Script execution finished"
