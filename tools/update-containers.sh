@@ -1,6 +1,5 @@
 #!/bin/bash
 
-COMPOSE_FILE="$REPO_DIR/docker-compose.yml" 
 LOG_FILE="/var/log/update_containers.log"  
 
 log() {
@@ -8,6 +7,11 @@ log() {
 }
 
 cd ..
+
+touch "$LOG_FILE" || {
+    echo "ERROR: cannot create log file: $LOG_FILE" >&2
+    exit 1
+}
 
 PREV_HASH=$(git rev-parse HEAD)
 log "Hash before pull: $PREV_HASH"
