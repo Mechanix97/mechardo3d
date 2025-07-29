@@ -15,8 +15,8 @@ stop-image:
 	@docker remove mechardo3d
 
 build-image-prod:
-	@docker build -t mechardo3d-mechardo3d .
-
+	@docker build --no-cache -t mechardo3d-mechardo3d:latest .
+	
 run-prod:
 	@docker compose up -d
 
