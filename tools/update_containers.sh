@@ -58,7 +58,7 @@ if [ "$PREV_HASH" != "$CURRENT_HASH" ]; then
     log "Image built successfully"
 
     log "Stopping containers"
-    make stop-pod >> "$LOG_FILE" 2>&1
+    make stop-prod >> "$LOG_FILE" 2>&1
     [ $? -eq 0 ] || {
         log "ERROR stopping containers"
         exit 1
@@ -66,7 +66,7 @@ if [ "$PREV_HASH" != "$CURRENT_HASH" ]; then
     log "Containers stopped successfully"
  
     log "Starting containers"
-    make run-pod >> "$LOG_FILE" 2>&1
+    make run-prod >> "$LOG_FILE" 2>&1
     [ $? -eq 0 ] || {
         log "ERROR starting containers"
         exit 1
