@@ -1,0 +1,14 @@
+[
+    {
+        "id": "1",
+        "title": "Primera Publicación",
+        "content": "Este es el contenido de mi primera publicación en el blog.",
+        "date": "2025-07-29"
+    },
+    {
+        "id": "2",
+        "title": "Segunda Publicación",
+        "content": "Aquí va el contenido de la segunda publicación.",
+        "date": "2025-07-28"
+    }
+]
