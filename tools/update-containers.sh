@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOG_FILE="/var/log/update_containers.log"  
+LOG_FILE="../log/update_containers.log"  
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
