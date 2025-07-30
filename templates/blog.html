@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ titulo }}</h1>
+<h1>{{ title }}</h1>
 {% for post in posts %}
 <article>
     <h2><a href="/blog/{{ post.id }}">{{ post.title }}</a></h2>

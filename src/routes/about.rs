@@ -3,8 +3,8 @@ use tera::{Context, Tera};
 
 pub async fn about(Extension(tera): Extension<Tera>) -> Html<String> {
     let mut context = Context::new();
-    context.insert("titulo", "Acerca de Mí");
-    context.insert("mensaje", "Soy el creador de este sitio, ¡bienvenido!");
+    context.insert("title", "Acerca de Mí");
+    context.insert("content", "Soy el creador de este sitio, ¡bienvenido!");
 
     let rendered = tera
         .render("about.html", &context)

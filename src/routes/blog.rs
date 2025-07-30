@@ -5,7 +5,7 @@ use tera::{Context, Tera};
 pub async fn blog(Extension(tera): Extension<Tera>) -> Html<String> {
     let posts = get_posts().expect("Error loading post");
     let mut context = Context::new();
-    context.insert("titulo", "Blog");
+    context.insert("title", "Blog");
     context.insert("posts", &posts);
 
     let rendered = tera
@@ -19,7 +19,7 @@ pub async fn blog_post(Extension(tera): Extension<Tera>, Path(id): Path<String>)
     let post = posts.iter().find(|p| p.id == id).expect("Post not found");
 
     let mut context = Context::new();
-    context.insert("titulo", &post.title);
+    context.insert("title", &post.title);
     context.insert("post", &post);
 
     let rendered = tera

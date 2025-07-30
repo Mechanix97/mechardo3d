@@ -3,9 +3,9 @@ use tera::{Context, Tera};
 
 pub async fn index(Extension(tera): Extension<Tera>) -> Html<String> {
     let mut context = Context::new();
-    context.insert("titulo", "Mechardo Labs");
+    context.insert("title", "Inicio");
     context.insert(
-        "mensaje",
+        "content",
         "Explora nuestros productos, blog, contacto y más sobre mí.",
     );
 
