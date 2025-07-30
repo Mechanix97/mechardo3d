@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+    darkMode: 'class',
     content: [
-        "./templates/**/*.{html,tera}" // Scan Tera templates
+        './templates/**/*.html',
+        './static/js/**/*.js',
     ],
     theme: {
-        extend: {}
+        extend: {},
     },
-    plugins: []
+    plugins: [],
 };
