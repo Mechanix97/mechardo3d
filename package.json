@@ -1,0 +1,24 @@
+{
+  "name": "mechardo3d",
+  "version": "1.0.0",
+  "description": "Mechardo3d web application",
+  "scripts": {
+    "build:css": "tailwindcss -i static/tailwind.css -o static/style.css",
+    "watch:css": "tailwindcss -i static/tailwind.css -o static/style.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mechanix97/mechardo3d.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mechanix97/mechardo3d/issues"
+  },
+  "homepage": "https://github.com/Mechanix97/mechardo3d#readme",
+  "devDependencies": {
+    "tailwindcss": "^4.1.11"
+  }
+}
