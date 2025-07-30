@@ -6,17 +6,17 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
-<body>
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/products">Productos</a></li>
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="/contact">Contacto</a></li>
-            <li><a href="/about">Acerca de Mí</a></li>
+<body class="font-sans bg-gray-100 text-gray-900">
+    <nav class="bg-gray-800 p-4">
+        <ul class="flex justify-center gap-4">
+            <li><a href="/" class="text-white hover:underline font-bold">Inicio</a></li>
+            <li><a href="/products" class="text-white hover:underline font-bold">Productos</a></li>
+            <li><a href="/blog" class="text-white hover:underline font-bold">Blog</a></li>
+            <li><a href="/contact" class="text-white hover:underline font-bold">Contacto</a></li>
+            <li><a href="/about" class="text-white hover:underline font-bold">Acerca de Mí</a></li>
         </ul>
     </nav>
-    <main>
+    <main class="max-w-2xl mx-auto p-4">
         {% block content %}{% endblock %}
     </main>
 </body>

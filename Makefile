@@ -25,3 +25,9 @@ stop-prod:
 	@docker remove mechardo3d-caddy-1
 	@docker stop mechardo3d-mechardo3d-1
 	@docker remove mechardo3d-mechardo3d-1
+
+watch-css:
+	@npm run watch:css
+
+build-css:
+	@npm run build:css

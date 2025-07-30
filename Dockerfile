@@ -11,6 +11,16 @@ RUN cargo install cargo-chef
 
 WORKDIR /mechardo3d
 
+FROM node:20 AS tailwind
+
+WORKDIR /mechardo3d
+COPY package.json package-lock.json ./
+RUN npm install
+COPY static/tailwind.css ./static/
+COPY templates ./templates
+COPY tailwind.config.js ./
+RUN npx tailwindcss -i static/tailwind.css -o static/style.css
+
 FROM chef AS planner
 COPY src ./src
 COPY Cargo.toml Cargo.lock ./
@@ -26,6 +36,7 @@ COPY Cargo.toml Cargo.lock ./
 COPY data ./data
 COPY templates ./templates
 COPY static ./static
+COPY --from=tailwind /mechardo3d/static/style.css ./static/style.css
 RUN cargo build --release $BUILD_FLAGS
 
 FROM ubuntu:24.04
