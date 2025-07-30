@@ -8,6 +8,6 @@ pub async fn contact(Extension(tera): Extension<Tera>) -> Html<String> {
 
     let rendered = tera
         .render("contact.html", &context)
-        .expect("Error al renderizar la plantilla");
+        .expect("Error rendering template");
     Html(rendered)
 }

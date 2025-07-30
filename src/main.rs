@@ -15,16 +15,14 @@ async fn serve_static(axum::extract::Path(path): axum::extract::Path<String>) ->
             let mime_type = mime_guess::from_path(&path).first_or_octet_stream();
             ([(header::CONTENT_TYPE, mime_type.as_ref())], content).into_response()
         }
-        Err(_) => (StatusCode::NOT_FOUND, "Archivo no encontrado").into_response(),
+        Err(_) => (StatusCode::NOT_FOUND, "File not found").into_response(),
     }
 }
 
 #[tokio::main]
 async fn main() {
-    // Inicializa Tera con las plantillas
-    let tera = Tera::new("templates/**/*").expect("Error al inicializar Tera");
+    let tera = Tera::new("templates/**/*").expect("Error initializing Tera");
 
-    // Configura el router con todas las rutas
     let app = Router::new()
         .route("/", get(routes::home::index))
         .route("/products", get(routes::products::products))
@@ -35,10 +33,9 @@ async fn main() {
         .route("/static/{*path}", get(serve_static))
         .layer(Extension(tera));
 
-    // Inicia el servidor
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
-    println!("Servidor corriendo en http://{}", addr);
+    println!("Server running on http://127.0.0.1:3000/");
     axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
         .await
-        .expect("Error al iniciar el servidor");
+        .expect("Error starting server");
 }
