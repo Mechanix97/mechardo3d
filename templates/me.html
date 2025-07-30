@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-8 ">
+    <!-- Header -->
+    <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 mb-2">Lucas Rack</h1>
+        <h2 class="text-xl md:text-2xl text-gray-600">Software Engineer</h2>
+    </header>
+
+    <!-- Contact Section -->
+    <section id="contact" class="mb-12">
+        <h3 class="text-2xl font-bold text-blue-500 mb-4">Contact</h3>
+        <ul class="flex flex-wrap gap-4">
+            <li>
+                <a href="https://github.com/Mechanix97" target="_blank"
+                    class="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">Github</a>
+            </li>
+            <li>
+                <a href="mailto:your.email@example.com"
+                    class="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">Mail</a>
+            </li>
+            <li>
+                <a href="https://linkedin.com/in/your-profile" target="_blank"
+                    class="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">Linkedin</a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="mb-12">
+        <h3 class="text-2xl font-bold text-blue-500 mb-4">Education</h3>
+        <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+            <h4 class="text-xl font-semibold text-blue-600">Universidad de Buenos Aires</h4>
+            <p class="text-gray-700">Bachelor of Engineering in Electronics with specialization in Digital Systems and
+                Computers</p>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="mb-12">
+        <h3 class="text-2xl font-bold text-blue-500 mb-4">Experience</h3>
+        <div class="space-y-6">
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">System Engineer at LambdaClass</h4>
+                <p class="text-gray-700">Developed scalable systems and contributed to open-source projects using Rust
+                    and Python.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">Business Consultant at Qaracter</h4>
+                <p class="text-gray-700">Provided technical consulting for blockchain and financial systems.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">Software Engineer at Eldar</h4>
+                <p class="text-gray-700">Built web applications with modern JavaScript frameworks and APIs.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">Teaching Assistant at Universidad de Favaloro</h4>
+                <p class="text-gray-700">Assisted in teaching electronics and programming courses.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h3 class="text-2xl font-bold text-blue-500 mb-4">Projects</h3>
+        <div class="space-y-6">
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">MQTT Alarm System</h4>
+                <p class="text-gray-700">Designed an IoT-based alarm system using MQTT for real-time communication.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">Portal Game</h4>
+                <p class="text-gray-700">Developed a 2D puzzle game inspired by Portal using Rust and Bevy.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">On-board Computer</h4>
+                <p class="text-gray-700">Built an embedded system for vehicle diagnostics with real-time data
+                    processing.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">Wilson Quadruped Robot</h4>
+                <p class="text-gray-700">Created a quadruped robot with ROS for autonomous navigation.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+                <h4 class="text-xl font-semibold text-blue-600">Al-go-oh! Card Game</h4>
+                <p class="text-gray-700">Implemented a digital card game with multiplayer support using WebSockets.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
