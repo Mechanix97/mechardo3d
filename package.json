@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/Mechanix97/mechardo3d#readme",
   "devDependencies": {
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.0.0-alpha.20"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.11"
   }
 }
