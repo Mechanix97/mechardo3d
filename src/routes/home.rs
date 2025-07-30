@@ -11,6 +11,6 @@ pub async fn index(Extension(tera): Extension<Tera>) -> Html<String> {
 
     let rendered = tera
         .render("index.html", &context)
-        .expect("Error al renderizar la plantilla");
+        .expect("Error rendering template");
     Html(rendered)
 }
