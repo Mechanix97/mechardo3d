@@ -3,7 +3,7 @@ use tera::{Context, Tera};
 
 pub async fn me(Extension(tera): Extension<Tera>) -> Html<String> {
     let mut context = Context::new();
-    context.insert("title", "Acerca de Mí");
+    context.insert("title", "About me");
 
     let rendered = tera
         .render("me.html", &context)
