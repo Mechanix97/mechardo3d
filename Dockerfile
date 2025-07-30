@@ -15,7 +15,8 @@ FROM node:20 AS tailwind
 
 WORKDIR /mechardo3d
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install --verbose  # Add --verbose for debugging
+RUN npm list tailwindcss  # Verify tailwindcss is installed
 COPY static/tailwind.css ./static/
 COPY templates ./templates
 COPY tailwind.config.js ./
