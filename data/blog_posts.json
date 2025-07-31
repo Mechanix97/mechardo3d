@@ -3,12 +3,18 @@
         "id": "1",
         "title": "Primera Publicación",
         "content": "Este es el contenido de mi primera publicación en el blog.",
-        "date": "2025-07-29"
+        "date": "27-07-2025"
     },
     {
         "id": "2",
         "title": "Segunda Publicación",
         "content": "Aquí va el contenido de la segunda publicación.",
-        "date": "2025-07-28"
+        "date": "28-07-2025"
+    },
+    {
+        "id": "3",
+        "title": "Tercera Publicación",
+        "content": "Aquí va el contenido de la segunda publicación.",
+        "date": "30-07-2025"
     }
 ]
