@@ -1,31 +1,24 @@
-(function () {
-    console.log('theme-toggle.js loaded');
+// Ejemplo de theme-toggle.js
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleButton = document.getElementById('theme-toggle'); // Botón para cambiar tema
+    const html = document.documentElement;
 
-    const toggleButton = document.getElementById('theme-toggle');
-    const sunPath = document.getElementById('sun');
-    const moonPath = document.getElementById('moon');
-
-    if (!toggleButton || !sunPath || !moonPath) {
-        console.error('Theme toggle elements not found');
-        return;
+    // Aplicar tema inicial (redundante con el script del head, pero seguro)
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (savedTheme === 'dark') {
+        html.classList.add('dark');
+    } else {
+        html.classList.remove('dark');
     }
 
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    const isDarkMode = savedTheme === 'dark' || (!savedTheme && prefersDark);
-
-    document.documentElement.classList.toggle('dark', isDarkMode);
-    sunPath.classList.toggle('hidden', isDarkMode);
-    moonPath.classList.toggle('hidden', !isDarkMode);
-
+    // Cambiar tema al hacer clic
     toggleButton.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        sunPath.classList.toggle('hidden', isDark);
-        moonPath.classList.toggle('hidden', !isDark);
-        console.log('Toggled theme to', isDark ? 'dark' : 'light');
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
     });
-})();
-
-
+});

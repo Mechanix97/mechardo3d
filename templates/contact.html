@@ -4,21 +4,21 @@
     <!-- Título y mensaje introductorio -->
     <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 dark:text-blue-300 mb-6 text-center leading-tight">{{
         title | default(value='Contacto') }}</h1>
-    <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">{{ content | default(value='¡Conectá con
-        Mechardo Labs! Enviame un mensaje o seguime en mis redes para ver tutoriales, proyectos de electrónica y más
-        ideas copadas.') }}</p>
+    <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">{{ content | default(value='Contactá con
+        Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de
+        electrónica y otras iniciativas.') }}</p>
 
     <!-- Canales de contacto -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
         <!-- Email -->
-        <a href="mailto:mechardo.labs@gmail.com" aria-label="Enviar un email"
+        <a href="mailto:mechardo.labs@gmail.com" aria-label="Enviarme un correo electrónico"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
             </svg>
-            <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Email</span>
+            <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Correo Electrónico</span>
         </a>
         <!-- Twitter (X) -->
         <a href="https://x.com/MechardoLabs" target="_blank" aria-label="Visitar mi perfil de X"
@@ -28,7 +28,7 @@
                 <path
                     d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
             </svg>
-            <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Twitter</span>
+            <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">X</span>
         </a>
         <!-- Instagram -->
         <a href="https://www.instagram.com/mechardo3d/" target="_blank" aria-label="Visitar mi perfil de Instagram"
@@ -73,34 +73,43 @@
         </a>
     </div>
 
-    <!-- Formulario de contacto -->
+    <!-- Contact form -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Envíame un Mensaje</h2>
-        <form method="POST" action="/contact" class="space-y-4">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Enviar un Mensaje</h2>
+        <form method="POST" action="/contact" class="space-y-4" id="contact-form">
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
-                <input type="text" id="name" name="name"
-                    class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200"
+                <input type="text" id="name" name="name" value="{{ name | default(value='') }}"
+                    class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 autofill:bg-transparent"
                     placeholder="Tu nombre" required>
             </div>
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                <input type="email" id="email" name="email"
-                    class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200"
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo
+                    Electrónico</label>
+                <input type="email" id="email" name="email" value="{{ email | default(value='') }}"
+                    class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 autofill:bg-transparent"
                     placeholder="tu@email.com" required>
             </div>
             <div>
                 <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mensaje</label>
                 <textarea id="message" name="message" rows="4"
-                    class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200"
-                    placeholder="Escribí tu mensaje aquí" required></textarea>
+                    class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 autofill:bg-white dark:autofill:bg-gray-700"
+                    placeholder="Escribí tu mensaje acá" required>{{ message | default(value='') }}</textarea>
             </div>
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
             <div class="text-center">
                 <button type="submit"
                     class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Enviar
                     Mensaje</button>
             </div>
+            <div id="error-alert"
+                class="hidden mb-6 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg shadow-md">
+                <span id="error-message"></span>
+            </div>
         </form>
     </div>
 </div>
+<!-- reCAPTCHA v3 script -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8"></script>
+<script src="/static/js/contact.js"></script>
 {% endblock %}

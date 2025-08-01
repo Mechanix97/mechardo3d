@@ -4,3 +4,4 @@ temp.txt
 /node_modules
 /static/style.css
 data/messages.json
+/secrets
