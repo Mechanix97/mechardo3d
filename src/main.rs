@@ -39,6 +39,7 @@ async fn main() {
         .route("/products", get(routes::products::products))
         .route("/blog", get(routes::blog::blog))
         .route("/blog/{:id}", get(routes::blog::blog_post))
+        .route("/blog/{id}", get(routes::blog::blog_post))
         .route(
             "/contact",
             get(routes::contact::contact).post(routes::contact::contact_submit),

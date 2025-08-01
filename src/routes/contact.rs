@@ -12,6 +12,7 @@ use std::fs;
 use std::net::SocketAddr;
 use std::path::Path;
 use std::sync::Arc;
+
 use tera::{Context, Tera};
 use tokio::sync::RwLock;
 use tracing::{error, info};
@@ -34,6 +35,13 @@ pub struct RecaptchaResponse {
 }
 
 pub type RateLimitState = Arc<RwLock<HashMap<String, chrono::DateTime<Utc>>>>;
+
+#[derive(Deserialize, Serialize)]
+pub struct ContactForm {
+    name: String,
+    email: String,
+    message: String,
+}
 
 pub async fn contact(Extension(tera): Extension<Tera>) -> Html<String> {
     let mut context = Context::new();
