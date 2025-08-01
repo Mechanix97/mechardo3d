@@ -1,24 +1,41 @@
-// Ejemplo de theme-toggle.js
 document.addEventListener('DOMContentLoaded', () => {
-    const toggleButton = document.getElementById('theme-toggle'); // Botón para cambiar tema
     const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun');
+    const moonIcon = document.getElementById('moon');
 
-    // Aplicar tema inicial (redundante con el script del head, pero seguro)
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    if (savedTheme === 'dark') {
-        html.classList.add('dark');
-    } else {
-        html.classList.remove('dark');
-    }
-
-    // Cambiar tema al hacer clic
-    toggleButton.addEventListener('click', () => {
+    // Función para actualizar el ícono según el tema
+    const updateIcon = () => {
         if (html.classList.contains('dark')) {
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+        } else {
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        }
+    };
+
+    // Inicializar el ícono según el tema actual
+    updateIcon();
+
+    // Escuchar cambios en el tema
+    themeToggle.addEventListener('click', () => {
+        const isDark = html.classList.contains('dark');
+        if (isDark) {
             html.classList.remove('dark');
             localStorage.setItem('theme', 'light');
         } else {
             html.classList.add('dark');
             localStorage.setItem('theme', 'dark');
+        }
+        updateIcon();
+    });
+
+    // Escuchar cambios en prefers-color-scheme
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            html.classList.toggle('dark', e.matches);
+            updateIcon();
         }
     });
 });
