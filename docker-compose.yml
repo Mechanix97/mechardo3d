@@ -8,7 +8,10 @@ services:
     environment:
       - RUST_LOG=info
     networks:
-      - proxy  
+      - proxy
+    volumes:
+      - ./data:/usr/local/bin/data
+      - ./secrets:/usr/local/bin/secrets
 
   caddy:
     build:
@@ -25,11 +28,12 @@ services:
     depends_on:
       - mechardo3d
     networks:
-      - proxy 
+      - proxy
 
 networks:
-  proxy: 
+  proxy:
 
 volumes:
   caddy_data:
   caddy_config:
+  data:

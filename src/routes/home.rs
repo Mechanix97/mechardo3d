@@ -22,9 +22,6 @@ pub async fn index(Extension(tera): Extension<Tera>) -> Html<String> {
     context.insert("title", "Mechardo3D - Inicio");
     context.insert("posts", &posts);
 
-    // Log para depuración
-    eprintln!("Context for index.html: {:?}", context);
-
     // Renderizar la plantilla
     match tera.render("index.html", &context) {
         Ok(rendered) => Html(rendered),
