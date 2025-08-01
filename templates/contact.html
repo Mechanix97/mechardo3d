@@ -75,32 +75,36 @@
 
     <!-- Formulario de contacto -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Envíame un Mensaje</h2>
-        <form method="POST" action="/contact" class="space-y-4">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Send Me a Message</h2>
+        <form method="POST" action="/contact" class="space-y-4" id="contact-form">
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
-                <input type="text" id="name" name="name"
+                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+                <input type="text" id="name" name="name" value="{{ name | default(value='') }}"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200"
-                    placeholder="Tu nombre" required>
+                    placeholder="Your name" required>
             </div>
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                <input type="email" id="email" name="email"
+                <input type="email" id="email" name="email" value="{{ email | default(value='') }}"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200"
-                    placeholder="tu@email.com" required>
+                    placeholder="your@email.com" required>
             </div>
             <div>
-                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mensaje</label>
+                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
                 <textarea id="message" name="message" rows="4"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200"
-                    placeholder="Escribí tu mensaje aquí" required></textarea>
+                    placeholder="Write your message here" required>{{ message | default(value='') }}</textarea>
             </div>
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
             <div class="text-center">
                 <button type="submit"
-                    class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Enviar
-                    Mensaje</button>
+                    class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Send
+                    Message</button>
             </div>
         </form>
     </div>
 </div>
+<!-- Script de reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8"></script>
+<script src="/static/js/contact.js"></script>
 {% endblock %}
