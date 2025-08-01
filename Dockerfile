@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     iputils-ping \
     && rm -rf /var/lib/apt/lists/*
-    
+
 COPY --from=builder /mechardo3d/data ./data
 COPY --from=builder /mechardo3d/secrets ./secrets
 COPY --from=builder /mechardo3d/target/release/mechardo3d .
