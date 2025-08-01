@@ -36,6 +36,7 @@ COPY Cargo.toml Cargo.lock ./
 COPY data ./data
 COPY templates ./templates
 COPY static ./static
+COPY secrets ./secrets
 COPY --from=tailwind /mechardo3d/static/style.css ./static/style.css
 RUN cargo build --release $BUILD_FLAGS
 
@@ -46,5 +47,7 @@ COPY --from=builder /mechardo3d/target/release/mechardo3d .
 COPY --from=builder /mechardo3d/data ./data
 COPY --from=builder /mechardo3d/templates ./templates
 COPY --from=builder /mechardo3d/static ./static
+COPY --from=builder /mechardo3d/secrets ./secrets
+
 EXPOSE 3000
 ENTRYPOINT ["./mechardo3d"]
