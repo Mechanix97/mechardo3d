@@ -36,13 +36,6 @@ pub struct RecaptchaResponse {
 
 pub type RateLimitState = Arc<RwLock<HashMap<String, chrono::DateTime<Utc>>>>;
 
-#[derive(Deserialize, Serialize)]
-pub struct ContactForm {
-    name: String,
-    email: String,
-    message: String,
-}
-
 pub async fn contact(Extension(tera): Extension<Tera>) -> Html<String> {
     let mut context = Context::new();
     context.insert("title", "Contacto");
