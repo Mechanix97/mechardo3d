@@ -1,5 +1,113 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-4">{{ title }}</h1>
-<p class="text-lg">{{ content }}</p>
+<div class="container mx-auto px-4 py-12 max-w-5xl">
+    <!-- Logo -->
+    <div class="flex justify-center mb-16">
+        <img src="/static/images/favicon/logo512.png" alt="Mechardo3D Logo"
+            class="w-80 h-80 object-contain transform hover:scale-105 transition-all duration-300">
+    </div>
+
+    <!-- DS2000 -->
+    <section class="mb-16">
+        <h2
+            class="text-4xl font-extrabold text-blue-600 dark:text-blue-300 mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
+            DS2000: Tu Control Total
+        </h2>
+        <div
+            class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-500">
+            <img src="/static/images/martin-fierro.avif" alt="DS2000" class="w-full h-[24rem] object-cover">
+            <div class="p-8">
+                <p class="text-lg text-gray-700 dark:text-gray-200 mb-6 text-center">
+                    El DS2000 es tu aliado para dominar Discord, Zoom y más, con 3 botones programables y 2 LEDs RGB
+                    personalizables. ¡Llevá tu setup al siguiente nivel!
+                </p>
+                <div class="text-center">
+                    <a href="/ds2000"
+                        class="inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white rounded-lg shadow-md hover:shadow-xl hover:from-blue-600 hover:to-blue-800 dark:hover:from-blue-500 dark:hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Explorá el DS2000
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Entradas Recientes del Blog -->
+    <section class="mb-16">
+        <h2
+            class="text-4xl font-extrabold text-blue-600 dark:text-blue-300 mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
+            Lo Último del Blog
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for post in posts %}
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 hover:shadow-[0_10px_20px_rgba(59,130,246,0.3)] dark:hover:shadow-[0_10px_20px_rgba(147,197,253,0.3)] transition-all duration-300 transform hover:scale-105">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">{{ post.title }}</h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ post.content | truncate(length=150) }}
+                </p>
+                <a href="/blog/{{ post.id }}" class="text-blue-500 dark:text-blue-300 hover:underline font-medium">Leer
+                    más</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Redes Sociales -->
+    <section class="mb-16 text-center">
+        <h2
+            class="text-4xl font-extrabold text-blue-600 dark:text-blue-300 mb-8 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
+            Conectá con Nosotros
+        </h2>
+        <div class="flex justify-center gap-6 flex-wrap">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/mechardo3d/" target="_blank" aria-label="Visitar mi perfil de Instagram"
+                class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
+                <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z" />
+                </svg>
+                <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Instagram</span>
+            </a>
+            <!-- Discord -->
+            <a href="https://discord.gg/your-server" target="_blank" aria-label="Unirse a mi servidor de Discord"
+                class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
+                <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.376-.444.753-.608 1.15a18.566 18.566 0 00-5.487 0c-.164-.398-.398-.775-.608-1.15a.074.074 0 00-.079-.037A19.789 19.789 0 003.683 4.37a.074.074 0 00-.032.027C.533 9.045-.319 13.579.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.074.074 0 00.081-.025c.454-.606.885-1.243 1.24-1.902a.074.074 0 00-.027-.098 13.087 13.087 0 01-1.872-.892.074.074 0 01-.008-.125c.126-.094.252-.192.378-.292a.074.074 0 01.078-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 01.078.01c.126.1.252.198.378.292a.074.074 0 01-.008.125 13.135 13.135 0 01-1.872.892.074.074 0 00-.027.098c.356.66.786 1.296 1.24 1.902a.074.074 0 00.081.025 19.884 19.884 0 006.002-3.03.074.074 0 00.032-.057c.5-5.177-.838-9.673-3.548-13.66a.074.074 0 00-.032-.027zM8.02 15.332c-1.183 0-2.157-1.085-2.157-2.419s.966-2.419 2.157-2.419c1.197 0 2.176 1.085 2.157 2.419 0 1.334-.96 2.419-2.157 2.419zm7.974 0c-1.183 0-2.157-1.085-2.157-2.419s.966-2.419 2.157-2.419c1.197 0 2.176 1.085 2.157 2.419 0 1.334-.96 2.419-2.157 2.419z" />
+                </svg>
+                <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Discord</span>
+            </a>
+            <!-- X -->
+            <a href="https://x.com/mechardo3d" target="_blank" aria-label="Visitar mi perfil de X"
+                class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
+                <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">X</span>
+            </a>
+            <!-- YouTube -->
+            <a href="https://www.youtube.com/@mechardo3d" target="_blank" aria-label="Visitar mi canal de YouTube"
+                class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
+                <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                </svg>
+                <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">YouTube</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        class="text-center py-8 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white">
+        <p class="text-lg">
+            &copy; 2025 Mechardo3D. Todos los derechos reservados.
+            <a href="/contact" class="underline hover:text-blue-200">Contactanos</a>
+        </p>
+    </footer>
+</div>
 {% endblock %}
