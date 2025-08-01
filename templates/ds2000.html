@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-4xl">
+    <!-- Título y descripción -->
+    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 dark:text-blue-300 mb-6 text-center leading-tight">
+        {{ title | default(value='DS2000 - Botonera USB') }}
+    </h1>.
+    <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">
+        Controlá tus comunicaciones con el DS2000, una botonera USB con 3 botones y 2 LEDs
+        RGB diseñada para mutear/desmutear, ensordecer/desensordecer y desconectar de canales en Discord.
+    </p>
+
+    <!-- Deslizador de fotos con modal -->
+    <div class="relative mb-12">
+        <div id="carousel" class="relative w-full  overflow-hidden rounded-lg shadow-md">
+            <div id="carousel-items" class="flex transition-transform duration-500 ease-in-out">
+                <!-- Imágenes de ejemplo (reemplazar con URLs reales) -->
+                <div class="min-w-full">
+                    <img src="/static/images/martin-fierro.avif" alt="DS2000 vista frontal"
+                        class="w-full h-[28rem] object-cover cursor-pointer"
+                        data-fullscreen="/static/images/martin-fierro.avif">
+                </div>
+                <div class="min-w-full">
+                    <img src="/static/images/martin-fierro.avif" alt="DS2000 vista lateral"
+                        class="w-full h-[28rem] object-cover cursor-pointer"
+                        data-fullscreen="/static/images/martin-fierro.avif">
+                </div>
+                <div class="min-w-full">
+                    <img src="/static/images/martin-fierro.avif" alt="DS2000 conectado"
+                        class="w-full h-[28rem] object-cover cursor-pointer"
+                        data-fullscreen="/static/images/martin-fierro.avif">
+                </div>
+            </div>
+            <!-- Botones de navegación -->
+            <button id="prev-slide"
+                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+                </svg>
+            </button>
+            <button id="next-slide"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.59 16.59L13.17 12l-4.58-4.59L10 6l6 6-6 6-1.41-1.41z" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal para imagen ampliada -->
+        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex hidden items-center justify-center z-50">
+            <div class="relative max-w-[90vw] max-h-[90vh]">
+                <img id="modal-image" src="" alt="Imagen ampliada del DS2000"
+                    class="w-full h-auto max-h-[90vh] object-contain rounded-lg">
+                <button id="close-modal"
+                    class="absolute top-2 right-2 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Botón de compra en Mercado Libre -->
+    <section class="mb-12 text-center">
+        <a href="https://www.mercadolibre.com.ar/p/DS2000" target="_blank"
+            class="font-bold  text-2xl inline-block px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Comprar
+        </a>
+    </section>
+
+
+    <!-- ... Resto de la página (características, botón de Mercado Libre, info técnica, controladores, FAQ) ... -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Características Principales
+        </h2>
+        <ul class="space-y-6">
+            <li
+                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.22-1.79L9 14v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.91-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 3.08-1.77 5.75-4.1 7.49z" />
+                </svg>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Control Intuitivo</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Tres botones programables para mutear/desmutear,
+                        ensordecer/desensordecer y desconectar de canales, ideales para streaming y reuniones virtuales.
+                    </p>
+                </div>
+            </li>
+            <li
+                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
+                </svg>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">LEDs RGB Personalizables</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Dos LEDs RGB para indicar estados o personalizar con
+                        colores según tu configuración.</p>
+                </div>
+            </li>
+            <li
+                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z" />
+                </svg>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Conexión USB Plug-and-Play</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Conectá el DS2000 a tu computadora por USB y usalo sin
+                        complicaciones en Windows, macOS o Linux.</p>
+                </div>
+            </li>
+            <li
+                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z" />
+                </svg>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">Diseño Compacto</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Tamaño ergonómico y portátil para integrarse
+                        perfectamente en tu setup.</p>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Información técnica -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Especificaciones Técnicas</h2>
+        <ul class="list-disc list-inside text-gray-700 dark:text-gray-200 space-y-2">
+            <li><strong>Conexión</strong>: USB 2.0 (compatible con USB 3.0)</li>
+            <li><strong>Botones</strong>: 3 botones programables (mutear/desmutear, ensordecer/desensordecer,
+                desconectar)</li>
+            <li><strong>Indicadores</strong>: 2 LEDs RGB configurables</li>
+            <li><strong>Compatibilidad</strong>: Windows 10/11, macOS 10.15+, Linux (Ubuntu, Fedora)</li>
+            <li><strong>Dimensiones</strong>: 10 cm x 5 cm x 2 cm (aproximado)</li>
+            <li><strong>Peso</strong>: 150 g</li>
+            <li><strong>Material</strong>: Plástico ABS de alta resistencia</li>
+            <li><strong>Software</strong>: Controladores opcionales para personalización avanzada</li>
+        </ul>
+    </section>
+
+    <!-- Sección de controladores -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Controladores y Software</h2>
+        <p class="text-gray-700 dark:text-gray-200 mb-6">Descargá los controladores y el software de configuración para
+            personalizar tu DS2000.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <a href="/static/downloads/ds2000-windows-driver.zip"
+                class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
+                <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+                <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Controlador para Windows</span>
+            </a>
+            <a href="/static/downloads/ds2000-macos-driver.zip"
+                class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
+                <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+                <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Controlador para macOS</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Preguntas Frecuentes</h2>
+        <div class="space-y-4">
+            <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">¿Es compatible
+                    con Discord y Zoom?</summary>
+                <p class="text-gray-700 dark:text-gray-300 mt-2">Sí, el DS2000 está diseñado para integrarse con
+                    aplicaciones como Discord, Zoom, Teams y otras, permitiendo controlar funciones de audio y conexión.
+                </p>
+            </details>
+            <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">¿Necesito
+                    instalar controladores?</summary>
+                <p class="text-gray-700 dark:text-gray-300 mt-2">El DS2000 es plug-and-play, pero ofrecemos
+                    controladores opcionales para personalizar los LEDs y los botones.</p>
+            </details>
+            <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">¿Puedo usar el
+                    DS2000 en Linux?</summary>
+                <p class="text-gray-700 dark:text-gray-300 mt-2">Sí, es compatible con distribuciones como Ubuntu y
+                    Fedora sin necesidad de controladores adicionales.</p>
+            </details>
+        </div>
+    </section>
+</div>
+
+<script src="/static/js/carousel.js"></script>
+
+{% endblock %}

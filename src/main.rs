@@ -36,7 +36,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(routes::home::index))
-        .route("/products", get(routes::products::products))
+        .route("/ds2000", get(routes::ds2000::ds2000))
         .route("/blog", get(routes::blog::blog))
         .route("/blog/{:id}", get(routes::blog::blog_post))
         .route(
