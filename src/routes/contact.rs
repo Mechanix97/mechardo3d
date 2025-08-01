@@ -2,22 +2,20 @@ use axum::{
     Extension,
     extract::{ConnectInfo, Form},
     http::StatusCode,
-    response::{Html, Redirect},
+    response::{Json, Redirect},
 };
 use chrono::Utc;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
 use std::net::SocketAddr;
 use std::path::Path;
 use std::sync::Arc;
-
 use tera::{Context, Tera};
 use tokio::sync::RwLock;
 use tracing::{error, info};
-
-const RECAPTCHA_SITE_KEY: &str = "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8";
 
 #[derive(Deserialize, Serialize)]
 pub struct ContactForm {
@@ -34,37 +32,47 @@ pub struct RecaptchaResponse {
     score: f32,
 }
 
+#[derive(Serialize)]
+pub struct ErrorResponse {
+    error: String,
+}
+
 pub type RateLimitState = Arc<RwLock<HashMap<String, chrono::DateTime<Utc>>>>;
 
-pub async fn contact(Extension(tera): Extension<Tera>) -> Html<String> {
+// Handler for GET /contact
+pub async fn contact(Extension(tera): Extension<Tera>) -> axum::response::Html<String> {
     let mut context = Context::new();
     context.insert("title", "Contacto");
-    context.insert("content", "Ponte en contacto con nosotros.");
-    context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
+    context.insert("content", "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas.");
+    context.insert(
+        "recaptcha_site_key",
+        "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8",
+    );
     let rendered = tera
         .render("contact.html", &context)
         .expect("Error rendering template");
-    Html(rendered)
+    axum::response::Html(rendered)
 }
 
-pub async fn contact_success(Extension(tera): Extension<Tera>) -> Html<String> {
+// Handler for GET /contact_success
+pub async fn contact_success(Extension(tera): Extension<Tera>) -> axum::response::Html<String> {
     let mut context = Context::new();
-    context.insert("title", "Mensaje enviado");
+    context.insert("title", "Message Sent");
     let rendered = tera
         .render("contact_success.html", &context)
         .expect("Error rendering template");
-    Html(rendered)
+    axum::response::Html(rendered)
 }
 
+// Handler for POST /contact
 pub async fn contact_submit(
-    Extension(tera): Extension<Tera>,
     Extension(rate_limit): Extension<RateLimitState>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
     Form(form): Form<ContactForm>,
-) -> Result<Redirect, (StatusCode, Html<String>)> {
+) -> Result<Redirect, (StatusCode, Json<ErrorResponse>)> {
     info!("Processing contact form submission from IP: {}", addr.ip());
 
-    // Límite por IP (1 mensaje cada 5 minutos)
+    // Rate limiting by IP (1 message every 5 minutes)
     let ip: String = addr.ip().to_string();
     let mut rate_limit = rate_limit.write().await;
     let now = Utc::now();
@@ -72,37 +80,28 @@ pub async fn contact_submit(
         let elapsed = now.signed_duration_since(*last_submission).num_seconds();
         if elapsed < 300 {
             info!("Rate limit exceeded for IP: {}", ip);
-            let mut context = Context::new();
-            context.insert("title", "Error");
-            context.insert(
-                "content",
-                "Por favor, esperá 5 minutos antes de enviar otro mensaje.",
-            );
-            context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-            let rendered = tera
-                .render("contact.html", &context)
-                .expect("Error rendering template");
-            return Err((StatusCode::TOO_MANY_REQUESTS, Html(rendered)));
+            return Err((
+                StatusCode::TOO_MANY_REQUESTS,
+                Json(ErrorResponse {
+                    error: "Esperá 5 minutos antes de mandar otro mensaje.".to_string(),
+                }),
+            ));
         }
     }
 
-    // Validación de campos
+    // Validate form fields
     if form.name.trim().is_empty() || form.email.trim().is_empty() || form.message.trim().is_empty()
     {
         info!("Invalid form data from IP: {}", ip);
-        let mut context = Context::new();
-        context.insert("title", "Error");
-        context.insert(
-            "content",
-            "Por favor, completá todos los campos del formulario.",
-        );
-        context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-        let rendered = tera
-            .render("contact.html", &context)
-            .expect("Error rendering template");
-        return Err((StatusCode::BAD_REQUEST, Html(rendered)));
+        return Err((
+            StatusCode::BAD_REQUEST,
+            Json(ErrorResponse {
+                error: "Completá todos los campos del formulario.".to_string(),
+            }),
+        ));
     }
 
+    // Read reCAPTCHA secret key from secrets/recaptcha.env
     let recaptcha_secret = match fs::read_to_string("secrets/recaptcha.env") {
         Ok(content) => content
             .lines()
@@ -116,15 +115,15 @@ pub async fn contact_submit(
             })
             .unwrap_or_else(|| {
                 error!("RECAPTCHA_SECRET_KEY not found in secrets/recaptcha.env");
-                String::from("")
+                String::from("") // Fallback for local testing
             }),
         Err(e) => {
             error!("Failed to read secrets/recaptcha.env: {}", e);
-            String::from("")
+            String::from("") // Fallback for local testing
         }
     };
 
-    // Verificar reCAPTCHA
+    // Verify reCAPTCHA
     info!("Verifying reCAPTCHA for IP: {}", ip);
     let client = Client::new();
     let recaptcha_response = client
@@ -138,71 +137,87 @@ pub async fn contact_submit(
         .await;
 
     match recaptcha_response {
-        Ok(response) if response.status().is_success() => {
-            match response.json::<RecaptchaResponse>().await {
-                Ok(recaptcha_data) => {
-                    if !recaptcha_data.success || recaptcha_data.score < 0.6 {
-                        info!(
-                            "reCAPTCHA verification failed for IP: {}. Success: {}, Score: {}",
-                            ip, recaptcha_data.success, recaptcha_data.score
+        Ok(response) => {
+            info!("reCAPTCHA response status: {}", response.status());
+            if response.status().is_success() {
+                match response.text().await {
+                    Ok(text) => {
+                        info!("reCAPTCHA response body: {}", text);
+                        match serde_json::from_str::<RecaptchaResponse>(&text) {
+                            Ok(recaptcha_data) => {
+                                if !recaptcha_data.success || recaptcha_data.score < 0.6 {
+                                    info!(
+                                        "reCAPTCHA verification failed for IP: {}. Success: {}, Score: {}",
+                                        ip, recaptcha_data.success, recaptcha_data.score
+                                    );
+                                    return Err((
+                                        StatusCode::FORBIDDEN,
+                                        Json(ErrorResponse {
+                                            error: "Falló la verificación de reCAPTCHA. Probá de nuevo.".to_string(),
+                                        }),
+                                    ));
+                                }
+                            }
+                            Err(e) => {
+                                error!(
+                                    "Failed to parse reCAPTCHA response for IP: {}: {}. Response body: {}",
+                                    ip, e, text
+                                );
+                                return Err((
+                                    StatusCode::INTERNAL_SERVER_ERROR,
+                                    Json(ErrorResponse {
+                                        error: "Error al verificar reCAPTCHA. Probá de nuevo."
+                                            .to_string(),
+                                    }),
+                                ));
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        error!(
+                            "Failed to read reCAPTCHA response body for IP: {}: {}",
+                            ip, e
                         );
-                        let mut context = Context::new();
-                        context.insert("title", "Error");
-                        context.insert(
-                            "content",
-                            "No se pudo verificar que no sos un bot. Intentá de nuevo.",
-                        );
-                        context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-                        let rendered = tera
-                            .render("contact.html", &context)
-                            .expect("Error rendering template");
-                        return Err((StatusCode::FORBIDDEN, Html(rendered)));
+                        return Err((
+                            StatusCode::INTERNAL_SERVER_ERROR,
+                            Json(ErrorResponse {
+                                error: "Error al verificar reCAPTCHA. Probá de nuevo.".to_string(),
+                            }),
+                        ));
                     }
                 }
-                Err(e) => {
-                    error!("Failed to parse reCAPTCHA response for IP: {}: {}", ip, e);
-                    let mut context = Context::new();
-                    context.insert("title", "Error");
-                    context.insert("content", "Error al verificar reCAPTCHA. Intentá de nuevo.");
-                    context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-                    let rendered: String = tera
-                        .render("contact.html", &context)
-                        .expect("Error rendering template");
-                    return Err((StatusCode::INTERNAL_SERVER_ERROR, Html(rendered)));
-                }
+            } else {
+                let status = response.status();
+                let text = response
+                    .text()
+                    .await
+                    .unwrap_or_else(|_| "No response body".to_string());
+                error!(
+                    "reCAPTCHA request failed for IP: {}. Status: {}. Response: {}",
+                    ip, status, text
+                );
+                return Err((
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(ErrorResponse {
+                        error: "Error al verificar reCAPTCHA. Probá de nuevo.".to_string(),
+                    }),
+                ));
             }
-        }
-        Ok(response) => {
-            error!(
-                "reCAPTCHA request failed for IP: {}. Status: {}",
-                ip,
-                response.status()
-            );
-            let mut context = Context::new();
-            context.insert("title", "Error");
-            context.insert("content", "Error al verificar reCAPTCHA. Intentá de nuevo.");
-            context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-            let rendered = tera
-                .render("contact.html", &context)
-                .expect("Error rendering template");
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, Html(rendered)));
         }
         Err(e) => {
             error!("reCAPTCHA request error for IP: {}: {}", ip, e);
-            let mut context = Context::new();
-            context.insert("title", "Error");
-            context.insert("content", "Error al verificar reCAPTCHA. Intentá de nuevo.");
-            context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-            let rendered = tera
-                .render("contact.html", &context)
-                .expect("Error rendering template");
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, Html(rendered)));
+            return Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(ErrorResponse {
+                    error: "Error al verificar reCAPTCHA. Probá de nuevo.".to_string(),
+                }),
+            ));
         }
     }
 
-    // Guardar en messages.json
+    // Save message to messages.json
     info!("Saving message to messages.json for IP: {}", ip);
-    let message = serde_json::json!({
+    let message = json!({
         "name": form.name,
         "email": form.email,
         "message": form.message,
@@ -216,12 +231,22 @@ pub async fn contact_submit(
                 Ok(messages) => messages,
                 Err(e) => {
                     error!("Failed to parse messages.json: {}", e);
-                    vec![]
+                    return Err((
+                        StatusCode::INTERNAL_SERVER_ERROR,
+                        Json(ErrorResponse {
+                            error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                        }),
+                    ));
                 }
             },
             Err(e) => {
                 error!("Failed to read messages.json: {}", e);
-                vec![]
+                return Err((
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(ErrorResponse {
+                        error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                    }),
+                ));
             }
         }
     } else {
@@ -234,34 +259,29 @@ pub async fn contact_submit(
             Ok(_) => info!("Message saved to messages.json for IP: {}", ip),
             Err(e) => {
                 error!("Failed to write to messages.json: {}", e);
-                let mut context = Context::new();
-                context.insert("title", "Error");
-                context.insert("content", "Error al guardar el mensaje. Intentá de nuevo.");
-                context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-                let rendered = tera
-                    .render("contact.html", &context)
-                    .expect("Error rendering template");
-                return Err((StatusCode::INTERNAL_SERVER_ERROR, Html(rendered)));
+                return Err((
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(ErrorResponse {
+                        error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                    }),
+                ));
             }
         },
         Err(e) => {
             error!("Failed to serialize messages to JSON: {}", e);
-            let mut context = Context::new();
-            context.insert("title", "Error");
-            context.insert("content", "Error al guardar el mensaje. Intentá de nuevo.");
-            context.insert("recaptcha_site_key", RECAPTCHA_SITE_KEY);
-            let rendered = tera
-                .render("contact.html", &context)
-                .expect("Error rendering template");
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, Html(rendered)));
+            return Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(ErrorResponse {
+                    error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                }),
+            ));
         }
     }
 
-    // Actualizar límite por IP
+    // Update rate limit for IP
     info!("Updating rate limit for IP: {}", ip);
-    rate_limit.insert(ip.clone(), now);
+    rate_limit.insert(ip, now);
 
-    // Redirigir a /contact_success
-    info!("Redirecting to /contact_success for IP: {}", ip);
+    // Redirect to /contact_success
     Ok(Redirect::to("/contact_success"))
 }

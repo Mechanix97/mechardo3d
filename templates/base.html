@@ -7,6 +7,31 @@
     <title>{{ title }} | Mechardo Labs</title>
     <link rel="stylesheet" href="/static/style.css?v=3">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon/favicon.ico">
+    <script>
+        // Fix for flashing
+        (function () {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    <style>
+        .grecaptcha-badge {
+            right: unset !important;
+            left: 4px !important;
+            bottom: 20px !important;
+            width: 70px !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .grecaptcha-badge:hover {
+            width: 256px !important;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
