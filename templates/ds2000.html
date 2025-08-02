@@ -4,7 +4,7 @@
     <!-- Título y descripción -->
     <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 dark:text-blue-300 mb-6 text-center leading-tight">
         {{ title | default(value='DS2000 - Botonera USB') }}
-    </h1>.
+    </h1>
     <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">
         Controlá tus comunicaciones con el DS2000, una botonera USB con 3 botones y 2 LEDs
         RGB diseñada para mutear/desmutear, ensordecer/desensordecer y desconectar de canales en Discord.
@@ -12,23 +12,23 @@
 
     <!-- Deslizador de fotos con modal -->
     <div class="relative mb-12">
-        <div id="carousel" class="relative w-full  overflow-hidden rounded-lg shadow-md">
+        <div id="carousel" class="relative w-full overflow-hidden rounded-lg shadow-md">
             <div id="carousel-items" class="flex transition-transform duration-500 ease-in-out">
                 <!-- Imágenes de ejemplo (reemplazar con URLs reales) -->
                 <div class="min-w-full">
-                    <img src="/static/images/martin-fierro.avif" alt="DS2000 vista frontal"
-                        class="w-full h-[28rem] object-cover cursor-pointer"
-                        data-fullscreen="/static/images/martin-fierro.avif">
+                    <img src="/static/images/DS2000/renders/frente.png" alt="DS2000 vista frontal"
+                        class="w-full h-[32rem] object-cover cursor-pointer"
+                        data-fullscreen="/static/images/DS2000/renders/frente.png">
                 </div>
                 <div class="min-w-full">
-                    <img src="/static/images/martin-fierro.avif" alt="DS2000 vista lateral"
-                        class="w-full h-[28rem] object-cover cursor-pointer"
-                        data-fullscreen="/static/images/martin-fierro.avif">
+                    <img src="/static/images/DS2000/renders/trasero.png" alt="DS2000 vista posterior"
+                        class="w-full h-[32rem] object-cover cursor-pointer"
+                        data-fullscreen="/static/images/DS2000/renders/trasero.png">
                 </div>
                 <div class="min-w-full">
-                    <img src="/static/images/martin-fierro.avif" alt="DS2000 conectado"
-                        class="w-full h-[28rem] object-cover cursor-pointer"
-                        data-fullscreen="/static/images/martin-fierro.avif">
+                    <img src="/static/images/DS2000/renders/superior.png" alt="DS2000 conectado"
+                        class="w-full h-[32rem] object-cover cursor-pointer"
+                        data-fullscreen="/static/images/DS2000/renders/superior.png">
                 </div>
             </div>
             <!-- Botones de navegación -->
@@ -62,7 +62,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Botón de compra en Mercado Libre -->
     <section class="mb-12 text-center">

@@ -19,7 +19,7 @@ pub async fn index(Extension(tera): Extension<Tera>) -> Html<String> {
 
     // Configurar el contexto de Tera
     let mut context = Context::new();
-    context.insert("title", "Mechardo3D - Inicio");
+    context.insert("title", "Inicio");
     context.insert("posts", &posts);
 
     // Renderizar la plantilla
