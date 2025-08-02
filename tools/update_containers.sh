@@ -77,7 +77,7 @@ else
     log "No changes detected, checking container status"
 fi
 
-if ! docker compose ps -q mechardo3d > /dev/null 2>&1; then
+if ! docker compose ps -q mechardo3d | grep -q .; then
     log "Container mechardo3d is not running, starting it"
     make run-prod >> "$LOG_FILE" 2>&1
     [ $? -eq 0 ] || {
