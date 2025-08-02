@@ -78,16 +78,15 @@ else
 fi
 
 if ! docker compose ps -q mechardo3d > /dev/null 2>&1; then
-        log "Container mechardo3d is not running, starting it"
-        make run-prod >> "$LOG_FILE" 2>&1
-        [ $? -eq 0 ] || {
-            log "ERROR starting container"
-            exit 1
-        }
-        log "Container started successfully"
-    else
-        log "Container mechardo3d is already running, no action needed"
-    fi
+    log "Container mechardo3d is not running, starting it"
+    make run-prod >> "$LOG_FILE" 2>&1
+    [ $? -eq 0 ] || {
+        log "ERROR starting container"
+        exit 1
+    }
+    log "Container started successfully"
+else
+    log "Container mechardo3d is already running, no action needed"
 fi
 
 log "Script execution finished"
