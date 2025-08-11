@@ -10,21 +10,22 @@
 
     <!-- Deslizador de fotos con modal -->
     <div class="relative mb-12">
-        <div id="carousel" class="relative w-full overflow-hidden rounded-lg shadow-md">
+        <div id="carousel"
+            class="relative w-full overflow-hidden rounded-lg shadow-md aspect-[3/2] max-h-[24rem] sm:max-h-[32rem]">
             <div id="carousel-items" class="flex transition-transform duration-500 ease-in-out">
                 <div class="min-w-full">
                     <img src="/static/images/DS2000/renders/frente.png" alt="DS2000 vista frontal"
-                        class="w-full h-[24rem] sm:h-[32rem] object-contain sm:object-cover cursor-pointer"
+                        class="w-full h-auto object-contain sm:object-cover cursor-pointer"
                         data-fullscreen="/static/images/DS2000/renders/frente.png">
                 </div>
                 <div class="min-w-full">
                     <img src="/static/images/DS2000/renders/trasero.png" alt="DS2000 vista posterior"
-                        class="w-full h-[24rem] sm:h-[32rem] object-contain sm:object-cover cursor-pointer"
+                        class="w-full h-auto object-contain sm:object-cover cursor-pointer"
                         data-fullscreen="/static/images/DS2000/renders/trasero.png">
                 </div>
                 <div class="min-w-full">
                     <img src="/static/images/DS2000/renders/superior.png" alt="DS2000 conectado"
-                        class="w-full h-[24rem] sm:h-[32rem] object-contain sm:object-cover cursor-pointer"
+                        class="w-full h-auto object-contain sm:object-cover cursor-pointer"
                         data-fullscreen="/static/images/DS2000/renders/superior.png">
                 </div>
             </div>
@@ -68,13 +69,12 @@
     <!-- Botón de compra en Mercado Libre -->
     <section class="mb-12 text-center">
         <a href="https://www.mercadolibre.com.ar/p/DS2000" target="_blank"
-            class="font-bold  text-2xl inline-block px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            class="font-bold text-2xl inline-block px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Comprar
         </a>
     </section>
 
-
-    <!-- ... Resto de la página (características, botón de Mercado Libre, info técnica, controladores, FAQ) ... -->
+    <!-- Características Principales -->
     <section class="mb-12">
         <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Características Principales
         </h2>
@@ -182,27 +182,26 @@
         <div class="space-y-4">
             <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
                 <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">¿Es compatible
-                    con Discord y Zoom?</summary>
+                    con Discord?</summary>
                 <p class="text-gray-700 dark:text-gray-300 mt-2">Sí, el DS2000 está diseñado para integrarse con
-                    aplicaciones como Discord, Zoom, Teams y otras, permitiendo controlar funciones de audio y conexión.
+                    aplicaciones como Discord permitiendo controlar funciones de audio y conexión.
                 </p>
             </details>
             <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
                 <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">¿Necesito
                     instalar controladores?</summary>
-                <p class="text-gray-700 dark:text-gray-300 mt-2">El DS2000 es plug-and-play, pero ofrecemos
-                    controladores opcionales para personalizar los LEDs y los botones.</p>
+                <p class="text-gray-700 dark:text-gray-300 mt-2">Si, dentro del software de DS2000 se contienen los
+                    controladores del dispositivo.</p>
             </details>
             <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
                 <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">¿Puedo usar el
                     DS2000 en Linux?</summary>
                 <p class="text-gray-700 dark:text-gray-300 mt-2">Sí, es compatible con distribuciones como Ubuntu y
-                    Fedora sin necesidad de controladores adicionales.</p>
+                    Fedora utilizando el software controlador.</p>
             </details>
         </div>
     </section>
 </div>
 
 <script src="/static/js/carousel.js"></script>
-
 {% endblock %}
