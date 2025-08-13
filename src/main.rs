@@ -37,6 +37,14 @@ async fn main() {
     let app = Router::new()
         .route("/", get(routes::home::index))
         .route("/ds2000", get(routes::ds2000::ds2000))
+        .route(
+            "/ds2000/terms-of-service",
+            get(routes::ds2000::terms_of_service),
+        )
+        .route(
+            "/ds2000/privacy_policy",
+            get(routes::ds2000::privacy_policy),
+        )
         .route("/blog", get(routes::blog::blog))
         .route("/blog/{:id}", get(routes::blog::blog_post))
         .route(
