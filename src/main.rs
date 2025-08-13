@@ -42,7 +42,7 @@ async fn main() {
             get(routes::ds2000::terms_of_service),
         )
         .route(
-            "/ds2000/privacy_policy",
+            "/ds2000/privacy-policy",
             get(routes::ds2000::privacy_policy),
         )
         .route("/blog", get(routes::blog::blog))
