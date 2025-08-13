@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-4xl">
+    <!-- DS2000 logo -->
+    <div
+        class="flex justify-center items-center w-full h-[12rem] md:h-[16rem] bg-[#13120E] rounded-lg shadow-xl overflow-hidden mb-12 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+        <img src="/static/images/DS2000/logo/ds2000-logo.png" alt="DS2000 Logo"
+            class="w-full h-full object-contain p-4" />
+    </div>
+
+    <!-- Terms of Service -->
+    <section class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 mb-12">
+        <h1
+            class="text-4xl font-extrabold font-mono mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
+            DS2000 – Terms of Service
+        </h1>
+        <p class="text-lg text-gray-700 dark:text-gray-200 mb-6 text-center">
+            <strong>Effective Date:</strong> August 13, 2025<br>
+            <strong>Company:</strong> Mechardo Labs, Argentina
+        </p>
+
+        <!-- 1. Acceptance of Terms -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">1. Acceptance of Terms</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            By accessing, installing, executing, or in any manner utilizing the DS2000 hardware device and/or
+            accompanying software (collectively referred to as “DS2000”), you (“the User”) acknowledge that you have
+            read, understood, and agree to be legally bound by these Terms of Service (“Terms”). If you do not accept
+            these Terms in their entirety, you are expressly prohibited from, and must refrain from, any further use of
+            DS2000.
+        </p>
+
+        <!-- 2. Description and Scope of Service -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">2. Description and Scope of Service</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            DS2000 comprises:
+        </p>
+        <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2">
+            <li>A proprietary hardware device designed to connect via USB to a computing system, commercialized by
+                Mechardo Labs.</li>
+            <li>Proprietary, downloadable software provided at no cost, which interacts with said hardware and
+                establishes a connection to the Discord platform via Remote Procedure Call (RPC) protocols.</li>
+        </ul>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            The software facilitates bidirectional data transfer between the hardware and the Discord client, including
+            but not limited to the retrieval, processing, and transmission of mute and deafen states, as well as the
+            issuance of commands to the Discord platform for muting/unmuting, deafening/undeafening, and disconnecting
+            the User from a voice channel.
+        </p>
+
+        <!-- 3. Eligibility and Compliance -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">3. Eligibility and Compliance</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            DS2000 is available without age restriction; however, the User is solely responsible for ensuring compliance
+            with all applicable laws, regulations, and contractual obligations, including but not limited to Discord’s
+            Terms of Service, Community Guidelines, and any applicable platform-specific policies.
+        </p>
+
+        <!-- 4. Restrictions on Use -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">4. Restrictions on Use</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            The User shall not, under any circumstances:
+        </p>
+        <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2">
+            <li>Use DS2000 for purposes unlawful under applicable jurisdiction, including harassment, fraud, or other
+                malicious activities.</li>
+            <li>Attempt, directly or indirectly, to modify, decompile, reverse engineer, disassemble, or derive source
+                code from the DS2000 software or hardware.</li>
+            <li>Reproduce, redistribute, sublicense, or commercially exploit DS2000 or its components without prior
+                written consent from Mechardo Labs.</li>
+            <li>Utilize DS2000 in any manner that interferes with, disrupts, or circumvents the normal operation of
+                Discord or any third-party services.</li>
+        </ul>
+
+        <!-- 5. Relationship with Discord -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">5. Relationship with Discord</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            DS2000 is an independent creation of Mechardo Labs and is neither developed, endorsed, sponsored,
+            authorized, nor in any way affiliated with Discord Inc. All usage of DS2000 that interfaces with Discord is
+            subject to Discord’s applicable terms and conditions, which remain entirely separate from this Agreement.
+        </p>
+
+        <!-- 6. Intellectual Property and Licensing -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">6. Intellectual Property and Licensing</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            All rights, title, and interest in and to DS2000, including its hardware design, software code, trade names,
+            and associated trademarks and logos, are and shall remain the exclusive property of Mechardo Labs. The User
+            is granted a revocable, non-exclusive, non-transferable, limited license to operate DS2000 in its provided
+            form solely for personal use. Modification, adaptation, or creation of derivative works is expressly
+            prohibited.
+        </p>
+
+        <!-- 7. Limitation of Liability -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">7. Limitation of Liability</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            To the fullest extent permitted by applicable law, Mechardo Labs, its directors, officers, employees,
+            agents, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or exemplary
+            damages, including but not limited to loss of data, interruption of service, hardware malfunction, or
+            personal injury, arising from or in connection with the use, misuse, or inability to use DS2000, even if
+            Mechardo Labs has been advised of the possibility of such damages. The User assumes all risks associated
+            with the operation of DS2000.
+        </p>
+
+        <!-- 8. Amendments -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">8. Amendments</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            Mechardo Labs reserves the right to amend, modify, or replace these Terms at any time without prior notice.
+            Continued use of DS2000 following such modifications constitutes acceptance of the revised Terms.
+        </p>
+
+        <!-- 9. Contact Information -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">9. Contact Information</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            All communications regarding these Terms shall be directed through the contact form available at: <a
+                href="https://mechardo3d.xyz/contact"
+                class="text-blue-500 dark:text-blue-300 hover:underline">https://mechardo3d.xyz/contact</a>.
+        </p>
+
+        <!-- 10. Governing Law and Jurisdiction -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">10. Governing Law and Jurisdiction</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            These Terms shall be governed by, construed, and enforced in accordance with the laws of the Argentine
+            Republic. Any dispute, claim, or controversy arising out of or relating to DS2000 or these Terms shall be
+            subject to the exclusive jurisdiction of the competent courts of Argentina.
+        </p>
+    </section>
+</div>
+{% endblock %}

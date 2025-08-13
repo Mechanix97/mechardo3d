@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-4xl">
+    <!-- DS2000 logo -->
+    <div
+        class="flex justify-center items-center w-full h-[12rem] md:h-[16rem] bg-[#13120E] rounded-lg shadow-xl overflow-hidden mb-12 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+        <img src="/static/images/DS2000/logo/ds2000-logo.png" alt="DS2000 Logo"
+            class="w-full h-full object-contain p-4" />
+    </div>
+
+    <!-- Privacy Policy -->
+    <section class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 mb-12">
+        <h1
+            class="text-4xl font-extrabold font-mono mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
+            DS2000 – Privacy Policy
+        </h1>
+        <p class="text-lg text-gray-700 dark:text-gray-200 mb-6 text-center">
+            <strong>Effective Date:</strong> August 13, 2025<br>
+            <strong>Company:</strong> Mechardo Labs, Argentina
+        </p>
+
+        <!-- 1. Purpose and Scope -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">1. Purpose and Scope</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            This Privacy Policy (“Policy”) describes the practices of Mechardo Labs regarding the collection, storage,
+            use, and protection of data obtained through the use of the DS2000 hardware and software. By using DS2000,
+            the User consents to the practices described in this Policy.
+        </p>
+
+        <!-- 2. Data Collected -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">2. Data Collected</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            When operating DS2000, Mechardo Labs may collect and store, either automatically or through explicit user
+            input, the following categories of information:
+        </p>
+        <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2">
+            <li>Discord mute and deafen status indicators.</li>
+            <li>The User’s email address and Discord user ID.</li>
+            <li>Aggregated usage statistics for internal analytical purposes only.</li>
+        </ul>
+
+        <!-- 3. Data Storage and Retention -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">3. Data Storage and Retention</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            All collected data is stored on servers controlled by Mechardo Labs and retained indefinitely unless a
+            lawful and verified deletion request is received from the User. Data is stored for operational, analytical,
+            and product improvement purposes and is not shared with external third parties under any circumstances,
+            except as required by applicable law or judicial order.
+        </p>
+
+        <!-- 4. Security Measures -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">4. Security Measures</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            Mechardo Labs implements commercially reasonable safeguards designed to protect personal data from
+            unauthorized access, alteration, disclosure, or destruction. Future iterations of DS2000 will incorporate
+            encrypted communication channels between the DS2000 device and its software to further enhance security.
+        </p>
+
+        <!-- 5. Registration Requirement -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">5. Registration Requirement</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            The DS2000 hardware requires proper registration with Mechardo Labs’ systems to function with the associated
+            software. Unregistered or improperly registered devices may be restricted from operation.
+        </p>
+
+        <!-- 6. No Web-Based Tracking -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">6. No Web-Based Tracking</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            The DS2000 software does not use cookies, web beacons, or any browser-based tracking technologies.
+        </p>
+
+        <!-- 7. User Rights -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">7. User Rights</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            Subject to applicable legal limitations, the User may request access to, rectification of, or deletion of
+            their personal data by submitting a verifiable request through the contact form at: <a
+                href="https://www.mechardo3d.xyz/contact"
+                class="text-blue-500 dark:text-blue-300 hover:underline">https://www.mechardo3d.xyz/contact</a>.
+        </p>
+
+        <!-- 8. Amendments to Policy -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">8. Amendments to Policy</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            Mechardo Labs may revise this Policy at any time without prior notice. The latest version will be available
+            through official publication channels. Continued use of DS2000 after such changes constitutes acceptance of
+            the updated Policy.
+        </p>
+
+        <!-- 9. Governing Law -->
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">9. Governing Law</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            This Policy shall be governed exclusively by the laws of the Argentine Republic.
+        </p>
+    </section>
+</div>
+{% endblock %}
