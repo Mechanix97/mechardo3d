@@ -5,3 +5,7 @@ www.mechardo3d.xyz {
 mechardo3d.xyz {
     reverse_proxy mechardo3d:3000
 }
+
+analytics.mechardo3d.xyz {
+    reverse_proxy plausible:8000
+}
