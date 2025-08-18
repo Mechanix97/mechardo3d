@@ -89,7 +89,7 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@plausible_db:5432/plausible
       - CLICKHOUSE_DATABASE_URL=http://plausible_clickhouse:8123/plausible_events_db
     ports:
-      - "8000:8000"  # Optional, for testing; remove in production
+      - "8000:8000"
     networks:
       - proxy
 
