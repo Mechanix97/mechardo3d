@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
     let hasInteracted = false;
     let autoAdvanceInterval;
+    let resetTimeout = null;
 
     // Función para actualizar el carrusel
     function updateCarousel() {
@@ -39,22 +40,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Iniciar autoavance al cargar
     startAutoAdvance();
 
-    // Navegación con botones
-    prevButton.addEventListener('click', () => {
+    // Función de debounce para manejar interacciones
+    function handleInteraction(direction) {
         hasInteracted = true;
         stopAutoAdvance();
-        currentIndex = (currentIndex === 0) ? carousel.children.length - 1 : currentIndex - 1;
-        updateCarousel();
-        setTimeout(resetInteraction, 10000); // Reanudar tras 10s de inactividad
-    });
 
-    nextButton.addEventListener('click', () => {
-        hasInteracted = true;
-        stopAutoAdvance();
-        currentIndex = (currentIndex === carousel.children.length - 1) ? 0 : currentIndex + 1;
+        // Limpiar cualquier timeout anterior
+        if (resetTimeout) {
+            clearTimeout(resetTimeout);
+        }
+
+        // Actualizar índice según dirección
+        if (direction === 'prev') {
+            currentIndex = (currentIndex === 0) ? carousel.children.length - 1 : currentIndex - 1;
+        } else if (direction === 'next') {
+            currentIndex = (currentIndex === carousel.children.length - 1) ? 0 : currentIndex + 1;
+        }
         updateCarousel();
-        setTimeout(resetInteraction, 10000); // Reanudar tras 10s de inactividad
-    });
+
+        // Programar reinicio del autoavance tras 10s de inactividad
+        resetTimeout = setTimeout(resetInteraction, 10000);
+    }
+
+    // Navegación con botones
+    prevButton.addEventListener('click', () => handleInteraction('prev'));
+    nextButton.addEventListener('click', () => handleInteraction('next'));
 
     // Navegación con teclas de flecha
     document.addEventListener('keydown', (e) => {
@@ -65,17 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // Evitar navegar con flechas si el modal está abierto
         }
         if (e.key === 'ArrowLeft') {
-            hasInteracted = true;
-            stopAutoAdvance();
-            currentIndex = (currentIndex === 0) ? carousel.children.length - 1 : currentIndex - 1;
-            updateCarousel();
-            setTimeout(resetInteraction, 10000); // Reanudar tras 10s de inactividad
+            handleInteraction('prev');
         } else if (e.key === 'ArrowRight') {
-            hasInteracted = true;
-            stopAutoAdvance();
-            currentIndex = (currentIndex === carousel.children.length - 1) ? 0 : currentIndex + 1;
-            updateCarousel();
-            setTimeout(resetInteraction, 10000); // Reanudar tras 10s de inactividad
+            handleInteraction('next');
         }
     });
 
@@ -90,14 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');
-        startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+        if (!hasInteracted) {
+            startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+        }
     });
 
     // Cerrar modal al hacer clic fuera de la imagen
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.classList.add('hidden');
-            startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+            if (!hasInteracted) {
+                startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+            }
         }
     });
 
@@ -105,7 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
             modal.classList.add('hidden');
-            startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+            if (!hasInteracted) {
+                startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+            }
         }
     });
 });
