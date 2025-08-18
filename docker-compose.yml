@@ -27,6 +27,7 @@ services:
       - caddy_config:/config
     depends_on:
       - mechardo3d
+      - plausible
     networks:
       - proxy
 
@@ -50,6 +51,14 @@ services:
       nofile:
         soft: 262144
         hard: 262144
+    environment:
+      - CLICKHOUSE_DB=plausible_events_db
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - proxy
 
@@ -64,14 +73,17 @@ services:
     restart: always
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     depends_on:
-      - plausible_db
-      - plausible_clickhouse
-      - plausible_mail
+      plausible_clickhouse:
+        condition: service_healthy
+      plausible_db:
+        condition: service_started
+      plausible_mail:
+        condition: service_started
     env_file:
       - ./secrets/plausible.env
     environment:
       - DATABASE_URL=postgres://postgres:postgres@plausible_db:5432/plausible
-      - CLICKHOUSE_DATABASE_URL=http://plausible_clickhouse:8123?username=&password=&x-migrations-table=schema_migrations
+      - CLICKHOUSE_DATABASE_URL=http://plausible_clickhouse:8123/plausible_events_db
     ports:
       - "8000:8000"
     networks:
