@@ -38,11 +38,6 @@ services:
       - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
     networks:
       - proxy
 
@@ -58,38 +53,21 @@ services:
         hard: 262144
     environment:
       - CLICKHOUSE_DB=plausible_events_db
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - proxy
-
-  plausible_mail:
-    image: bytemark/smtp
-    restart: always
     networks:
       - proxy
 
   plausible:
     image: ghcr.io/plausible/community-edition:v3.0.1
     restart: always
-    command: sh -c "sleep 20 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+    command: sh -c "/entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     depends_on:
-      plausible_db:
-        condition: service_healthy
-      plausible_clickhouse:
-        condition: service_healthy
-      plausible_mail:
-        condition: service_started
+      - plausible_db
+      - plausible_clickhouse
     env_file:
       - ./secrets/plausible.env
     environment:
       - DATABASE_URL=postgres://postgres:postgres@plausible_db:5432/plausible
       - CLICKHOUSE_DATABASE_URL=http://plausible_clickhouse:8123/plausible_events_db
-    ports:
-      - "8000:8000"
     networks:
       - proxy
 
