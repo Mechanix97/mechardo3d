@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mx-auto px-4 py-12 max-w-4xl">
     <!-- Imagen destacada -->
-    <img src="{{ post.image | default(value='\static\images\martin-fierro.avif') }}"
+    <img src="{{ post.thumbnail | default(value='\static\images\martin-fierro.avif') }}"
         alt="Imagen destacada del post {{ post.title }}"
         class="w-full h-64 md:h-96 object-cover rounded-lg shadow-md mb-8 transition-transform duration-300 hover:scale-[1.02]">
 
@@ -15,7 +15,7 @@
         class="flex flex-col sm:flex-row items-center justify-center gap-4 text-gray-600 dark:text-gray-300 text-sm mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg py-4 px-6">
         <span>Por {{ post.author | default(value='Lucas Rack') }}</span>
         <span>|</span>
-        <span>{{ post.date }}</span>
+        <span>{{ post.date | date_format }}</span>
         {% if post.category %}
         <span>|</span>
         <span
@@ -26,7 +26,7 @@
 
     <!-- Contenido -->
     <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-200 mb-12 leading-relaxed">
-        {{ post.content | safe }}
+        {{ content | safe }}
     </div>
 
     <!-- Botón Volver -->
@@ -51,7 +51,7 @@
             <article
                 class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 <a href="/blog/{{ related.id }}" aria-label="Leer el post {{ related.title }}">
-                    <img src="{{ related.image | default(value='\static\images\martin-fierro.avif') }}"
+                    <img src="{{ related.thumbnail | default(value='\static\images\martin-fierro.avif') }}"
                         alt="Imagen destacada del post {{ related.title }}"
                         class="w-full h-48 object-cover rounded-t-lg">
                     <div class="p-6">
@@ -61,7 +61,7 @@
                         <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300 text-sm mb-4">
                             <span>Por {{ related.author | default(value='Lucas Rack') }}</span>
                             <span>|</span>
-                            <span>{{ related.date }}</span>
+                            <span>{{ related.date | date_format }}</span>
                             {% if related.category %}
                             <span>|</span>
                             <span
