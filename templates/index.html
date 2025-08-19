@@ -38,7 +38,8 @@
             <div
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 hover:shadow-[0_10px_20px_rgba(59,130,246,0.3)] dark:hover:shadow-[0_10px_20px_rgba(147,197,253,0.3)] transition-all duration-300 transform hover:scale-105">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">{{ post.title }}</h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ post.content | truncate(length=150) }}
+                <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ post.summary | truncate(length=150)
+                    }}
                 </p>
                 <a href="/blog/{{ post.id }}" class="text-blue-500 dark:text-blue-300 hover:underline font-medium">Leer
                     más</a>

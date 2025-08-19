@@ -2,19 +2,27 @@
     {
         "id": "1",
         "title": "Primera Publicación",
-        "content": "Este es el contenido de mi primera publicación en el blog.",
+        "summary": "Este es el contenido de mi primera publicación en el blog.",
         "date": "27-07-2025"
     },
     {
         "id": "2",
         "title": "Segunda Publicación",
-        "content": "Aquí va el contenido de la segunda publicación.",
+        "summary": "Aquí va el contenido de la segunda publicación.",
         "date": "28-07-2025"
     },
     {
         "id": "3",
         "title": "Tercera Publicación",
-        "content": "Aquí va el contenido de la segunda publicación.",
+        "summary": "Aquí va el contenido de la tercera publicación.",
         "date": "30-07-2025"
+    },
+    {
+        "id": "4",
+        "title": "Alarma IoT con Rust, MQTT, ESPHome y Telegram",
+        "summary": "",
+        "thumbnail": "\\static\\images\\blog\\alarma-iot\\thumbnail.png",
+        "route": "iot-alarm.html",
+        "date": "18-08-2025"
     }
 ]
