@@ -48,24 +48,24 @@ async fn main() {
     let app = Router::new()
         .route("/", get(redirect_to_default_lang))
         // Language-prefixed routes
-        .route("/:lang", get(routes::home::index))
-        .route("/:lang/ds2000", get(routes::ds2000::ds2000))
+        .route("/{lang}", get(routes::home::index))
+        .route("/{lang}/ds2000", get(routes::ds2000::ds2000))
         .route(
-            "/:lang/ds2000/terms-of-service",
+            "/{lang}/ds2000/terms-of-service",
             get(routes::ds2000::terms_of_service),
         )
         .route(
-            "/:lang/ds2000/privacy-policy",
+            "/{lang}/ds2000/privacy-policy",
             get(routes::ds2000::privacy_policy),
         )
-        .route("/:lang/blog", get(routes::blog::blog))
-        .route("/:lang/blog/:id", get(routes::blog::blog_post))
+        .route("/{lang}/blog", get(routes::blog::blog))
+        .route("/{lang}/blog/{id}", get(routes::blog::blog_post))
         .route(
-            "/:lang/contact",
+            "/{lang}/contact",
             get(routes::contact::contact).post(routes::contact::contact_submit),
         )
-        .route("/:lang/contact_success", get(routes::contact::contact_success))
-        .route("/:lang/me", get(routes::me::me))
+        .route("/{lang}/contact_success", get(routes::contact::contact_success))
+        .route("/{lang}/me", get(routes::me::me))
         .route("/static/{*path}", get(serve_static))
         .layer(Extension(tera))
         .layer(Extension(rate_limit));
