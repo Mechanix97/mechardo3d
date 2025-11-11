@@ -11,7 +11,7 @@ use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
 use std::net::SocketAddr;
-use std::path::Path;
+use std::path::Path as StdPath;
 use std::sync::Arc;
 use tera::{Context, Tera};
 use tokio::sync::RwLock;
@@ -39,11 +39,26 @@ pub struct ErrorResponse {
 
 pub type RateLimitState = Arc<RwLock<HashMap<String, chrono::DateTime<Utc>>>>;
 
+use crate::language::Language;
+use axum::extract::Path as AxumPath;
+
 // Handler for GET /contact
-pub async fn contact(Extension(tera): Extension<Tera>) -> axum::response::Html<String> {
+pub async fn contact(
+    AxumPath(lang): AxumPath<String>,
+    Extension(tera): Extension<Tera>,
+) -> axum::response::Html<String> {
+    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let mut context = Context::new();
-    context.insert("title", "Contacto");
-    context.insert("content", "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas.");
+    context.insert("lang", language.as_str());
+    context.insert("title", if language == Language::English { "Contact" } else { "Contacto" });
+    context.insert(
+        "content",
+        if language == Language::English {
+            "Contact Mechardo Labs. Send me a message or follow me on social media to explore tutorials, electronics projects and other initiatives."
+        } else {
+            "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas."
+        },
+    );
     context.insert(
         "recaptcha_site_key",
         "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8",
@@ -55,9 +70,14 @@ pub async fn contact(Extension(tera): Extension<Tera>) -> axum::response::Html<S
 }
 
 // Handler for GET /contact_success
-pub async fn contact_success(Extension(tera): Extension<Tera>) -> axum::response::Html<String> {
+pub async fn contact_success(
+    AxumPath(lang): AxumPath<String>,
+    Extension(tera): Extension<Tera>,
+) -> axum::response::Html<String> {
+    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let mut context = Context::new();
-    context.insert("title", "Message Sent");
+    context.insert("lang", language.as_str());
+    context.insert("title", if language == Language::English { "Message Sent" } else { "Mensaje Enviado" });
     let rendered = tera
         .render("contact_success.html", &context)
         .expect("Error rendering template");
@@ -66,10 +86,12 @@ pub async fn contact_success(Extension(tera): Extension<Tera>) -> axum::response
 
 // Handler for POST /contact
 pub async fn contact_submit(
+    AxumPath(lang): AxumPath<String>,
     Extension(rate_limit): Extension<RateLimitState>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
     Form(form): Form<ContactForm>,
 ) -> Result<Redirect, (StatusCode, Json<ErrorResponse>)> {
+    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     info!("Processing contact form submission from IP: {}", addr.ip());
 
     // Rate limiting by IP (1 message every 5 minutes)
@@ -225,7 +247,7 @@ pub async fn contact_submit(
     });
 
     let messages_file = "data/messages.json";
-    let mut messages: Vec<serde_json::Value> = if Path::new(messages_file).exists() {
+    let mut messages: Vec<serde_json::Value> = if StdPath::new(messages_file).exists() {
         match fs::read_to_string(messages_file) {
             Ok(data) => match serde_json::from_str(&data) {
                 Ok(messages) => messages,
@@ -283,5 +305,5 @@ pub async fn contact_submit(
     rate_limit.insert(ip, now);
 
     // Redirect to /contact_success
-    Ok(Redirect::to("/contact_success"))
+    Ok(Redirect::to(&format!("/{}/contact_success", language.as_str())))
 }

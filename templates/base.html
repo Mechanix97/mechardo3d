@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="">
+<html lang="{{ lang | default(value='es') }}" class="">
 
 <head>
     <meta charset="UTF-8">
@@ -40,15 +40,41 @@
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
     <nav class="bg-gray-800 dark:bg-gray-800 p-4">
-        <ul class="flex justify-center gap-12">
-            <li><a href="/ds2000" class="text-white hover:underline font-bold">DS2000</a></li>
-            <li><a href="/blog" class="text-white hover:underline font-bold">Blog</a></li>
-            <li><a href="/contact" class="text-white hover:underline font-bold">Contacto</a></li>
-        </ul>
+        <div class="flex justify-between items-center max-w-6xl mx-auto">
+            <ul class="flex justify-center gap-12">
+                <li><a href="/{{ lang | default(value='es') }}/ds2000" class="text-white hover:underline font-bold">DS2000</a></li>
+                <li><a href="/{{ lang | default(value='es') }}/blog" class="text-white hover:underline font-bold">Blog</a></li>
+                <li><a href="/{{ lang | default(value='es') }}/contact" class="text-white hover:underline font-bold">{% if lang == "en" %}Contact{% else %}Contacto{% endif %}</a></li>
+            </ul>
+            <!-- Language Selector -->
+            <div class="flex gap-2" id="lang-selector">
+                <button onclick="switchLanguage('es')" 
+                   class="px-3 py-1 rounded {% if lang == 'es' or lang is not defined %}bg-blue-600 text-white{% else %}bg-gray-700 text-gray-300 hover:bg-gray-600{% endif %} font-bold">
+                    ES
+                </button>
+                <button onclick="switchLanguage('en')" 
+                   class="px-3 py-1 rounded {% if lang == 'en' %}bg-blue-600 text-white{% else %}bg-gray-700 text-gray-300 hover:bg-gray-600{% endif %} font-bold">
+                    EN
+                </button>
+            </div>
+            <script>
+                function switchLanguage(newLang) {
+                    const currentPath = window.location.pathname;
+                    // Remove current language prefix if present
+                    let pathWithoutLang = currentPath.replace(/^\/(en|es)/, '');
+                    // If path is just /, make it empty
+                    if (pathWithoutLang === '/') {
+                        pathWithoutLang = '';
+                    }
+                    // Navigate to new language path
+                    window.location.href = '/' + newLang + pathWithoutLang;
+                }
+            </script>
+        </div>
     </nav>
     <main class="w-auto mx-auto p-4">
         <div class="flex justify-center container mx-auto px-4 py-8  max-w-4xl">
-            <a href="/">
+            <a href="/{{ lang | default(value='es') }}">
                 <svg class="w-full h-auto object-contain transform hover:scale-105 transition-all duration-300"
                     version="1.0" xmlns="http://www.w3.org/2000/svg" width="1280.000000pt" height="720.000000pt"
                     viewBox="0 0 1280.000000 720.000000" preserveAspectRatio="xMidYMid meet">
@@ -319,8 +345,8 @@
 <footer
     class="text-center py-4 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white">
     <p class="text-lg">
-        &copy; 2025 Mechardo Labs. Todos los derechos reservados.
-        <a href="/contact" class="underline hover:text-blue-200">Contactanos</a>
+        &copy; 2025 Mechardo Labs. {% if lang == "en" %}All rights reserved.{% else %}Todos los derechos reservados.{% endif %}
+        <a href="/{{ lang | default(value='es') }}/contact" class="underline hover:text-blue-200">{% if lang == "en" %}Contact us{% else %}Contactanos{% endif %}</a>
     </p>
 </footer>
 
