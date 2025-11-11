@@ -10,8 +10,8 @@
 
 // Language configuration - Add new languages here easily
 const LANGUAGES = [
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'en', name: 'English', flag: '🇬🇧' }
+    { code: 'es', name: 'Español' },
+    { code: 'en', name: 'English' }
 ];
 
 /**
@@ -28,10 +28,10 @@ function initLanguageSelector(currentLang) {
         return;
     }
 
-    // Update the current language flag
+    // Update the current language code display
     const currentLanguage = LANGUAGES.find(lang => lang.code === currentLang);
     if (currentLanguage) {
-        currentLangFlag.textContent = currentLanguage.flag;
+        currentLangFlag.textContent = currentLanguage.code.toUpperCase();
     }
 
     // Build the dropdown menu
@@ -42,9 +42,8 @@ function initLanguageSelector(currentLang) {
                 <button onclick="switchLanguage('${lang.code}')"
                     class="w-full px-4 py-2 text-left text-white hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors ${
                         isActive ? 'bg-blue-600 dark:bg-blue-700 font-bold' : ''
-                    } flex items-center gap-2">
-                    <span class="text-lg">${lang.flag}</span>
-                    <span>${lang.name}</span>
+                    }">
+                    ${lang.name}
                 </button>
             `;
         })

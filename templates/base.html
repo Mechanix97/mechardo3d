@@ -40,7 +40,7 @@
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
     <nav class="bg-gray-800 dark:bg-gray-800 p-4">
-        <div class="flex justify-between items-center max-w-6xl mx-auto">
+        <div class="flex justify-center items-center max-w-6xl mx-auto">
             <ul class="flex justify-center gap-12">
                 <li><a href="/{{ lang | default(value='es') }}/ds2000" class="text-white hover:underline font-bold">DS2000</a></li>
                 <li><a href="/{{ lang | default(value='es') }}/blog" class="text-white hover:underline font-bold">Blog</a></li>
@@ -308,10 +308,10 @@
     <div class="fixed bottom-20 right-4 z-50">
         <div class="relative">
             <button id="lang-dropdown-btn" aria-label="Language selector"
-                class="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
-                <span id="current-lang-flag" class="text-xl">🌐</span>
+                class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors font-bold">
+                <span id="current-lang-flag">ES</span>
             </button>
-            <div id="lang-dropdown-menu" class="hidden absolute bottom-12 right-0 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden min-w-[150px] border border-gray-700">
+            <div id="lang-dropdown-menu" class="hidden absolute bottom-12 right-0 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden min-w-[140px] border border-gray-700">
                 <!-- Language options will be populated by JS -->
             </div>
         </div>
