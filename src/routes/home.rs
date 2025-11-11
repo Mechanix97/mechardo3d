@@ -1,9 +1,15 @@
 use crate::data::blog_data::get_posts;
+use crate::language::Language;
 use crate::models::blog_post::BlogPost;
-use axum::{Extension, response::Html};
+use axum::{extract::Path, Extension, response::Html};
 use tera::{Context, Tera};
 
-pub async fn index(Extension(tera): Extension<Tera>) -> Html<String> {
+pub async fn index(
+    Path(lang): Path<String>,
+    Extension(tera): Extension<Tera>,
+) -> Html<String> {
+    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
+    
     // Obtener posts del blog
     let posts = match get_posts() {
         Ok(mut posts) => {
@@ -19,7 +25,8 @@ pub async fn index(Extension(tera): Extension<Tera>) -> Html<String> {
 
     // Configurar el contexto de Tera
     let mut context = Context::new();
-    context.insert("title", "Inicio");
+    context.insert("lang", language.as_str());
+    context.insert("title", if language == Language::English { "Home" } else { "Inicio" });
     context.insert("posts", &posts);
 
     // Renderizar la plantilla
