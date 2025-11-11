@@ -73,6 +73,11 @@ function initLanguageSelector(currentLang) {
  * @param {string} newLang - The language code to switch to
  */
 function switchLanguage(newLang) {
+    // Save language preference to cookie (expires in 1 year)
+    const expirationDate = new Date();
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+    document.cookie = `lang=${newLang}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Lax`;
+
     const currentPath = window.location.pathname;
 
     // Remove current language prefix if present

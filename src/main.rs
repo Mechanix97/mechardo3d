@@ -1,4 +1,8 @@
-use axum::{Extension, Router, response::IntoResponse, routing::get};
+use axum::{
+    http::HeaderMap,
+    response::{IntoResponse, Redirect},
+    Extension, Router, routing::get,
+};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -9,14 +13,15 @@ use tracing::info;
 mod data;
 mod date_format;
 mod language;
+mod language_detection;
 mod models;
 mod routes;
 
-
-// Redirect root to default language (Spanish)
-async fn redirect_to_default_lang() -> impl IntoResponse {
-    use axum::response::Redirect;
-    Redirect::permanent(&format!("/{}", language::Language::default().as_str()))
+// Redirect root to detected or default language
+async fn redirect_to_default_lang(headers: HeaderMap) -> impl IntoResponse {
+    // Detect language from Accept-Language header
+    let detected_lang = language_detection::detect_from_accept_language(&headers);
+    Redirect::permanent(&format!("/{}", detected_lang.as_str()))
 }
 
 async fn serve_static(axum::extract::Path(path): axum::extract::Path<String>) -> impl IntoResponse {
