@@ -18,7 +18,7 @@
                     ¡Llevá tu setup al siguiente nivel!
                 </p>
                 <div class="text-center">
-                    <a href="/ds2000"
+                    <a href="/{{ lang | default(value='es') }}/ds2000"
                         class="inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white rounded-lg shadow-md hover:shadow-xl hover:from-blue-600 hover:to-blue-800 dark:hover:from-blue-500 dark:hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         Explorá el DS2000
                     </a>
@@ -41,7 +41,7 @@
                 <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ post.summary | truncate(length=150)
                     }}
                 </p>
-                <a href="/blog/{{ post.id }}" class="text-blue-500 dark:text-blue-300 hover:underline font-medium">Leer
+                <a href="/{{ lang | default(value='es') }}/blog/{{ post.id }}" class="text-blue-500 dark:text-blue-300 hover:underline font-medium">Leer
                     más</a>
             </div>
             {% endfor %}

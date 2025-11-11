@@ -7,8 +7,8 @@
         {% for post in posts %}
         <article
             class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <a href="/blog/{{ post.id }}" aria-label="Leer el post {{ post.title }}">
-                <img src="{{ post.thumbnail | default(value='static\images\martin-fierro.avif') }}"
+            <a href="/{{ lang | default(value='es') }}/blog/{{ post.id }}" aria-label="Leer el post {{ post.title }}">
+                <img src="{{ post.thumbnail | default(value='/static/images/martin-fierro.avif') }}"
                     alt="Imagen destacada del post {{ post.title }}" class="w-full h-48 object-cover rounded-t-lg">
                 <div class="p-6">
                     <h2
@@ -27,7 +27,7 @@
                     </div>
                     <p class="text-gray-700 dark:text-gray-200 mb-4 line-clamp-3">{{ post.summary |
                         default(value='Resumen no disponible. Haz clic para leer más.') }}</p>
-                    <a href="/blog/{{ post.id }}"
+                    <a href="/{{ lang | default(value='es') }}/blog/{{ post.id }}"
                         class="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-200">Leer
                         más</a>
                 </div>
