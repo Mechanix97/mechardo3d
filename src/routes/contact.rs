@@ -52,9 +52,14 @@ pub async fn contact(
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
+    let title = t.get("page_titles")
+        .and_then(|pt| pt.get("contact"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("Contact");
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
-    context.insert("title", if language == Language::English { "Contact" } else { "Contacto" });
+    context.insert("title", title);
     context.insert("t", &t);
     context.insert(
         "recaptcha_site_key",
@@ -75,9 +80,14 @@ pub async fn contact_success(
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
+    let title = t.get("page_titles")
+        .and_then(|pt| pt.get("message_sent"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("Message Sent");
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
-    context.insert("title", if language == Language::English { "Message Sent" } else { "Mensaje Enviado" });
+    context.insert("title", title);
     context.insert("t", &t);
     let rendered = tera
         .render("contact_success.html", &context)
@@ -242,7 +252,7 @@ pub async fn contact_submit(
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(ErrorResponse {
-                    error: "Error al verificar reCAPTCHA. Probá de nuevo.".to_string(),
+                    error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
                 }),
             ));
         }
@@ -277,7 +287,7 @@ pub async fn contact_submit(
                 return Err((
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(ErrorResponse {
-                        error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                        error: get_error_msg(&translations, language.as_str(), "save_failed"),
                     }),
                 ));
             }
@@ -295,7 +305,7 @@ pub async fn contact_submit(
                 return Err((
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(ErrorResponse {
-                        error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                        error: get_error_msg(&translations, language.as_str(), "save_failed"),
                     }),
                 ));
             }
@@ -305,7 +315,7 @@ pub async fn contact_submit(
             return Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(ErrorResponse {
-                    error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                    error: get_error_msg(&translations, language.as_str(), "save_failed"),
                 }),
             ));
         }

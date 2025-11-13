@@ -46,7 +46,7 @@
             "en": "A complete IoT alarm system integrating hardware and software using modern open-source technologies."
         },
         "thumbnail": "\\static\\images\\blog\\alarma-iot\\thumbnail.png",
-        "route": "iot-alarm.html",
+        "route": "iot-alarm",
         "date": "18-08-2025"
     }
 ]

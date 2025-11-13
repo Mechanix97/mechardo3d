@@ -86,7 +86,7 @@ pub async fn blog_post(
     context.insert("t", &t);
 
     if let Some(post_content_route) = &post.route {
-        let content = fs::read_to_string(format!("templates/blog/{}", post_content_route))
+        let content = fs::read_to_string(format!("templates/blog/{}/{}.html", post_content_route, language.as_str()))
             .expect("Post content not found");
         context.insert("content", &content);
     } else {

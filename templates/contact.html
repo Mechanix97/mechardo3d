@@ -106,5 +106,13 @@
 </div>
 <!-- reCAPTCHA v3 script -->
 <script src="https://www.google.com/recaptcha/api.js?render=6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8"></script>
+<script>
+    // Pass translations to JavaScript
+    window.contactTranslations = {
+        unknownError: "{{ t.errors.contact_unknown }}",
+        submitError: "{{ t.errors.contact_submit }}",
+        recaptchaError: "{{ t.errors.recaptcha_failed }}"
+    };
+</script>
 <script src="/static/js/contact.js"></script>
 {% endblock %}

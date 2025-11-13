@@ -14,9 +14,14 @@ pub async fn me(
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
+    let title = t.get("page_titles")
+        .and_then(|pt| pt.get("about"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("About Me");
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
-    context.insert("title", if language == Language::English { "About me" } else { "Sobre mí" });
+    context.insert("title", title);
     context.insert("t", &t);
 
     let rendered = tera

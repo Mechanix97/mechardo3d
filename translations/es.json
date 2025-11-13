@@ -20,6 +20,13 @@
       "title": "Conectá con Nosotros"
     }
   },
+  "page_titles": {
+    "home": "Inicio",
+    "contact": "Contacto",
+    "message_sent": "Mensaje Enviado",
+    "about": "Sobre mí",
+    "blog": "Blog"
+  },
   "contact": {
     "title": "Contacto",
     "intro": "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas.",
@@ -69,51 +76,6 @@
     "view_more": "Ver más blogs",
     "keep_reading": "Seguir Leyendo",
     "summary_default": "Resumen no disponible. Haz clic para leer más."
-  },
-  "iot_alarm": {
-    "title": "Construyendo un Sistema de Alarma IoT con Rust, MQTT, ESPHome y Telegram",
-    "intro": "En Mechardo Labs me apasiona crear soluciones IoT innovadoras que integren hardware y software de forma fluida. En mi hogar, encontré un antiguo sistema de alarma inactivo, con sensores y sirenas cuyas conexiones convergían en un punto central. Aprovechando esta infraestructura, diseñé un sistema de alarma IoT avanzado utilizando un broker MQTT, una placa ESP32 con ESPHome para la gestión del hardware, y un puente (bridge) en Rust para proporcionar una interfaz robusta. Este sistema permite enviar notificaciones en tiempo real (por ejemplo, a través de Telegram), combinando fiabilidad, escalabilidad y una experiencia de usuario optimizada.",
-    "connections": {
-      "title": "Conexiones",
-      "description": "El proyecto mqtt-IOT-alarm es un sistema de alarma IoT basado en MQTT diseñado para monitorear tres sensores de movimiento distribuidos en la casa y dos sensores de apertura de puerta, uno adelante y otro atrás. Todos estos sensores se conectan a un ESP32 con conector USB tipo C (se utilizó un adaptador para una correcta lectura).",
-      "alt_esp32": "ESP32 USB tipo C",
-      "voltage_description": "Para adaptar la conexión de los sensores se requiere utilizar 12 V de alimentación, y dado que los sensores funcionan como interruptores, se reduce la tensión a la salida para que el ESP32 pueda leerla correctamente. Se empleó un divisor resistivo en la salida del sensor (reduciendo a 3.3 V) y se agregó un capacitor como filtro pasa bajos. Para las sirenas, se utilizó un par de relés que actúan como desacoplo de señales. Por último, se conectó el receptor de un timbre inalámbrico directamente a la placa.",
-      "alt_connections": "Conexiones alarma IOT"
-    },
-    "pins": {
-      "title": "Pines utilizados",
-      "pin16": "Pin 16: Sirena exterior",
-      "pin17": "Pin 17: Sirena interior",
-      "pin33": "Pin 33: Timbre inalámbrico",
-      "pin13": "Pin 13: Sensor puerta delantera",
-      "pin12": "Pin 12: Sensor puerta trasera",
-      "pin14": "Pin 14: Sensor movimiento 1",
-      "pin27": "Pin 27: Sensor movimiento 2",
-      "pin26": "Pin 26: Sensor movimiento 3"
-    },
-    "esphome": {
-      "title": "Programando el ESP32 con ESPHome",
-      "why_title": "¿Por qué ESPHome?",
-      "why_description": "ESPHome es una plataforma de código abierto que simplifica la programación de dispositivos ESP32 y ESP8266 para aplicaciones IoT. Su configuración basada en YAML nos permitió definir rápidamente los sensores y actuadores sin escribir código C++ de bajo nivel. Además, ESPHome se integra fácilmente con MQTT y permite actualizaciones OTA (over the air).",
-      "config_title": "Configuración del ESP32",
-      "config_description": "Esta configuración publica los eventos de los sensores al broker MQTT y permite controlar las sirenas remotamente a través de tópicos MQTT."
-    },
-    "bridge": {
-      "title": "Bridge MQTT con Rust",
-      "description": "La pieza clave de software es un programa en Rust que actúa como puente entre los sensores/actuadores y los usuarios (yo). El ESP32 envía datos de los sensores mediante mensajes MQTT al broker local (Mosquitto). El programa Rust se suscribe a los tópicos de interés y ejecuta la lógica definida cada vez que recibe un mensaje. Gracias al modelo pub/sub de MQTT, el hardware y el software están desacoplados: los dispositivos publican datos en el broker y el servicio en Rust los recibe al suscribirse a esos tópicos.",
-      "client": "Cliente MQTT en Rust (rumqttc): el bridge usa el crate rumqttc para conectarse al broker MQTT. Se inicializan las opciones de conexión (MqttOptions), se crea un cliente y se suscribe a los tópicos relevantes (por ejemplo alarm/motion, alarm/door).",
-      "notifications": "Manejo de notificaciones: el servicio también puede enviar alertas a Telegram. De este modo, cada evento (como \"Movimiento detectado\") se envía como mensaje al chat configurado del usuario. Para poder activar o desactivar la alarma, se envian mensajes MQTT a través de Home Assistant",
-      "concurrency": "Concurrencia y ejecución: el programa corre bajo tokio::main, lanzando una tarea que procesa eventloop.poll() de manera continua y no bloqueante. Esto permite manejar múltiples mensajes en paralelo sin afectar la respuesta en tiempo real.",
-      "security": "Seguridad: el broker MQTT se configura con autenticación y, opcionalmente, cifrado TLS/SSL. Además, el código puede aplicar mecanismos de debounce para evitar inundar de notificaciones al usuario durante eventos muy frecuentes."
-    },
-    "conclusion": {
-      "title": "Conclusión",
-      "description": "El proyecto mqtt-IOT-alarm fue una experiencia emocionante en la construcción de un sistema de alarma IoT completamente local. Al combinar el rendimiento de Rust en el puente MQTT, la simplicidad de ESPHome en el ESP32, y la flexibilidad de Telegram para notificaciones, creamos una solución confiable y fácil de usar. Este proyecto demuestra el poder de integrar herramientas de código abierto con desarrollo personalizado para resolver problemas reales del hogar."
-    },
-    "github": {
-      "aria": "Visitar repositorio en GitHub",
-      "label": "Ver en GitHub"
-    }
   },
   "ds2000": {
     "description": "Controlá tus comunicaciones con el DS2000, una botonera USB con 3 botones y 2 LEDs RGB diseñada para mutear/desmutear, ensordecer/desensordecer y desconectar de canales en Discord.",
@@ -183,6 +145,8 @@
     "rate_limit": "Esperá 5 minutos antes de mandar otro mensaje.",
     "fill_fields": "Completá todos los campos del formulario.",
     "recaptcha_failed": "Falló la verificación de reCAPTCHA. Probá de nuevo.",
-    "save_failed": "Error al guardar el mensaje. Probá de nuevo."
+    "save_failed": "Error al guardar el mensaje. Probá de nuevo.",
+    "contact_unknown": "Ocurrió un error desconocido. Probá de nuevo.",
+    "contact_submit": "Error al enviar el formulario. Probá de nuevo."
   }
 }

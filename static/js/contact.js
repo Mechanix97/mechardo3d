@@ -52,24 +52,24 @@ document.addEventListener('DOMContentLoaded', function () {
                                     errorAlert.classList.remove('hidden');
                                 } else {
                                     console.error('No error message in response');
-                                    errorMessage.textContent = 'Ocurrió un error desconocido. Probá de nuevo.';
+                                    errorMessage.textContent = window.contactTranslations.unknownError;
                                     errorAlert.classList.remove('hidden');
                                 }
                             }).catch(err => {
                                 console.error('Failed to parse JSON response:', err);
-                                errorMessage.textContent = 'Error al enviar el formulario. Probá de nuevo.';
+                                errorMessage.textContent = window.contactTranslations.submitError;
                                 errorAlert.classList.remove('hidden');
                             });
                         }
                     })
                     .catch(error => {
                         console.error('Fetch error:', error);
-                        errorMessage.textContent = 'Error al enviar el formulario. Probá de nuevo.';
+                        errorMessage.textContent = window.contactTranslations.submitError;
                         errorAlert.classList.remove('hidden');
                     });
             }).catch(error => {
                 console.error('reCAPTCHA error:', error);
-                errorMessage.textContent = 'Error con reCAPTCHA. Probá de nuevo.';
+                errorMessage.textContent = window.contactTranslations.recaptchaError;
                 errorAlert.classList.remove('hidden');
             });
         });

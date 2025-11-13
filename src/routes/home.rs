@@ -26,10 +26,10 @@ pub async fn index(
 ) -> Html<String> {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
 
-    // Obtener posts del blog
+    // Get blog posts
     let posts_view = match get_posts() {
         Ok(mut posts) => {
-            // Ordenar por fecha descendente y tomar los 3 más recientes
+            // Sort by date descending and take the 3 most recent
             posts.sort_by(|a, b| b.date.cmp(&a.date));
             posts.into_iter().take(3).map(|post| BlogPostView {
                 id: post.id.clone(),
@@ -42,21 +42,26 @@ pub async fn index(
         }
         Err(e) => {
             eprintln!("Error loading blog posts from data/blog_posts.json: {}", e);
-            Vec::new() // Usar lista vacía para no romper el renderizado
+            Vec::new() // Use empty list to avoid breaking rendering
         }
     };
 
     // Get translations for current language
     let t = get_translations_for_lang(&translations, language.as_str());
 
-    // Configurar el contexto de Tera
+    let title = t.get("page_titles")
+        .and_then(|pt| pt.get("home"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("Home");
+
+    // Configure Tera context
     let mut context = Context::new();
     context.insert("lang", language.as_str());
-    context.insert("title", if language == Language::English { "Home" } else { "Inicio" });
+    context.insert("title", title);
     context.insert("posts", &posts_view);
     context.insert("t", &t);
 
-    // Renderizar la plantilla
+    // Render template
     match tera.render("index.html", &context) {
         Ok(rendered) => Html(rendered),
         Err(e) => {
