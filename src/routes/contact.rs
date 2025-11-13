@@ -7,7 +7,7 @@ use axum::{
 use chrono::Utc;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
+use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::fs;
 use std::net::SocketAddr;
@@ -16,6 +16,7 @@ use std::sync::Arc;
 use tera::{Context, Tera};
 use tokio::sync::RwLock;
 use tracing::{error, info};
+use crate::translations::get_translations_for_lang;
 
 #[derive(Deserialize, Serialize)]
 pub struct ContactForm {
@@ -46,19 +47,15 @@ use axum::extract::Path as AxumPath;
 pub async fn contact(
     AxumPath(lang): AxumPath<String>,
     Extension(tera): Extension<Tera>,
+    Extension(translations): Extension<Arc<HashMap<String, Value>>>,
 ) -> axum::response::Html<String> {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
+    let t = get_translations_for_lang(&translations, language.as_str());
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", if language == Language::English { "Contact" } else { "Contacto" });
-    context.insert(
-        "content",
-        if language == Language::English {
-            "Contact Mechardo Labs. Send me a message or follow me on social media to explore tutorials, electronics projects and other initiatives."
-        } else {
-            "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas."
-        },
-    );
+    context.insert("t", &t);
     context.insert(
         "recaptcha_site_key",
         "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8",
@@ -73,21 +70,36 @@ pub async fn contact(
 pub async fn contact_success(
     AxumPath(lang): AxumPath<String>,
     Extension(tera): Extension<Tera>,
+    Extension(translations): Extension<Arc<HashMap<String, Value>>>,
 ) -> axum::response::Html<String> {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
+    let t = get_translations_for_lang(&translations, language.as_str());
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", if language == Language::English { "Message Sent" } else { "Mensaje Enviado" });
+    context.insert("t", &t);
     let rendered = tera
         .render("contact_success.html", &context)
         .expect("Error rendering template");
     axum::response::Html(rendered)
 }
 
+/// Helper function to get error message translation
+fn get_error_msg(translations: &HashMap<String, Value>, lang: &str, key: &str) -> String {
+    let t = get_translations_for_lang(translations, lang);
+    t.get("errors")
+        .and_then(|e| e.get(key))
+        .and_then(|v| v.as_str())
+        .unwrap_or(key)
+        .to_string()
+}
+
 // Handler for POST /contact
 pub async fn contact_submit(
     AxumPath(lang): AxumPath<String>,
     Extension(rate_limit): Extension<RateLimitState>,
+    Extension(translations): Extension<Arc<HashMap<String, Value>>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
     Form(form): Form<ContactForm>,
 ) -> Result<Redirect, (StatusCode, Json<ErrorResponse>)> {
@@ -105,7 +117,7 @@ pub async fn contact_submit(
             return Err((
                 StatusCode::TOO_MANY_REQUESTS,
                 Json(ErrorResponse {
-                    error: "Esperá 5 minutos antes de mandar otro mensaje.".to_string(),
+                    error: get_error_msg(&translations, language.as_str(), "rate_limit"),
                 }),
             ));
         }
@@ -118,7 +130,7 @@ pub async fn contact_submit(
         return Err((
             StatusCode::BAD_REQUEST,
             Json(ErrorResponse {
-                error: "Completá todos los campos del formulario.".to_string(),
+                error: get_error_msg(&translations, language.as_str(), "fill_fields"),
             }),
         ));
     }
@@ -175,7 +187,7 @@ pub async fn contact_submit(
                                     return Err((
                                         StatusCode::FORBIDDEN,
                                         Json(ErrorResponse {
-                                            error: "Falló la verificación de reCAPTCHA. Probá de nuevo.".to_string(),
+                                            error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
                                         }),
                                     ));
                                 }
@@ -188,8 +200,7 @@ pub async fn contact_submit(
                                 return Err((
                                     StatusCode::INTERNAL_SERVER_ERROR,
                                     Json(ErrorResponse {
-                                        error: "Error al verificar reCAPTCHA. Probá de nuevo."
-                                            .to_string(),
+                                        error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
                                     }),
                                 ));
                             }
@@ -203,7 +214,7 @@ pub async fn contact_submit(
                         return Err((
                             StatusCode::INTERNAL_SERVER_ERROR,
                             Json(ErrorResponse {
-                                error: "Error al verificar reCAPTCHA. Probá de nuevo.".to_string(),
+                                error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
                             }),
                         ));
                     }
@@ -221,7 +232,7 @@ pub async fn contact_submit(
                 return Err((
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(ErrorResponse {
-                        error: "Error al verificar reCAPTCHA. Probá de nuevo.".to_string(),
+                        error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
                     }),
                 ));
             }
@@ -256,7 +267,7 @@ pub async fn contact_submit(
                     return Err((
                         StatusCode::INTERNAL_SERVER_ERROR,
                         Json(ErrorResponse {
-                            error: "Error al guardar el mensaje. Probá de nuevo.".to_string(),
+                            error: get_error_msg(&translations, language.as_str(), "save_failed"),
                         }),
                     ));
                 }

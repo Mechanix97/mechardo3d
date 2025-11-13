@@ -1,26 +1,50 @@
 [
     {
         "id": "1",
-        "title": "Primera Publicación",
-        "summary": "Este es el contenido de mi primera publicación en el blog.",
+        "title": {
+            "es": "Primera Publicación",
+            "en": "First Post"
+        },
+        "summary": {
+            "es": "Este es el contenido de mi primera publicación en el blog.",
+            "en": "This is the content of my first blog post."
+        },
         "date": "27-07-2025"
     },
     {
         "id": "2",
-        "title": "Segunda Publicación",
-        "summary": "Aquí va el contenido de la segunda publicación.",
+        "title": {
+            "es": "Segunda Publicación",
+            "en": "Second Post"
+        },
+        "summary": {
+            "es": "Aquí va el contenido de la segunda publicación.",
+            "en": "Here is the content of the second post."
+        },
         "date": "28-07-2025"
     },
     {
         "id": "3",
-        "title": "Tercera Publicación",
-        "summary": "Aquí va el contenido de la tercera publicación.",
+        "title": {
+            "es": "Tercera Publicación",
+            "en": "Third Post"
+        },
+        "summary": {
+            "es": "Aquí va el contenido de la tercera publicación.",
+            "en": "Here is the content of the third post."
+        },
         "date": "30-07-2025"
     },
     {
         "id": "4",
-        "title": "Alarma IoT con Rust, MQTT, ESPHome y Telegram",
-        "summary": "",
+        "title": {
+            "es": "Alarma IoT con Rust, MQTT, ESPHome y Telegram",
+            "en": "IoT Alarm with Rust, MQTT, ESPHome and Telegram"
+        },
+        "summary": {
+            "es": "Un sistema de alarma IoT completo que integra hardware y software utilizando tecnologías modernas de código abierto.",
+            "en": "A complete IoT alarm system integrating hardware and software using modern open-source technologies."
+        },
         "thumbnail": "\\static\\images\\blog\\alarma-iot\\thumbnail.png",
         "route": "iot-alarm.html",
         "date": "18-08-2025"

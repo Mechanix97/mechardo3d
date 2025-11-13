@@ -1,0 +1,188 @@
+{
+  "nav": {
+    "contact": "Contact"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "contact": "Contact us"
+  },
+  "home": {
+    "ds2000": {
+      "title": "DS2000: Discord to the Next Level",
+      "description": "The DS2000 is your ally to master Discord, with 3 buttons to mute, deafen, and disconnect. 2 customizable RGB LEDs to see the status. Take your setup to the next level!",
+      "cta": "Explore the DS2000"
+    },
+    "blog": {
+      "title": "Latest from the Blog",
+      "read_more": "Read more"
+    },
+    "social": {
+      "title": "Connect with Us"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Contact Mechardo Labs. Send me a message or follow me on my social networks to explore tutorials, electronics projects, and other initiatives.",
+    "email": {
+      "label": "Email",
+      "aria": "Send me an email"
+    },
+    "form": {
+      "title": "Send a Message",
+      "name": "Name",
+      "name_placeholder": "Your name",
+      "email": "Email",
+      "email_placeholder": "your@email.com",
+      "message": "Message",
+      "message_placeholder": "Write your message here",
+      "submit": "Send Message"
+    }
+  },
+  "social": {
+    "instagram": {
+      "aria": "Visit my Instagram profile"
+    },
+    "discord": {
+      "aria": "Join my Discord server"
+    },
+    "x": {
+      "aria": "Visit my X profile"
+    },
+    "youtube": {
+      "aria": "Visit my YouTube channel"
+    },
+    "telegram": {
+      "aria": "Contact me on Telegram"
+    }
+  },
+  "blog": {
+    "title": "Mechardo's Blog",
+    "read_post": "Read the post",
+    "by": "By",
+    "summary_default": "Summary not available. Click to read more.",
+    "read_more": "Read more"
+  },
+  "blog_post": {
+    "featured_image": "Featured image of the post",
+    "by": "By",
+    "back_to_list": "Back to blog list",
+    "view_more": "View more blogs",
+    "keep_reading": "Keep Reading",
+    "summary_default": "Summary not available. Click to read more."
+  },
+  "iot_alarm": {
+    "title": "Building an IoT Alarm System with Rust, MQTT, ESPHome, and Telegram",
+    "intro": "At Mechardo Labs, I'm passionate about creating innovative IoT solutions that seamlessly integrate hardware and software. In my home, I found an inactive old alarm system, with sensors and sirens whose connections converged at a central point. Leveraging this infrastructure, I designed an advanced IoT alarm system using an MQTT broker, an ESP32 board with ESPHome for hardware management, and a Rust bridge to provide a robust interface. This system enables real-time notifications (for example, via Telegram), combining reliability, scalability, and an optimized user experience.",
+    "connections": {
+      "title": "Connections",
+      "description": "The mqtt-IOT-alarm project is an MQTT-based IoT alarm system designed to monitor three motion sensors distributed around the house and two door opening sensors, one in front and one in back. All these sensors connect to an ESP32 with USB Type-C connector (an adapter was used for proper reading).",
+      "alt_esp32": "ESP32 USB Type C",
+      "voltage_description": "To adapt the sensor connection, a 12V power supply is required, and since the sensors function as switches, the output voltage is reduced so the ESP32 can read it correctly. A resistive divider was used at the sensor output (reducing to 3.3V) and a capacitor was added as a low-pass filter. For the sirens, a pair of relays were used to act as signal decoupling. Finally, a wireless doorbell receiver was connected directly to the board.",
+      "alt_connections": "IoT alarm connections"
+    },
+    "pins": {
+      "title": "Pins used",
+      "pin16": "Pin 16: Exterior siren",
+      "pin17": "Pin 17: Interior siren",
+      "pin33": "Pin 33: Wireless doorbell",
+      "pin13": "Pin 13: Front door sensor",
+      "pin12": "Pin 12: Back door sensor",
+      "pin14": "Pin 14: Motion sensor 1",
+      "pin27": "Pin 27: Motion sensor 2",
+      "pin26": "Pin 26: Motion sensor 3"
+    },
+    "esphome": {
+      "title": "Programming the ESP32 with ESPHome",
+      "why_title": "Why ESPHome?",
+      "why_description": "ESPHome is an open-source platform that simplifies programming ESP32 and ESP8266 devices for IoT applications. Its YAML-based configuration allowed us to quickly define sensors and actuators without writing low-level C++ code. Additionally, ESPHome easily integrates with MQTT and allows OTA (over the air) updates.",
+      "config_title": "ESP32 Configuration",
+      "config_description": "This configuration publishes sensor events to the MQTT broker and allows remote control of the sirens via MQTT topics."
+    },
+    "bridge": {
+      "title": "MQTT Bridge with Rust",
+      "description": "The key software piece is a Rust program that acts as a bridge between the sensors/actuators and the users (me). The ESP32 sends sensor data via MQTT messages to the local broker (Mosquitto). The Rust program subscribes to topics of interest and executes defined logic each time it receives a message. Thanks to MQTT's pub/sub model, hardware and software are decoupled: devices publish data to the broker and the Rust service receives them by subscribing to those topics.",
+      "client": "MQTT Client in Rust (rumqttc): the bridge uses the rumqttc crate to connect to the MQTT broker. Connection options (MqttOptions) are initialized, a client is created, and it subscribes to relevant topics (for example alarm/motion, alarm/door).",
+      "notifications": "Notification handling: the service can also send alerts to Telegram. This way, each event (like \"Motion detected\") is sent as a message to the user's configured chat. To be able to activate or deactivate the alarm, MQTT messages are sent through Home Assistant",
+      "concurrency": "Concurrency and execution: the program runs under tokio::main, launching a task that processes eventloop.poll() continuously and non-blocking. This allows handling multiple messages in parallel without affecting real-time response.",
+      "security": "Security: the MQTT broker is configured with authentication and, optionally, TLS/SSL encryption. Additionally, the code can apply debounce mechanisms to avoid flooding the user with notifications during very frequent events."
+    },
+    "conclusion": {
+      "title": "Conclusion",
+      "description": "The mqtt-IOT-alarm project was an exciting experience in building a completely local IoT alarm system. By combining Rust's performance in the MQTT bridge, ESPHome's simplicity on the ESP32, and Telegram's flexibility for notifications, we created a reliable and easy-to-use solution. This project demonstrates the power of integrating open-source tools with custom development to solve real home problems."
+    },
+    "github": {
+      "aria": "Visit GitHub repository",
+      "label": "View on GitHub"
+    }
+  },
+  "ds2000": {
+    "description": "Control your communications with the DS2000, a USB button box with 3 buttons and 2 RGB LEDs designed to mute/unmute, deafen/undeafen, and disconnect from channels in Discord.",
+    "buy": "Buy",
+    "features": {
+      "title": "Main Features",
+      "control": {
+        "title": "Intuitive Control",
+        "description": "Three programmable buttons to mute/unmute, deafen/undeafen, and disconnect from channels, ideal for streaming and virtual meetings."
+      },
+      "leds": {
+        "title": "Customizable RGB LEDs",
+        "description": "Two RGB LEDs to indicate status or customize with colors according to your configuration."
+      },
+      "usb": {
+        "title": "USB Plug-and-Play Connection",
+        "description": "Connect the DS2000 to your computer via USB and use it without complications on Windows, macOS, or Linux."
+      },
+      "design": {
+        "title": "Compact Design",
+        "description": "Ergonomic and portable size to integrate perfectly into your setup."
+      }
+    },
+    "specs": {
+      "title": "Technical Specifications",
+      "connection": "Connection",
+      "buttons": "Buttons",
+      "buttons_desc": "3 programmable buttons (mute/unmute, deafen/undeafen, disconnect)",
+      "indicators": "Indicators",
+      "indicators_desc": "2 configurable RGB LEDs",
+      "compatibility": "Compatibility",
+      "dimensions": "Dimensions",
+      "weight": "Weight",
+      "material": "Material",
+      "material_desc": "High resistance ABS plastic",
+      "software": "Software",
+      "software_desc": "Optional drivers for advanced customization"
+    },
+    "drivers": {
+      "title": "Drivers and Software",
+      "description": "Download the drivers and configuration software to customize your DS2000.",
+      "windows": "Windows Driver",
+      "macos": "macOS Driver"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Is it compatible with Discord?",
+      "a1": "Yes, the DS2000 is designed to integrate with applications like Discord allowing you to control audio and connection functions.",
+      "q2": "Do I need to install drivers?",
+      "a2": "Yes, the DS2000 software contains the device drivers.",
+      "q3": "Can I use the DS2000 on Linux?",
+      "a3": "Yes, it is compatible with distributions like Ubuntu and Fedora using the driver software."
+    },
+    "images": {
+      "front": "DS2000 front view",
+      "back": "DS2000 back view",
+      "top": "DS2000 connected",
+      "enlarged": "Enlarged image of DS2000"
+    }
+  },
+  "contact_success": {
+    "title": "Message Sent!",
+    "message": "Thank you for contacting Mechardo Labs. I will respond soon.",
+    "back": "Back to Contact"
+  },
+  "errors": {
+    "rate_limit": "Wait 5 minutes before sending another message.",
+    "fill_fields": "Complete all form fields.",
+    "recaptcha_failed": "reCAPTCHA verification failed. Please try again.",
+    "save_failed": "Error saving message. Please try again."
+  }
+}

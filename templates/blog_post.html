@@ -3,7 +3,7 @@
 <div class="container mx-auto px-4 py-12 max-w-4xl">
     <!-- Imagen destacada -->
     <img src="{{ post.thumbnail | default(value='/static/images/martin-fierro.avif') }}"
-        alt="Imagen destacada del post {{ post.title }}"
+        alt="{{ t.blog_post.featured_image }} {{ post.title }}"
         class="w-full h-64 md:h-96 object-cover rounded-lg shadow-md mb-8 transition-transform duration-300 hover:scale-[1.02]">
 
     <!-- Título -->
@@ -13,9 +13,9 @@
     <!-- Metadatos -->
     <div
         class="flex flex-col sm:flex-row items-center justify-center gap-4 text-gray-600 dark:text-gray-300 text-sm mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg py-4 px-6">
-        <span>Por {{ post.author | default(value='Lucas Rack') }}</span>
+        <span>{{ t.blog_post.by }} {{ post.author | default(value='Lucas Rack') }}</span>
         <span>|</span>
-        <span>{{ post.date | date_format }}</span>
+        <span>{{ post.date | date_format(lang=lang) }}</span>
         {% if post.category %}
         <span>|</span>
         <span
@@ -33,35 +33,35 @@
     <div class="text-center">
         <a href="/{{ lang | default(value='es') }}/blog"
             class="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            aria-label="Volver a la lista de blogs">
+            aria-label="{{ t.blog_post.back_to_list }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            Ver más blogs
+            {{ t.blog_post.view_more }}
         </a>
     </div>
 
     <!-- Publicaciones relacionadas -->
     {% if related_posts %}
     <div class="mt-12">
-        <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-300 mb-8 text-center">Seguir Leyendo</h2>
+        <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-300 mb-8 text-center">{{ t.blog_post.keep_reading }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {% for related in related_posts %}
             <article
                 class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <a href="/{{ lang | default(value='es') }}/blog/{{ related.id }}" aria-label="Leer el post {{ related.title }}">
+                <a href="/{{ lang | default(value='es') }}/blog/{{ related.id }}" aria-label="{{ t.blog.read_post }} {{ related.title }}">
                     <img src="{{ related.thumbnail | default(value='/static/images/martin-fierro.avif') }}"
-                        alt="Imagen destacada del post {{ related.title }}"
+                        alt="{{ t.blog_post.featured_image }} {{ related.title }}"
                         class="w-full h-48 object-cover rounded-t-lg">
                     <div class="p-6">
                         <h3
                             class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-2 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200">
                             {{ related.title }}</h3>
                         <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300 text-sm mb-4">
-                            <span>Por {{ related.author | default(value='Lucas Rack') }}</span>
+                            <span>{{ t.blog_post.by }} {{ related.author | default(value='Lucas Rack') }}</span>
                             <span>|</span>
-                            <span>{{ related.date | date_format }}</span>
+                            <span>{{ related.date | date_format(lang=lang) }}</span>
                             {% if related.category %}
                             <span>|</span>
                             <span
@@ -70,10 +70,9 @@
                             {% endif %}
                         </div>
                         <p class="text-gray-700 dark:text-gray-200 mb-4 line-clamp-3">{{ related.summary |
-                            default(value='Resumen no disponible. Haz clic para leer más.') }}</p>
+                            default(value=t.blog_post.summary_default) }}</p>
                         <a href="/{{ lang | default(value='es') }}/blog/{{ related.id }}"
-                            class="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-200">Leer
-                            más</a>
+                            class="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-200">{{ t.blog.read_more }}</a>
                     </div>
                 </a>
             </article>

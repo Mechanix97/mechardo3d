@@ -3,6 +3,7 @@ use axum::{
     response::{IntoResponse, Redirect},
     Extension, Router, routing::get,
 };
+use serde_json::Value;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -16,6 +17,7 @@ mod language;
 mod language_detection;
 mod models;
 mod routes;
+mod translations;
 
 // Redirect root to detected or default language
 async fn redirect_to_default_lang(headers: HeaderMap) -> impl IntoResponse {
@@ -49,6 +51,10 @@ async fn main() {
     tera.register_filter("date_format", date_format::date_format);
     let rate_limit: routes::contact::RateLimitState = Arc::new(RwLock::new(HashMap::new()));
 
+    // Load translations
+    let translations: Arc<HashMap<String, Value>> = Arc::new(translations::load_translations());
+    info!("Loaded translations for languages: {:?}", translations.keys());
+
     // Redirect root to default language
     let app = Router::new()
         .route("/", get(redirect_to_default_lang))
@@ -73,7 +79,8 @@ async fn main() {
         .route("/{lang}/me", get(routes::me::me))
         .route("/static/{*path}", get(serve_static))
         .layer(Extension(tera))
-        .layer(Extension(rate_limit));
+        .layer(Extension(rate_limit))
+        .layer(Extension(translations));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     info!("Server running on http://127.0.0.1:3000/");

@@ -3,70 +3,53 @@
     <section class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 mb-12">
         <h1
             class="text-4xl font-extrabold font-mono mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
-            Construyendo un Sistema de Alarma IoT con Rust, MQTT, ESPHome y Telegram
+            {{ t.iot_alarm.title }}
         </h1>
 
         <!-- Introduction -->
         <p class="text-lg text-gray-700 dark:text-gray-200 mb-6">
-            En Mechardo Labs me apasiona crear soluciones IoT innovadoras que integren hardware y software de forma
-            fluida. En mi hogar, encontré un antiguo sistema de alarma inactivo, con sensores y sirenas cuyas conexiones
-            convergían en un punto central. Aprovechando esta infraestructura, diseñé un sistema de alarma IoT avanzado
-            utilizando un broker MQTT, una placa ESP32 con ESPHome para la gestión del hardware, y un puente (bridge) en
-            Rust para proporcionar una interfaz robusta. Este sistema permite enviar notificaciones en tiempo real (por
-            ejemplo, a través de Telegram), combinando fiabilidad, escalabilidad y una experiencia de usuario
-            optimizada.
+            {{ t.iot_alarm.intro }}
         </p>
 
         <!-- Project Overview -->
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">Conexiones</h2>
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">{{ t.iot_alarm.connections.title }}</h2>
         <p class="text-gray-700 dark:text-gray-300 mb-6">
-            El proyecto <code>mqtt-IOT-alarm</code> es un sistema de alarma IoT basado en MQTT diseñado para monitorear
-            tres sensores de movimiento distribuidos en la casa y dos sensores de apertura de puerta, uno adelante y
-            otro
-            atrás. Todos estos sensores se conectan a un ESP32 con conector USB tipo C (se utilizó un adaptador para una
-            correcta lectura).
+            {{ t.iot_alarm.connections.description }}
         </p>
-        <img src="/static/images/blog/alarma-iot/esp32-pinout.jpg" alt="ESP32 USB type C"
+        <img src="/static/images/blog/alarma-iot/esp32-pinout.jpg" alt="{{ t.iot_alarm.connections.alt_esp32 }}"
             class="w-full h-full rounded-lg mb-6">
 
         <p class="text-gray-700 dark:text-gray-300 mb-6">
-            Para adaptar la conexión de los sensores se requiere utilizar 12 V de alimentación, y dado que los sensores
-            funcionan como interruptores, se reduce la tensión a la salida para que el ESP32 pueda leerla correctamente.
-            Se empleó un divisor resistivo en la salida del sensor (reduciendo a 3.3 V) y se agregó un capacitor como
-            filtro pasa bajos. Para las sirenas, se utilizó un par de relés que actúan como desacoplo de señales. Por
-            último, se conectó el receptor de un timbre inalámbrico directamente a la placa.
+            {{ t.iot_alarm.connections.voltage_description }}
         </p>
 
-        <img src="/static/images/blog/alarma-iot/thumbnail.png" alt="Conexiones alarma IOT"
+        <img src="/static/images/blog/alarma-iot/thumbnail.png" alt="{{ t.iot_alarm.connections.alt_connections }}"
             class="w-full h-full  rounded-lg mb-6">
 
         <section class="mb-6">
-            <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-300">Pines utilizados</h3>
+            <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-300">{{ t.iot_alarm.pins.title }}</h3>
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6">
                 <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
-                    <li>Pin 16: Sirena exterior</li>
-                    <li>Pin 17: Sirena interior</li>
-                    <li>Pin 33: Timbre inalámbrico</li>
-                    <li>Pin 13: Sensor puerta delantera</li>
-                    <li>Pin 12: Sensor puerta trasera</li>
-                    <li>Pin 14: Sensor movimiento 1</li>
-                    <li>Pin 27: Sensor movimiento 2</li>
-                    <li>Pin 26: Sensor movimiento 3</li>
+                    <li>{{ t.iot_alarm.pins.pin16 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin17 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin33 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin13 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin12 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin14 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin27 }}</li>
+                    <li>{{ t.iot_alarm.pins.pin26 }}</li>
                 </ul>
             </div>
         </section>
 
         <!-- ESPHome Section -->
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">Programando el ESP32 con ESPHome</h2>
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">¿Por qué ESPHome?</h3>
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">{{ t.iot_alarm.esphome.title }}</h2>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">{{ t.iot_alarm.esphome.why_title }}</h3>
         <p class="text-gray-700 dark:text-gray-300 mb-4">
-            ESPHome es una plataforma de código abierto que simplifica la programación de dispositivos ESP32 y ESP8266
-            para aplicaciones IoT. Su configuración basada en YAML nos permitió definir rápidamente los sensores y
-            actuadores sin escribir código C++ de bajo nivel. Además, ESPHome se integra fácilmente con MQTT y permite
-            actualizaciones OTA (over the air).
+            {{ t.iot_alarm.esphome.why_description }}
         </p>
 
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">Configuración del ESP32</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">{{ t.iot_alarm.esphome.config_title }}</h3>
         <pre
             class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-sm text-gray-800 dark:text-gray-200 overflow-x-auto"><code>esphome:
   name: esp32-mqtt-alarm
@@ -129,61 +112,39 @@ binary_sensor:
         payload: "ON"</code></pre>
 
         <p class="text-gray-700 dark:text-gray-300 mb-6">
-            Esta configuración publica los eventos de los sensores al broker MQTT y permite controlar las sirenas
-            remotamente a través de tópicos MQTT.
+            {{ t.iot_alarm.esphome.config_description }}
         </p>
 
         <!-- Bridge MQTT with Rust Section -->
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">Bridge MQTT con Rust</h2>
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">{{ t.iot_alarm.bridge.title }}</h2>
         <p class="text-gray-700 dark:text-gray-300 mb-6">
-            La pieza clave de software es un programa en Rust que actúa como puente entre los sensores/actuadores y los
-            usuarios (yo). El ESP32 envía datos de los sensores mediante mensajes MQTT al broker local (Mosquitto). El
-            programa Rust se suscribe a los tópicos de interés y ejecuta la lógica definida cada vez que
-            recibe un mensaje. Gracias al modelo <strong>pub/sub</strong> de MQTT, el hardware y el software están
-            desacoplados: los dispositivos publican datos en el broker y el servicio en Rust los recibe al suscribirse a
-            esos tópicos.
+            {{ t.iot_alarm.bridge.description }}
         </p>
 
         <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2">
-            <li><strong>Cliente MQTT en Rust (rumqttc)</strong>: el bridge usa el crate <code>rumqttc</code> para
-                conectarse al broker MQTT. Se inicializan las opciones de conexión (<code>MqttOptions</code>), se crea
-                un
-                cliente y se suscribe a los tópicos relevantes (por ejemplo <code>alarm/motion</code>,
-                <code>alarm/door</code>).
-            </li>
-            <li><strong>Manejo de notificaciones</strong>: el servicio también puede enviar alertas a Telegram. De este
-                modo, cada evento (como “Movimiento detectado”) se envía como mensaje
-                al chat configurado del usuario. Para poder activar o desactivar la alarma, se envian mensajes MQTT a
-                través de Home Assistant</li>
-            <li><strong>Concurrencia y ejecución</strong>: el programa corre bajo <code>tokio::main</code>, lanzando una
-                tarea que procesa <code>eventloop.poll()</code> de manera continua y no bloqueante. Esto permite manejar
-                múltiples mensajes en paralelo sin afectar la respuesta en tiempo real.</li>
-            <li><strong>Seguridad</strong>: el broker MQTT se configura con autenticación y, opcionalmente, cifrado
-                TLS/SSL. Además, el código puede aplicar mecanismos de <em>debounce</em> para evitar inundar de
-                notificaciones al usuario durante eventos muy frecuentes.</li>
+            <li><strong>{{ t.iot_alarm.bridge.client }}</strong></li>
+            <li><strong>{{ t.iot_alarm.bridge.notifications }}</strong></li>
+            <li><strong>{{ t.iot_alarm.bridge.concurrency }}</strong></li>
+            <li><strong>{{ t.iot_alarm.bridge.security }}</strong></li>
         </ul>
 
         <!-- Conclusion -->
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">Conclusión</h2>
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4">{{ t.iot_alarm.conclusion.title }}</h2>
         <p class="text-gray-700 dark:text-gray-300 mb-6">
-            El proyecto <code>mqtt-IOT-alarm</code> fue una experiencia emocionante en la construcción de un sistema de
-            alarma IoT completamente local. Al combinar el rendimiento de Rust en el puente MQTT, la simplicidad de
-            ESPHome en el ESP32, y la flexibilidad de Telegram para notificaciones, creamos una solución confiable y
-            fácil de usar. Este proyecto demuestra el poder de integrar herramientas de código abierto con desarrollo
-            personalizado para resolver problemas reales del hogar.
+            {{ t.iot_alarm.conclusion.description }}
         </p>
 
 
         <div class="text-center mb-6">
             <a href="https://github.com/Mechanix97/mqtt-IoT-alarm" target="_blank"
-                aria-label="Visitar repositorio en GitHub"
+                aria-label="{{ t.iot_alarm.github.aria }}"
                 class="inline-block px-6 py-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                 <svg class="w-6 h-6 inline-block mr-2" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-.76-1.11-.76-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.29.1-2.68 0 0 .84-.27 2.75 1.02a9.56 9.56 0 012.5-.33 9.56 9.56 0 012.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.39.2 2.43.1 2.68.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" />
                 </svg>
-                Ver en GitHub
+                {{ t.iot_alarm.github.label }}
             </a>
         </div>
     </section>

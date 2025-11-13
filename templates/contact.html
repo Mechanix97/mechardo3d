@@ -2,26 +2,23 @@
 {% block content %}
 <div class="container mx-auto px-4 py-12 max-w-4xl">
     <!-- Título y mensaje introductorio -->
-    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 dark:text-blue-300 mb-6 text-center leading-tight">{{
-        title | default(value='Contacto') }}</h1>
-    <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">{{ content | default(value='Contactá con
-        Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de
-        electrónica y otras iniciativas.') }}</p>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 dark:text-blue-300 mb-6 text-center leading-tight">{{ t.contact.title }}</h1>
+    <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">{{ t.contact.intro }}</p>
 
     <!-- Canales de contacto -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
         <!-- Email -->
-        <a href="mailto:mechardo.labs@gmail.com" aria-label="Enviarme un correo electrónico"
+        <a href="mailto:mechardo.labs@gmail.com" aria-label="{{ t.contact.email.aria }}"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
             </svg>
-            <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Correo Electrónico</span>
+            <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">{{ t.contact.email.label }}</span>
         </a>
         <!-- Twitter (X) -->
-        <a href="https://x.com/MechardoLabs" target="_blank" aria-label="Visitar mi perfil de X"
+        <a href="https://x.com/MechardoLabs" target="_blank" aria-label="{{ t.social.x.aria }}"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -31,7 +28,7 @@
             <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">X</span>
         </a>
         <!-- Instagram -->
-        <a href="https://www.instagram.com/mechardo3d/" target="_blank" aria-label="Visitar mi perfil de Instagram"
+        <a href="https://www.instagram.com/mechardo3d/" target="_blank" aria-label="{{ t.social.instagram.aria }}"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +38,7 @@
             <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Instagram</span>
         </a>
         <!-- Discord -->
-        <a href="https://discord.gg/VtbFAGJe86" target="_blank" aria-label="Unirse a mi servidor de Discord"
+        <a href="https://discord.gg/VtbFAGJe86" target="_blank" aria-label="{{ t.social.discord.aria }}"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +48,7 @@
             <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Discord</span>
         </a>
         <!-- Telegram -->
-        <a href="https://t.me/your-profile" target="_blank" aria-label="Contactarme por Telegram"
+        <a href="https://t.me/your-profile" target="_blank" aria-label="{{ t.social.telegram.aria }}"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" viewBox="0 0 240 240" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +59,7 @@
             <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Telegram</span>
         </a>
         <!-- YouTube -->
-        <a href="https://www.youtube.com/@MechardoLabs" target="_blank" aria-label="Visitar mi canal de YouTube"
+        <a href="https://www.youtube.com/@MechardoLabs" target="_blank" aria-label="{{ t.social.youtube.aria }}"
             class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
             <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -75,32 +72,30 @@
 
     <!-- Contact form -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">Enviar un Mensaje</h2>
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">{{ t.contact.form.title }}</h2>
         <form method="POST" action="/{{ lang | default(value='es') }}/contact" class="space-y-4" id="contact-form">
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
+                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t.contact.form.name }}</label>
                 <input type="text" id="name" name="name" value="{{ name | default(value='') }}"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 autofill:bg-transparent"
-                    placeholder="Tu nombre" required>
+                    placeholder="{{ t.contact.form.name_placeholder }}" required>
             </div>
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo
-                    Electrónico</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t.contact.form.email }}</label>
                 <input type="email" id="email" name="email" value="{{ email | default(value='') }}"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 autofill:bg-transparent"
-                    placeholder="tu@email.com" required>
+                    placeholder="{{ t.contact.form.email_placeholder }}" required>
             </div>
             <div>
-                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mensaje</label>
+                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t.contact.form.message }}</label>
                 <textarea id="message" name="message" rows="4"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors duration-200 autofill:bg-white dark:autofill:bg-gray-700"
-                    placeholder="Escribí tu mensaje acá" required>{{ message | default(value='') }}</textarea>
+                    placeholder="{{ t.contact.form.message_placeholder }}" required>{{ message | default(value='') }}</textarea>
             </div>
             <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
             <div class="text-center">
                 <button type="submit"
-                    class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Enviar
-                    Mensaje</button>
+                    class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">{{ t.contact.form.submit }}</button>
             </div>
             <div id="error-alert"
                 class="hidden mb-6 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg shadow-md">
