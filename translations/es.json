@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "contact": "Contacto"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "contact": "Contactanos"
+  },
+  "home": {
+    "ds2000": {
+      "title": "DS2000: Discord al siguiente nivel",
+      "description": "El DS2000 es tu aliado para dominar Discord, con 3 botones para mutear, ensordecer y desconectarse. 2 LEDs RGB personalizables para ver el estado. ¡Llevá tu setup al siguiente nivel!",
+      "cta": "Explorá el DS2000"
+    },
+    "blog": {
+      "title": "Lo Último del Blog",
+      "read_more": "Leer más"
+    },
+    "social": {
+      "title": "Conectá con Nosotros"
+    }
+  },
+  "page_titles": {
+    "home": "Inicio",
+    "contact": "Contacto",
+    "message_sent": "Mensaje Enviado",
+    "about": "Sobre mí",
+    "blog": "Blog"
+  },
+  "contact": {
+    "title": "Contacto",
+    "intro": "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas.",
+    "email": {
+      "label": "Correo Electrónico",
+      "aria": "Enviarme un correo electrónico"
+    },
+    "form": {
+      "title": "Enviar un Mensaje",
+      "name": "Nombre",
+      "name_placeholder": "Tu nombre",
+      "email": "Correo Electrónico",
+      "email_placeholder": "tu@email.com",
+      "message": "Mensaje",
+      "message_placeholder": "Escribí tu mensaje acá",
+      "submit": "Enviar Mensaje"
+    }
+  },
+  "social": {
+    "instagram": {
+      "aria": "Visitar mi perfil de Instagram"
+    },
+    "discord": {
+      "aria": "Unirse a mi servidor de Discord"
+    },
+    "x": {
+      "aria": "Visitar mi perfil de X"
+    },
+    "youtube": {
+      "aria": "Visitar mi canal de YouTube"
+    },
+    "telegram": {
+      "aria": "Contactarme por Telegram"
+    }
+  },
+  "blog": {
+    "title": "Blog de Mechardo",
+    "read_post": "Leer el post",
+    "by": "Por",
+    "summary_default": "Resumen no disponible. Haz clic para leer más.",
+    "read_more": "Leer más"
+  },
+  "blog_post": {
+    "featured_image": "Imagen destacada del post",
+    "by": "Por",
+    "back_to_list": "Volver a la lista de blogs",
+    "view_more": "Ver más blogs",
+    "keep_reading": "Seguir Leyendo",
+    "summary_default": "Resumen no disponible. Haz clic para leer más."
+  },
+  "ds2000": {
+    "description": "Controlá tus comunicaciones con el DS2000, una botonera USB con 3 botones y 2 LEDs RGB diseñada para mutear/desmutear, ensordecer/desensordecer y desconectar de canales en Discord.",
+    "buy": "Comprar",
+    "features": {
+      "title": "Características Principales",
+      "control": {
+        "title": "Control Intuitivo",
+        "description": "Tres botones programables para mutear/desmutear, ensordecer/desensordecer y desconectar de canales, ideales para streaming y reuniones virtuales."
+      },
+      "leds": {
+        "title": "LEDs RGB Personalizables",
+        "description": "Dos LEDs RGB para indicar estados o personalizar con colores según tu configuración."
+      },
+      "usb": {
+        "title": "Conexión USB Plug-and-Play",
+        "description": "Conectá el DS2000 a tu computadora por USB y usalo sin complicaciones en Windows, macOS o Linux."
+      },
+      "design": {
+        "title": "Diseño Compacto",
+        "description": "Tamaño ergonómico y portátil para integrarse perfectamente en tu setup."
+      }
+    },
+    "specs": {
+      "title": "Especificaciones Técnicas",
+      "connection": "Conexión",
+      "buttons": "Botones",
+      "buttons_desc": "3 botones programables (mutear/desmutear, ensordecer/desensordecer, desconectar)",
+      "indicators": "Indicadores",
+      "indicators_desc": "2 LEDs RGB configurables",
+      "compatibility": "Compatibilidad",
+      "dimensions": "Dimensiones",
+      "weight": "Peso",
+      "material": "Material",
+      "material_desc": "Plástico ABS de alta resistencia",
+      "software": "Software",
+      "software_desc": "Controladores opcionales para personalización avanzada"
+    },
+    "drivers": {
+      "title": "Controladores y Software",
+      "description": "Descargá los controladores y el software de configuración para personalizar tu DS2000.",
+      "windows": "Controlador para Windows",
+      "macos": "Controlador para macOS"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": "¿Es compatible con Discord?",
+      "a1": "Sí, el DS2000 está diseñado para integrarse con aplicaciones como Discord permitiendo controlar funciones de audio y conexión.",
+      "q2": "¿Necesito instalar controladores?",
+      "a2": "Si, dentro del software de DS2000 se contienen los controladores del dispositivo.",
+      "q3": "¿Puedo usar el DS2000 en Linux?",
+      "a3": "Sí, es compatible con distribuciones como Ubuntu y Fedora utilizando el software controlador."
+    },
+    "images": {
+      "front": "DS2000 vista frontal",
+      "back": "DS2000 vista posterior",
+      "top": "DS2000 conectado",
+      "enlarged": "Imagen ampliada del DS2000"
+    }
+  },
+  "contact_success": {
+    "title": "¡Mensaje Enviado!",
+    "message": "Gracias por contactar con Mechardo Labs. Te responderé pronto.",
+    "back": "Volver a Contacto"
+  },
+  "errors": {
+    "rate_limit": "Esperá 5 minutos antes de mandar otro mensaje.",
+    "fill_fields": "Completá todos los campos del formulario.",
+    "recaptcha_failed": "Falló la verificación de reCAPTCHA. Probá de nuevo.",
+    "save_failed": "Error al guardar el mensaje. Probá de nuevo.",
+    "contact_unknown": "Ocurrió un error desconocido. Probá de nuevo.",
+    "contact_submit": "Error al enviar el formulario. Probá de nuevo."
+  }
+}

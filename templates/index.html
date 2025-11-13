@@ -10,17 +10,15 @@
             <div class="p-8">
                 <h2
                     class="text-4xl font-extrabold font-mono mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
-                    DS2000: Discord al siguiente nivel
+                    {{ t.home.ds2000.title }}
                 </h2>
                 <p class="text-lg text-gray-700 dark:text-gray-200 mb-6 text-center">
-                    El DS2000 es tu aliado para dominar Discord, con 3 botones para mutear, ensordecer y desconectarse.
-                    2 LEDs RGB personalizables para ver el estado.
-                    ¡Llevá tu setup al siguiente nivel!
+                    {{ t.home.ds2000.description }}
                 </p>
                 <div class="text-center">
                     <a href="/{{ lang | default(value='es') }}/ds2000"
                         class="inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white rounded-lg shadow-md hover:shadow-xl hover:from-blue-600 hover:to-blue-800 dark:hover:from-blue-500 dark:hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Explorá el DS2000
+                        {{ t.home.ds2000.cta }}
                     </a>
                 </div>
             </div>
@@ -31,7 +29,7 @@
     <section class="mb-16">
         <h2
             class="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
-            Lo Último del Blog
+            {{ t.home.blog.title }}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             {% for post in posts %}
@@ -41,8 +39,7 @@
                 <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ post.summary | truncate(length=150)
                     }}
                 </p>
-                <a href="/{{ lang | default(value='es') }}/blog/{{ post.id }}" class="text-blue-500 dark:text-blue-300 hover:underline font-medium">Leer
-                    más</a>
+                <a href="/{{ lang | default(value='es') }}/blog/{{ post.id }}" class="text-blue-500 dark:text-blue-300 hover:underline font-medium">{{ t.home.blog.read_more }}</a>
             </div>
             {% endfor %}
         </div>
@@ -52,11 +49,11 @@
     <section class="mb-16 text-center">
         <h2
             class="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-transparent bg-clip-text">
-            Conectá con Nosotros
+            {{ t.home.social.title }}
         </h2>
         <div class="flex justify-center gap-6 flex-wrap">
             <!-- Instagram -->
-            <a href="https://www.instagram.com/mechardo3d/" target="_blank" aria-label="Visitar mi perfil de Instagram"
+            <a href="https://www.instagram.com/mechardo3d/" target="_blank" aria-label="{{ t.social.instagram.aria }}"
                 class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
                 <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +63,7 @@
                 <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Instagram</span>
             </a>
             <!-- Discord -->
-            <a href="https://discord.gg/VtbFAGJe86" target="_blank" aria-label="Unirse a mi servidor de Discord"
+            <a href="https://discord.gg/VtbFAGJe86" target="_blank" aria-label="{{ t.social.discord.aria }}"
                 class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
                 <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +73,7 @@
                 <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Discord</span>
             </a>
             <!-- X -->
-            <a href="https://x.com/MechardoLabs" target="_blank" aria-label="Visitar mi perfil de X"
+            <a href="https://x.com/MechardoLabs" target="_blank" aria-label="{{ t.social.x.aria }}"
                 class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
                 <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +83,7 @@
                 <span class="text-lg font-semibold text-blue-600 dark:text-blue-300">Twitter</span>
             </a>
             <!-- YouTube -->
-            <a href="https://www.youtube.com/@MechardoLabs" target="_blank" aria-label="Visitar mi canal de YouTube"
+            <a href="https://www.youtube.com/@MechardoLabs" target="_blank" aria-label="{{ t.social.youtube.aria }}"
                 class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300 transform hover:scale-105">
                 <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">

@@ -44,7 +44,7 @@
             <ul class="flex justify-center gap-12">
                 <li><a href="/{{ lang | default(value='es') }}/ds2000" class="text-white hover:underline font-bold">DS2000</a></li>
                 <li><a href="/{{ lang | default(value='es') }}/blog" class="text-white hover:underline font-bold">Blog</a></li>
-                <li><a href="/{{ lang | default(value='es') }}/contact" class="text-white hover:underline font-bold">{% if lang == "en" %}Contact{% else %}Contacto{% endif %}</a></li>
+                <li><a href="/{{ lang | default(value='es') }}/contact" class="text-white hover:underline font-bold">{{ t.nav.contact }}</a></li>
             </ul>
         </div>
     </nav>
@@ -343,8 +343,8 @@
 <footer
     class="text-center py-4 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white">
     <p class="text-lg">
-        &copy; 2025 Mechardo Labs. {% if lang == "en" %}All rights reserved.{% else %}Todos los derechos reservados.{% endif %}
-        <a href="/{{ lang | default(value='es') }}/contact" class="underline hover:text-blue-200">{% if lang == "en" %}Contact us{% else %}Contactanos{% endif %}</a>
+        &copy; 2025 Mechardo Labs. {{ t.footer.rights }}
+        <a href="/{{ lang | default(value='es') }}/contact" class="underline hover:text-blue-200">{{ t.footer.contact }}</a>
     </p>
 </footer>
 

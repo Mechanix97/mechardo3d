@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let autoAdvanceInterval;
     let resetTimeout = null;
 
-    // Función para actualizar el carrusel
+    // Function to update carousel
     function updateCarousel() {
         carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
 
-    // Iniciar autoavance
+    // Start auto-advance
     function startAutoAdvance() {
         if (!hasInteracted) {
             autoAdvanceInterval = setInterval(() => {
@@ -26,31 +26,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Detener autoavance
+    // Stop auto-advance
     function stopAutoAdvance() {
         clearInterval(autoAdvanceInterval);
     }
 
-    // Reanudar autoavance tras inactividad
+    // Resume auto-advance after inactivity
     function resetInteraction() {
         hasInteracted = false;
         startAutoAdvance();
     }
 
-    // Iniciar autoavance al cargar
+    // Start auto-advance on load
     startAutoAdvance();
 
-    // Función de debounce para manejar interacciones
+    // Debounce function to handle interactions
     function handleInteraction(direction) {
         hasInteracted = true;
         stopAutoAdvance();
 
-        // Limpiar cualquier timeout anterior
+        // Clear any previous timeout
         if (resetTimeout) {
             clearTimeout(resetTimeout);
         }
 
-        // Actualizar índice según dirección
+        // Update index based on direction
         if (direction === 'prev') {
             currentIndex = (currentIndex === 0) ? carousel.children.length - 1 : currentIndex - 1;
         } else if (direction === 'next') {
@@ -58,21 +58,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateCarousel();
 
-        // Programar reinicio del autoavance tras 10s de inactividad
+        // Schedule auto-advance restart after 10s of inactivity
         resetTimeout = setTimeout(resetInteraction, 10000);
     }
 
-    // Navegación con botones
+    // Button navigation
     prevButton.addEventListener('click', () => handleInteraction('prev'));
     nextButton.addEventListener('click', () => handleInteraction('next'));
 
-    // Navegación con teclas de flecha
+    // Arrow key navigation
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft' && !modal.classList.contains('hidden')) {
-            return; // Evitar navegar con flechas si el modal está abierto
+            return; // Avoid navigating with arrows if modal is open
         }
         if (e.key === 'ArrowRight' && !modal.classList.contains('hidden')) {
-            return; // Evitar navegar con flechas si el modal está abierto
+            return; // Avoid navigating with arrows if modal is open
         }
         if (e.key === 'ArrowLeft') {
             handleInteraction('prev');
@@ -86,33 +86,33 @@ document.addEventListener('DOMContentLoaded', () => {
         img.addEventListener('click', () => {
             modalImage.src = img.dataset.fullscreen;
             modal.classList.remove('hidden');
-            stopAutoAdvance(); // Pausar autoavance al abrir modal
+            stopAutoAdvance(); // Pause auto-advance when opening modal
         });
     });
 
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');
         if (!hasInteracted) {
-            startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+            startAutoAdvance(); // Resume auto-advance when closing modal if no interaction
         }
     });
 
-    // Cerrar modal al hacer clic fuera de la imagen
+    // Close modal when clicking outside the image
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.classList.add('hidden');
             if (!hasInteracted) {
-                startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+                startAutoAdvance(); // Resume auto-advance when closing modal if no interaction
             }
         }
     });
 
-    // Cerrar modal con tecla Esc
+    // Close modal with Esc key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
             modal.classList.add('hidden');
             if (!hasInteracted) {
-                startAutoAdvance(); // Reanudar autoavance al cerrar modal si no hubo interacción
+                startAutoAdvance(); // Resume auto-advance when closing modal if no interaction
             }
         }
     });

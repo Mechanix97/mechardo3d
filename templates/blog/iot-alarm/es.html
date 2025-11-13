@@ -22,11 +22,10 @@
         <p class="text-gray-700 dark:text-gray-300 mb-6">
             El proyecto <code>mqtt-IOT-alarm</code> es un sistema de alarma IoT basado en MQTT diseñado para monitorear
             tres sensores de movimiento distribuidos en la casa y dos sensores de apertura de puerta, uno adelante y
-            otro
-            atrás. Todos estos sensores se conectan a un ESP32 con conector USB tipo C (se utilizó un adaptador para una
+            otro atrás. Todos estos sensores se conectan a un ESP32 con conector USB tipo C (se utilizó un adaptador para una
             correcta lectura).
         </p>
-        <img src="/static/images/blog/alarma-iot/esp32-pinout.jpg" alt="ESP32 USB type C"
+        <img src="/static/images/blog/alarma-iot/esp32-pinout.jpg" alt="ESP32 USB tipo C"
             class="w-full h-full rounded-lg mb-6">
 
         <p class="text-gray-700 dark:text-gray-300 mb-6">
@@ -79,7 +78,7 @@ wifi:
 
 logger:
 api:
-ota:
+ ota:
   platform: esphome
 
 mqtt:
@@ -147,12 +146,11 @@ binary_sensor:
         <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2">
             <li><strong>Cliente MQTT en Rust (rumqttc)</strong>: el bridge usa el crate <code>rumqttc</code> para
                 conectarse al broker MQTT. Se inicializan las opciones de conexión (<code>MqttOptions</code>), se crea
-                un
-                cliente y se suscribe a los tópicos relevantes (por ejemplo <code>alarm/motion</code>,
+                un cliente y se suscribe a los tópicos relevantes (por ejemplo <code>alarm/motion</code>,
                 <code>alarm/door</code>).
             </li>
             <li><strong>Manejo de notificaciones</strong>: el servicio también puede enviar alertas a Telegram. De este
-                modo, cada evento (como “Movimiento detectado”) se envía como mensaje
+                modo, cada evento (como "Movimiento detectado") se envía como mensaje
                 al chat configurado del usuario. Para poder activar o desactivar la alarma, se envian mensajes MQTT a
                 través de Home Assistant</li>
             <li><strong>Concurrencia y ejecución</strong>: el programa corre bajo <code>tokio::main</code>, lanzando una

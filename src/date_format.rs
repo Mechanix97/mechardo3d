@@ -34,7 +34,7 @@ pub fn get_month_name(month: u32, lang: &str) -> &'static str {
             10 => "octubre",
             11 => "noviembre",
             12 => "diciembre",
-            _ => "desconocido",
+            _ => "Unknown",
         }
     }
 }
