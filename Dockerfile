@@ -37,6 +37,7 @@ COPY templates ./templates
 COPY data ./data
 COPY secrets ./secrets
 COPY static ./static
+COPY translations ./translations
 COPY --from=tailwind /mechardo3d/static/style.css ./static/style.css
 RUN cargo build --release $BUILD_FLAGS
 
@@ -54,6 +55,7 @@ COPY --from=builder /mechardo3d/secrets ./secrets
 COPY --from=builder /mechardo3d/target/release/mechardo3d .
 COPY --from=builder /mechardo3d/templates ./templates
 COPY --from=builder /mechardo3d/static ./static
+COPY --from=builder /mechardo3d/translations ./translations
 
 EXPOSE 3000
 ENTRYPOINT ["./mechardo3d"]
