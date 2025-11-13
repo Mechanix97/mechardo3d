@@ -59,13 +59,13 @@ pub async fn blog_post(
     Path((lang, id)): Path<(String, String)>,
     Extension(tera): Extension<Tera>,
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> Html<String> {
+) -> Result<Html<String>, (axum::http::StatusCode, String)> {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
-    let posts = get_posts().expect("Error loading posts");
+    let posts = get_posts().map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Error loading posts: {}", e)))?;
     let post: &crate::models::blog_post::BlogPost = posts
         .iter()
         .find(|p: &&crate::models::blog_post::BlogPost| p.id == id)
-        .expect("Post not found");
+        .ok_or_else(|| (axum::http::StatusCode::NOT_FOUND, format!("Post not found: {}", id)))?;
 
     let t = get_translations_for_lang(&translations, language.as_str());
 
@@ -87,7 +87,7 @@ pub async fn blog_post(
 
     if let Some(post_content_route) = &post.route {
         let content = fs::read_to_string(format!("templates/blog/{}/{}.html", post_content_route, language.as_str()))
-            .expect("Post content not found");
+            .map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Post content not found: {} - Error: {}", post_content_route, e)))?;
         context.insert("content", &content);
     } else {
         context.insert("content", &post_view.summary);
@@ -113,6 +113,6 @@ pub async fn blog_post(
 
     let rendered = tera
         .render("blog_post.html", &context)
-        .expect("Error rendering post");
-    Html(rendered)
+        .map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Error rendering post: {}", e)))?;
+    Ok(Html(rendered))
 }
