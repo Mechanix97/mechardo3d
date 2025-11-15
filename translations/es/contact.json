@@ -1,0 +1,25 @@
+{
+  "contact": {
+    "title": "Contacto",
+    "intro": "Contactá con Mechardo Labs. Enviame un mensaje o seguime en mis redes sociales para explorar tutoriales, proyectos de electrónica y otras iniciativas.",
+    "email": {
+      "label": "Correo Electrónico",
+      "aria": "Enviarme un correo electrónico"
+    },
+    "form": {
+      "title": "Enviar un Mensaje",
+      "name": "Nombre",
+      "name_placeholder": "Tu nombre",
+      "email": "Correo Electrónico",
+      "email_placeholder": "tu@email.com",
+      "message": "Mensaje",
+      "message_placeholder": "Escribí tu mensaje acá",
+      "submit": "Enviar Mensaje"
+    }
+  },
+  "contact_success": {
+    "title": "¡Mensaje Enviado!",
+    "message": "Gracias por contactar con Mechardo Labs. Te responderé pronto.",
+    "back": "Volver a Contacto"
+  }
+}

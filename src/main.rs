@@ -21,9 +21,23 @@ mod translations;
 
 // Redirect root to detected or default language
 async fn redirect_to_default_lang(headers: HeaderMap) -> impl IntoResponse {
-    // Detect language from Accept-Language header
-    let detected_lang = language_detection::detect_from_accept_language(&headers);
+    let detected_lang = language_detection::detect_language(&headers);
     Redirect::permanent(&format!("/{}", detected_lang.as_str()))
+}
+
+// Fallback handler for routes without language prefix
+// Uses a catch-all to redirect any unmapped path
+async fn fallback(
+    axum::extract::Path(path): axum::extract::Path<String>,
+    headers: HeaderMap,
+) -> impl IntoResponse {
+    // Ignore static files and direct to 404
+    if path.starts_with("static/") {
+        return Redirect::permanent("/404").into_response();
+    }
+
+    let detected_lang = language_detection::detect_language(&headers);
+    Redirect::permanent(&format!("/{}/{}", detected_lang.as_str(), path)).into_response()
 }
 
 async fn serve_static(axum::extract::Path(path): axum::extract::Path<String>) -> impl IntoResponse {
@@ -78,6 +92,9 @@ async fn main() {
         .route("/{lang}/contact_success", get(routes::contact::contact_success))
         .route("/{lang}/me", get(routes::me::me))
         .route("/static/{*path}", get(serve_static))
+        .fallback(|path: axum::extract::Path<String>, headers: HeaderMap| {
+            fallback(path, headers)
+        })
         .layer(Extension(tera))
         .layer(Extension(rate_limit))
         .layer(Extension(translations));

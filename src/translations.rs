@@ -2,34 +2,55 @@ use serde_json::Value;
 use std::collections::HashMap;
 use std::fs;
 
-/// Load translations from JSON files
-/// Returns a HashMap with language codes as keys and translation JSON as values
+/// Load translations from modular JSON files organized by language
+/// Returns a HashMap with language codes as keys and merged translation JSON as values
 pub fn load_translations() -> HashMap<String, Value> {
     let mut translations = HashMap::new();
 
     // Load English translations
-    if let Ok(en_content) = fs::read_to_string("translations/en.json") {
-        if let Ok(en_json) = serde_json::from_str::<Value>(&en_content) {
-            translations.insert("en".to_string(), en_json);
-        } else {
-            eprintln!("Failed to parse translations/en.json");
-        }
+    if let Ok(en_merged) = load_language_translations("en") {
+        translations.insert("en".to_string(), en_merged);
     } else {
-        eprintln!("Failed to read translations/en.json");
+        eprintln!("Failed to load English translations");
     }
 
     // Load Spanish translations
-    if let Ok(es_content) = fs::read_to_string("translations/es.json") {
-        if let Ok(es_json) = serde_json::from_str::<Value>(&es_content) {
-            translations.insert("es".to_string(), es_json);
-        } else {
-            eprintln!("Failed to parse translations/es.json");
-        }
+    if let Ok(es_merged) = load_language_translations("es") {
+        translations.insert("es".to_string(), es_merged);
     } else {
-        eprintln!("Failed to read translations/es.json");
+        eprintln!("Failed to load Spanish translations");
     }
 
     translations
+}
+
+/// Load and merge all translation files for a specific language
+fn load_language_translations(lang: &str) -> Result<Value, Box<dyn std::error::Error>> {
+    let mut merged = serde_json::Map::new();
+
+    // Files to load in order
+    let files = vec!["common", "home", "contact", "blog", "ds2000", "about"];
+
+    for file in files {
+        let path = format!("translations/{}/{}.json", lang, file);
+        match fs::read_to_string(&path) {
+            Ok(content) => {
+                match serde_json::from_str::<Value>(&content) {
+                    Ok(Value::Object(obj)) => {
+                        // Merge this file's content into the main object
+                        for (key, value) in obj {
+                            merged.insert(key, value);
+                        }
+                    }
+                    Ok(_) => eprintln!("Translation file {} is not a JSON object", path),
+                    Err(e) => eprintln!("Failed to parse {}: {}", path, e),
+                }
+            }
+            Err(e) => eprintln!("Failed to read {}: {}", path, e),
+        }
+    }
+
+    Ok(Value::Object(merged))
 }
 
 /// Get translations for a specific language

@@ -1,0 +1,61 @@
+{
+  "ds2000": {
+    "description": "Controlá tus comunicaciones con el DS2000, una botonera USB con 3 botones y 2 LEDs RGB diseñada para mutear/desmutear, ensordecer/desensordecer y desconectar de canales en Discord.",
+    "buy": "Comprar",
+    "features": {
+      "title": "Características Principales",
+      "control": {
+        "title": "Control Intuitivo",
+        "description": "Tres botones programables para mutear/desmutear, ensordecer/desensordecer y desconectar de canales, ideales para streaming y reuniones virtuales."
+      },
+      "leds": {
+        "title": "LEDs RGB Personalizables",
+        "description": "Dos LEDs RGB para indicar estados o personalizar con colores según tu configuración."
+      },
+      "usb": {
+        "title": "Conexión USB Plug-and-Play",
+        "description": "Conectá el DS2000 a tu computadora por USB y usalo sin complicaciones en Windows, macOS o Linux."
+      },
+      "design": {
+        "title": "Diseño Compacto",
+        "description": "Tamaño ergonómico y portátil para integrarse perfectamente en tu setup."
+      }
+    },
+    "specs": {
+      "title": "Especificaciones Técnicas",
+      "connection": "Conexión",
+      "buttons": "Botones",
+      "buttons_desc": "3 botones programables (mutear/desmutear, ensordecer/desensordecer, desconectar)",
+      "indicators": "Indicadores",
+      "indicators_desc": "2 LEDs RGB configurables",
+      "compatibility": "Compatibilidad",
+      "dimensions": "Dimensiones",
+      "weight": "Peso",
+      "material": "Material",
+      "material_desc": "Plástico ABS de alta resistencia",
+      "software": "Software",
+      "software_desc": "Controladores opcionales para personalización avanzada"
+    },
+    "drivers": {
+      "title": "Controladores y Software",
+      "description": "Descargá los controladores y el software de configuración para personalizar tu DS2000.",
+      "windows": "Controlador para Windows",
+      "macos": "Controlador para macOS"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": "¿Es compatible con Discord?",
+      "a1": "Sí, el DS2000 está diseñado para integrarse con aplicaciones como Discord permitiendo controlar funciones de audio y conexión.",
+      "q2": "¿Necesito instalar controladores?",
+      "a2": "Si, dentro del software de DS2000 se contienen los controladores del dispositivo.",
+      "q3": "¿Puedo usar el DS2000 en Linux?",
+      "a3": "Sí, es compatible con distribuciones como Ubuntu y Fedora utilizando el software controlador."
+    },
+    "images": {
+      "front": "DS2000 vista frontal",
+      "back": "DS2000 vista posterior",
+      "top": "DS2000 conectado",
+      "enlarged": "Imagen ampliada del DS2000"
+    }
+  }
+}
