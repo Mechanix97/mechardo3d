@@ -5,6 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} | Mechardo Labs</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{ meta_description | default(value='Mechardo Labs - Software Engineer | Rust, Blockchain, Electronics') }}">
+    <meta name="keywords" content="{{ meta_keywords | default(value='software engineer, rust, blockchain, discord, electronics') }}">
+    <meta name="author" content="Lucas Rack">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mechardo3d.xyz/{{ lang }}/{{ canonical_path | default(value='') }}">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="{{ og_title | default(value=title) }} | Mechardo Labs">
+    <meta property="og:description" content="{{ og_description | default(value=meta_description) }}">
+    <meta property="og:type" content="{{ og_type | default(value='website') }}">
+    <meta property="og:url" content="https://mechardo3d.xyz/{{ lang }}/{{ canonical_path | default(value='') }}">
+    <meta property="og:image" content="https://mechardo3d.xyz/static/images/og-image.png">
+    <meta property="og:site_name" content="Mechardo Labs">
+    <meta property="og:locale" content="{{ og_locale | default(value='es_ES') }}">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ og_title | default(value=title) }} | Mechardo Labs">
+    <meta name="twitter:description" content="{{ og_description | default(value=meta_description) }}">
+    <meta name="twitter:image" content="https://mechardo3d.xyz/static/images/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    {% if json_ld_schema %}
+    <script type="application/ld+json">
+    {{ json_ld_schema | safe }}
+    </script>
+    {% endif %}
+
     <link rel="stylesheet" href="/static/style.css?v=3">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon/favicon.ico">
     <script>

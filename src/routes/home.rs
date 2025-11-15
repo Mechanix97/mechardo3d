@@ -1,4 +1,5 @@
 use crate::data::blog_data::get_posts;
+use crate::json_ld;
 use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
@@ -55,12 +56,29 @@ pub async fn index(
         .and_then(|v| v.as_str())
         .unwrap_or("Home");
 
+    // Determine og_locale based on language
+    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+
+    // Generate JSON-LD schema
+    let schema = json_ld::organization_schema(language.as_str());
+    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
+
     // Configure Tera context
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", title);
     context.insert("posts", &posts_view);
     context.insert("t", &t);
+    context.insert("json_ld_schema", &json_ld_schema);
+
+    // SEO meta tags
+    context.insert("meta_description", "Mechardo Labs - Software Engineer specialized in Rust, Blockchain, and Electronics. Explore my portfolio, projects, and blog.");
+    context.insert("meta_keywords", "software engineer, rust, blockchain, discord, electronics, developer portfolio");
+    context.insert("og_title", title);
+    context.insert("og_description", "Mechardo Labs - Software Engineer specialized in Rust, Blockchain, and Electronics. Explore my portfolio, projects, and blog.");
+    context.insert("og_type", "website");
+    context.insert("og_locale", og_locale);
+    context.insert("canonical_path", "");
 
     // Render template
     match tera.render("index.html", &context) {
