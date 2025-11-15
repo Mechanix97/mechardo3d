@@ -1,12 +1,8 @@
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 /// Generate JSON-LD schema for a Person (used on /me page)
 pub fn person_schema(lang: &str) -> Value {
-    let locale = if lang == "es" {
-        "es-ES"
-    } else {
-        "en-US"
-    };
+    let locale = if lang == "es" { "es-ES" } else { "en-US" };
 
     json!({
         "@context": "https://schema.org",
@@ -44,11 +40,7 @@ pub fn person_schema(lang: &str) -> Value {
 
 /// Generate JSON-LD schema for Organization (used on home page)
 pub fn organization_schema(lang: &str) -> Value {
-    let locale = if lang == "es" {
-        "es-ES"
-    } else {
-        "en-US"
-    };
+    let locale = if lang == "es" { "es-ES" } else { "en-US" };
 
     json!({
         "@context": "https://schema.org",
@@ -70,11 +62,7 @@ pub fn organization_schema(lang: &str) -> Value {
 
 /// Generate JSON-LD schema for a Product (used on DS2000 page)
 pub fn product_schema(lang: &str) -> Value {
-    let locale = if lang == "es" {
-        "es-ES"
-    } else {
-        "en-US"
-    };
+    let locale = if lang == "es" { "es-ES" } else { "en-US" };
 
     json!({
         "@context": "https://schema.org",
@@ -110,12 +98,14 @@ pub fn product_schema(lang: &str) -> Value {
 }
 
 /// Generate JSON-LD schema for a BlogPosting
-pub fn blog_post_schema(title: &str, description: &str, date: &str, author: &str, lang: &str) -> Value {
-    let locale = if lang == "es" {
-        "es-ES"
-    } else {
-        "en-US"
-    };
+pub fn blog_post_schema(
+    title: &str,
+    description: &str,
+    date: &str,
+    author: &str,
+    lang: &str,
+) -> Value {
+    let locale = if lang == "es" { "es-ES" } else { "en-US" };
 
     json!({
         "@context": "https://schema.org",
@@ -140,11 +130,7 @@ pub fn blog_post_schema(title: &str, description: &str, date: &str, author: &str
 
 /// Generate JSON-LD schema for a WebPage
 pub fn webpage_schema(title: &str, description: &str, page_type: &str, lang: &str) -> Value {
-    let locale = if lang == "es" {
-        "es-ES"
-    } else {
-        "en-US"
-    };
+    let locale = if lang == "es" { "es-ES" } else { "en-US" };
 
     json!({
         "@context": "https://schema.org",

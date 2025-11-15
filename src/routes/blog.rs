@@ -49,14 +49,18 @@ pub async fn blog(
         .collect();
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Generate JSON-LD schema
     let schema = json_ld::webpage_schema(
         "Blog",
         "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.",
         "Blog",
-        language.as_str()
+        language.as_str(),
     );
     let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
 
@@ -69,7 +73,10 @@ pub async fn blog(
 
     // SEO meta tags
     context.insert("meta_description", "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.");
-    context.insert("meta_keywords", "blog, rust, blockchain, tutorials, software development");
+    context.insert(
+        "meta_keywords",
+        "blog, rust, blockchain, tutorials, software development",
+    );
     context.insert("og_title", "Blog");
     context.insert("og_description", "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.");
     context.insert("og_type", "website");
@@ -117,13 +124,19 @@ pub async fn blog_post(
     };
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Build canonical path for individual blog post
     let canonical_path = format!("blog/{}", id);
 
     // Generate JSON-LD schema for blog post
-    let description = post_view.summary.as_ref()
+    let description = post_view
+        .summary
+        .as_ref()
         .map(|s| s.chars().take(155).collect::<String>())
         .unwrap_or_else(|| "Mechardo Labs Blog".to_string());
     let date_str = post_view.date.format("%Y-%m-%d").to_string();
@@ -132,7 +145,7 @@ pub async fn blog_post(
         &description,
         &date_str,
         "Lucas Rack",
-        language.as_str()
+        language.as_str(),
     );
     let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
 
@@ -148,7 +161,10 @@ pub async fn blog_post(
         .map(|s| s.chars().take(155).collect::<String>())
         .unwrap_or_else(|| "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.".to_string());
     context.insert("meta_description", &meta_description);
-    context.insert("meta_keywords", "blog, rust, blockchain, tutorials, software development");
+    context.insert(
+        "meta_keywords",
+        "blog, rust, blockchain, tutorials, software development",
+    );
     context.insert("og_title", &post_view.title);
     context.insert("og_description", &meta_description);
     context.insert("og_type", "article");

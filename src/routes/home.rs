@@ -62,7 +62,11 @@ pub async fn index(
         .unwrap_or("Home");
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Generate JSON-LD schema
     let schema = json_ld::organization_schema(language.as_str());
@@ -78,7 +82,10 @@ pub async fn index(
 
     // SEO meta tags
     context.insert("meta_description", "Mechardo Labs - Software Engineer specialized in Rust, Blockchain, and Electronics. Explore my portfolio, projects, and blog.");
-    context.insert("meta_keywords", "software engineer, rust, blockchain, discord, electronics, developer portfolio");
+    context.insert(
+        "meta_keywords",
+        "software engineer, rust, blockchain, discord, electronics, developer portfolio",
+    );
     context.insert("og_title", title);
     context.insert("og_description", "Mechardo Labs - Software Engineer specialized in Rust, Blockchain, and Electronics. Explore my portfolio, projects, and blog.");
     context.insert("og_type", "website");

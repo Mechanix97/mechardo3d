@@ -24,7 +24,11 @@ pub async fn me(
         .unwrap_or("About Me");
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Generate JSON-LD schema
     let schema = json_ld::person_schema(language.as_str());
@@ -38,7 +42,10 @@ pub async fn me(
 
     // SEO meta tags
     context.insert("meta_description", "About Lucas Rack - Rust Developer, Blockchain Engineer, and Electronics enthusiast. Experience with Ethereum, Smart Contracts, and P2P protocols.");
-    context.insert("meta_keywords", "lucas rack, rust developer, blockchain engineer, software engineer, ethereum");
+    context.insert(
+        "meta_keywords",
+        "lucas rack, rust developer, blockchain engineer, software engineer, ethereum",
+    );
     context.insert("og_title", title);
     context.insert("og_description", "About Lucas Rack - Rust Developer, Blockchain Engineer, and Electronics enthusiast. Experience with Ethereum, Smart Contracts, and P2P protocols.");
     context.insert("og_type", "profile");
