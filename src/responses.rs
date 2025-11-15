@@ -29,6 +29,11 @@ impl IntoResponse for HtmlWithLang {
             .parse()
             .unwrap(),
         );
+        // Clear old 'lang' cookie from previous versions
+        headers.append(
+            "Set-Cookie",
+            "lang=; Path=/; Max-Age=0; SameSite=Lax".parse().unwrap(),
+        );
 
         (StatusCode::OK, headers, self.html).into_response()
     }
