@@ -4,7 +4,17 @@
       "Bash(cargo build:*)",
       "Bash(cargo run:*)",
       "Bash(cargo check:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(cargo fmt:*)",
+      "Bash(for file in translations/**/*.json)",
+      "Bash(do echo \"Validating $file\")",
+      "Bash(python3:*)",
+      "Bash(exit 1)",
+      "Bash(done)",
+      "Bash(node -e:*)",
+      "Bash(for file in translations/en/*.json translations/es/*.json)",
+      "Bash(do node -e \"JSON.parse(require(''fs'').readFileSync(''$file'', ''utf8''))\")",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []

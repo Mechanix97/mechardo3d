@@ -2,7 +2,7 @@ use crate::json_ld;
 use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
-use axum::{extract::Path, Extension};
+use axum::{Extension, extract::Path};
 use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -17,7 +17,11 @@ pub async fn ds2000(
     let t = get_translations_for_lang(&translations, language.as_str());
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Generate JSON-LD schema
     let schema = json_ld::product_schema(language.as_str());
@@ -31,7 +35,10 @@ pub async fn ds2000(
 
     // SEO meta tags
     context.insert("meta_description", "DS2000 - USB Discord Button Box with 3 programmable buttons and RGB LEDs. Mute, deafen, and disconnect with one click.");
-    context.insert("meta_keywords", "discord button, discord mute, usb button box, streaming gear, ds2000");
+    context.insert(
+        "meta_keywords",
+        "discord button, discord mute, usb button box, streaming gear, ds2000",
+    );
     context.insert("og_title", "DS2000");
     context.insert("og_description", "DS2000 - USB Discord Button Box with 3 programmable buttons and RGB LEDs. Mute, deafen, and disconnect with one click.");
     context.insert("og_type", "product");
@@ -53,7 +60,11 @@ pub async fn privacy_policy(
     let t = get_translations_for_lang(&translations, language.as_str());
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Generate JSON-LD schema
     let schema = json_ld::product_schema(language.as_str());
@@ -67,7 +78,10 @@ pub async fn privacy_policy(
 
     // SEO meta tags
     context.insert("meta_description", "DS2000 - USB Discord Button Box with 3 programmable buttons and RGB LEDs. Mute, deafen, and disconnect with one click.");
-    context.insert("meta_keywords", "discord button, discord mute, usb button box, streaming gear, ds2000");
+    context.insert(
+        "meta_keywords",
+        "discord button, discord mute, usb button box, streaming gear, ds2000",
+    );
     context.insert("og_title", "DS2000 - Privacy Policy");
     context.insert("og_description", "DS2000 - USB Discord Button Box with 3 programmable buttons and RGB LEDs. Mute, deafen, and disconnect with one click.");
     context.insert("og_type", "product");
@@ -89,7 +103,11 @@ pub async fn terms_of_service(
     let t = get_translations_for_lang(&translations, language.as_str());
 
     // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+    let og_locale = if language.as_str() == "es" {
+        "es_ES"
+    } else {
+        "en_US"
+    };
 
     // Generate JSON-LD schema
     let schema = json_ld::product_schema(language.as_str());
@@ -103,7 +121,10 @@ pub async fn terms_of_service(
 
     // SEO meta tags
     context.insert("meta_description", "DS2000 - USB Discord Button Box with 3 programmable buttons and RGB LEDs. Mute, deafen, and disconnect with one click.");
-    context.insert("meta_keywords", "discord button, discord mute, usb button box, streaming gear, ds2000");
+    context.insert(
+        "meta_keywords",
+        "discord button, discord mute, usb button box, streaming gear, ds2000",
+    );
     context.insert("og_title", "DS2000 - Terms of Service");
     context.insert("og_description", "DS2000 - USB Discord Button Box with 3 programmable buttons and RGB LEDs. Mute, deafen, and disconnect with one click.");
     context.insert("og_type", "product");

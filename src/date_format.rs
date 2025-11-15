@@ -50,10 +50,7 @@ pub fn date_format(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
         .with_timezone(&Utc);
 
     // Get language from args, default to Spanish
-    let lang = args
-        .get("lang")
-        .and_then(|v| v.as_str())
-        .unwrap_or("es");
+    let lang = args.get("lang").and_then(|v| v.as_str()).unwrap_or("es");
 
     let month_name = get_month_name(date.month(), lang);
 
@@ -64,4 +61,3 @@ pub fn date_format(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
     };
     Ok(Value::String(formatted))
 }
-

@@ -1,7 +1,8 @@
 use axum::{
+    Extension, Router,
     http::HeaderMap,
     response::{IntoResponse, Redirect},
-    Extension, Router, routing::get,
+    routing::get,
 };
 use serde_json::Value;
 use std::collections::HashMap;
@@ -89,7 +90,10 @@ async fn main() {
 
     // Load translations
     let translations: Arc<HashMap<String, Value>> = Arc::new(translations::load_translations());
-    info!("Loaded translations for languages: {:?}", translations.keys());
+    info!(
+        "Loaded translations for languages: {:?}",
+        translations.keys()
+    );
 
     // Redirect root to default language
     let app = Router::new()
@@ -102,18 +106,28 @@ async fn main() {
         .route("/blog", get(redirect_blog))
         // Language-prefixed routes (most specific routes FIRST)
         .route("/{lang}/me", get(routes::me::me))
-        .route("/{lang}/contact", get(routes::contact::contact).post(routes::contact::contact_submit))
-        .route("/{lang}/contact_success", get(routes::contact::contact_success))
+        .route(
+            "/{lang}/contact",
+            get(routes::contact::contact).post(routes::contact::contact_submit),
+        )
+        .route(
+            "/{lang}/contact_success",
+            get(routes::contact::contact_success),
+        )
         .route("/{lang}/blog/{id}", get(routes::blog::blog_post))
         .route("/{lang}/blog", get(routes::blog::blog))
-        .route("/{lang}/ds2000/terms-of-service", get(routes::ds2000::terms_of_service))
-        .route("/{lang}/ds2000/privacy-policy", get(routes::ds2000::privacy_policy))
+        .route(
+            "/{lang}/ds2000/terms-of-service",
+            get(routes::ds2000::terms_of_service),
+        )
+        .route(
+            "/{lang}/ds2000/privacy-policy",
+            get(routes::ds2000::privacy_policy),
+        )
         .route("/{lang}/ds2000", get(routes::ds2000::ds2000))
         .route("/{lang}", get(routes::home::index))
         // Fallback for unmapped routes
-        .fallback(|path: axum::extract::Path<String>, headers: HeaderMap| {
-            fallback(path, headers)
-        })
+        .fallback(|path: axum::extract::Path<String>, headers: HeaderMap| fallback(path, headers))
         .layer(Extension(tera))
         .layer(Extension(rate_limit))
         .layer(Extension(translations));
