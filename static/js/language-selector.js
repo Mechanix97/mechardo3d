@@ -76,7 +76,7 @@ function switchLanguage(newLang) {
     // Save language preference to cookie (expires in 1 year)
     const expirationDate = new Date();
     expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-    document.cookie = `lang=${newLang}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Lax`;
+    document.cookie = `language=${newLang}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Lax`;
 
     const currentPath = window.location.pathname;
 
