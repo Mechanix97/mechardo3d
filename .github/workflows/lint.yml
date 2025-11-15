@@ -1,11 +1,6 @@
 name: Lint
 
 on:
-  push:
-    branches:
-      - master
-      - main
-      - feat/**
   pull_request:
     branches:
       - master
