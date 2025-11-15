@@ -1,7 +1,8 @@
 use crate::data::blog_data::get_posts;
 use crate::language::Language;
+use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
-use axum::{extract::Path, Extension, response::Html};
+use axum::{extract::Path, Extension};
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 use serde_json::Value;
@@ -23,7 +24,7 @@ pub async fn index(
     Path(lang): Path<String>,
     Extension(tera): Extension<Tera>,
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> Html<String> {
+) -> HtmlWithLang {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
 
     // Get blog posts
@@ -63,13 +64,13 @@ pub async fn index(
 
     // Render template
     match tera.render("index.html", &context) {
-        Ok(rendered) => Html(rendered),
+        Ok(rendered) => HtmlWithLang::new(rendered, language),
         Err(e) => {
             eprintln!("Error rendering index.html: {}", e);
-            Html(format!(
+            HtmlWithLang::new(format!(
                 "<html><body><h1>Error rendering page</h1><p>{}</p></body></html>",
                 e
-            ))
+            ), language)
         }
     }
 }

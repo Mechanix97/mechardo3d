@@ -16,6 +16,7 @@ mod date_format;
 mod language;
 mod language_detection;
 mod models;
+mod responses;
 mod routes;
 mod translations;
 
