@@ -20,20 +20,6 @@ impl IntoResponse for HtmlWithLang {
     fn into_response(self) -> Response {
         let mut headers = HeaderMap::new();
         headers.insert("Content-Type", "text/html; charset=utf-8".parse().unwrap());
-        headers.insert(
-            "Set-Cookie",
-            format!(
-                "language={}; Path=/; Max-Age=31536000; SameSite=Lax",
-                self.lang.as_str()
-            )
-            .parse()
-            .unwrap(),
-        );
-        // Clear old 'lang' cookie from previous versions
-        headers.append(
-            "Set-Cookie",
-            "lang=; Path=/; Max-Age=0; SameSite=Lax".parse().unwrap(),
-        );
 
         (StatusCode::OK, headers, self.html).into_response()
     }
