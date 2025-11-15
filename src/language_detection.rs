@@ -1,6 +1,28 @@
 use axum::http::HeaderMap;
 use crate::language::Language;
 
+/// Detect language from cookie first, then fallback to Accept-Language header
+pub fn detect_language(headers: &HeaderMap) -> Language {
+    // First, try to get language from cookie
+    if let Some(cookie_header) = headers.get("cookie") {
+        if let Ok(cookie_str) = cookie_header.to_str() {
+            for cookie in cookie_str.split(';') {
+                let cookie = cookie.trim();
+                if cookie.starts_with("language=") {
+                    if let Some(lang) = cookie.strip_prefix("language=") {
+                        if let Some(language) = Language::from_str(lang) {
+                            return language;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Fallback to Accept-Language header
+    detect_from_accept_language(headers)
+}
+
 /// Parse Accept-Language header and return the best matching language
 /// Supports formats like: "en-US,en;q=0.9,es;q=0.8"
 pub fn detect_from_accept_language(headers: &HeaderMap) -> Language {

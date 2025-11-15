@@ -1,0 +1,17 @@
+{
+  "blog": {
+    "title": "Blog de Mechardo",
+    "read_post": "Leer el post",
+    "by": "Por",
+    "summary_default": "Resumen no disponible. Haz clic para leer más.",
+    "read_more": "Leer más"
+  },
+  "blog_post": {
+    "featured_image": "Imagen destacada del post",
+    "by": "Por",
+    "back_to_list": "Volver a la lista de blogs",
+    "view_more": "Ver más blogs",
+    "keep_reading": "Seguir Leyendo",
+    "summary_default": "Resumen no disponible. Haz clic para leer más."
+  }
+}

@@ -1,3 +1,4 @@
+use crate::responses::HtmlWithLang;
 use axum::{
     Extension,
     extract::{ConnectInfo, Form},
@@ -48,7 +49,7 @@ pub async fn contact(
     AxumPath(lang): AxumPath<String>,
     Extension(tera): Extension<Tera>,
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> axum::response::Html<String> {
+) -> HtmlWithLang {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
@@ -68,7 +69,7 @@ pub async fn contact(
     let rendered = tera
         .render("contact.html", &context)
         .expect("Error rendering template");
-    axum::response::Html(rendered)
+    HtmlWithLang::new(rendered, language)
 }
 
 // Handler for GET /contact_success
@@ -76,7 +77,7 @@ pub async fn contact_success(
     AxumPath(lang): AxumPath<String>,
     Extension(tera): Extension<Tera>,
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> axum::response::Html<String> {
+) -> HtmlWithLang {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
@@ -92,7 +93,7 @@ pub async fn contact_success(
     let rendered = tera
         .render("contact_success.html", &context)
         .expect("Error rendering template");
-    axum::response::Html(rendered)
+    HtmlWithLang::new(rendered, language)
 }
 
 /// Helper function to get error message translation

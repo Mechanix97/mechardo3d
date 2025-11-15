@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "contact": "Contacto"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "contact": "Contactanos"
+  },
+  "page_titles": {
+    "home": "Inicio",
+    "contact": "Contacto",
+    "message_sent": "Mensaje Enviado",
+    "about": "Sobre mí",
+    "blog": "Blog"
+  },
+  "social": {
+    "instagram": {
+      "aria": "Visitar mi perfil de Instagram"
+    },
+    "discord": {
+      "aria": "Unirse a mi servidor de Discord"
+    },
+    "x": {
+      "aria": "Visitar mi perfil de X"
+    },
+    "youtube": {
+      "aria": "Visitar mi canal de YouTube"
+    },
+    "telegram": {
+      "aria": "Contactarme por Telegram"
+    }
+  },
+  "errors": {
+    "rate_limit": "Esperá 5 minutos antes de mandar otro mensaje.",
+    "fill_fields": "Completá todos los campos del formulario.",
+    "recaptcha_failed": "Falló la verificación de reCAPTCHA. Probá de nuevo.",
+    "save_failed": "Error al guardar el mensaje. Probá de nuevo.",
+    "contact_unknown": "Ocurrió un error desconocido. Probá de nuevo.",
+    "contact_submit": "Error al enviar el formulario. Probá de nuevo."
+  }
+}

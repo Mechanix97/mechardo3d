@@ -1,0 +1,17 @@
+{
+  "blog": {
+    "title": "Mechardo's Blog",
+    "read_post": "Read the post",
+    "by": "By",
+    "summary_default": "Summary not available. Click to read more.",
+    "read_more": "Read more"
+  },
+  "blog_post": {
+    "featured_image": "Featured image of the post",
+    "by": "By",
+    "back_to_list": "Back to blog list",
+    "view_more": "View more blogs",
+    "keep_reading": "Keep Reading",
+    "summary_default": "Summary not available. Click to read more."
+  }
+}

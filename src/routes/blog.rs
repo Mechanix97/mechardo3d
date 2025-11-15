@@ -1,7 +1,8 @@
 use crate::data::blog_data::get_posts;
 use crate::language::Language;
 use crate::translations::get_translations_for_lang;
-use axum::{Extension, extract::Path, response::Html};
+use crate::responses::HtmlWithLang;
+use axum::{Extension, extract::Path};
 use chrono::{DateTime, Utc};
 use rand::rng;
 use rand::seq::IteratorRandom;
@@ -26,7 +27,7 @@ pub async fn blog(
     Path(lang): Path<String>,
     Extension(tera): Extension<Tera>,
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> Html<String> {
+) -> HtmlWithLang {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let mut posts = get_posts().expect("Error loading posts");
     posts.sort_by(|a, b| b.date.cmp(&a.date));
@@ -52,14 +53,14 @@ pub async fn blog(
     let rendered = tera
         .render("blog.html", &context)
         .expect("Error rendering template");
-    Html(rendered)
+    HtmlWithLang::new(rendered, language)
 }
 
 pub async fn blog_post(
     Path((lang, id)): Path<(String, String)>,
     Extension(tera): Extension<Tera>,
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> Result<Html<String>, (axum::http::StatusCode, String)> {
+) -> Result<HtmlWithLang, (axum::http::StatusCode, String)> {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let posts = get_posts().map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Error loading posts: {}", e)))?;
     let post: &crate::models::blog_post::BlogPost = posts
@@ -114,5 +115,5 @@ pub async fn blog_post(
     let rendered = tera
         .render("blog_post.html", &context)
         .map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Error rendering post: {}", e)))?;
-    Ok(Html(rendered))
+    Ok(HtmlWithLang::new(rendered, language))
 }

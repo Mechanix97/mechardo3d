@@ -16,14 +16,49 @@ mod date_format;
 mod language;
 mod language_detection;
 mod models;
+mod responses;
 mod routes;
 mod translations;
 
 // Redirect root to detected or default language
 async fn redirect_to_default_lang(headers: HeaderMap) -> impl IntoResponse {
-    // Detect language from Accept-Language header
-    let detected_lang = language_detection::detect_from_accept_language(&headers);
+    let detected_lang = language_detection::detect_language(&headers);
     Redirect::permanent(&format!("/{}", detected_lang.as_str()))
+}
+
+// Handlers for routes without language prefix that redirect to language-prefixed versions
+async fn redirect_me(headers: HeaderMap) -> impl IntoResponse {
+    let detected_lang = language_detection::detect_language(&headers);
+    Redirect::temporary(&format!("/{}/me", detected_lang.as_str()))
+}
+
+async fn redirect_contact(headers: HeaderMap) -> impl IntoResponse {
+    let detected_lang = language_detection::detect_language(&headers);
+    Redirect::temporary(&format!("/{}/contact", detected_lang.as_str()))
+}
+
+async fn redirect_contact_success(headers: HeaderMap) -> impl IntoResponse {
+    let detected_lang = language_detection::detect_language(&headers);
+    Redirect::temporary(&format!("/{}/contact_success", detected_lang.as_str()))
+}
+
+async fn redirect_blog(headers: HeaderMap) -> impl IntoResponse {
+    let detected_lang = language_detection::detect_language(&headers);
+    Redirect::temporary(&format!("/{}/blog", detected_lang.as_str()))
+}
+
+// Fallback handler for truly unmapped routes
+async fn fallback(
+    axum::extract::Path(path): axum::extract::Path<String>,
+    headers: HeaderMap,
+) -> impl IntoResponse {
+    // Ignore static files and direct to 404
+    if path.starts_with("static/") {
+        return Redirect::temporary("/404").into_response();
+    }
+
+    let detected_lang = language_detection::detect_language(&headers);
+    Redirect::temporary(&format!("/{}/{}", detected_lang.as_str(), path)).into_response()
 }
 
 async fn serve_static(axum::extract::Path(path): axum::extract::Path<String>) -> impl IntoResponse {
@@ -58,26 +93,26 @@ async fn main() {
     // Redirect root to default language
     let app = Router::new()
         .route("/", get(redirect_to_default_lang))
-        // Language-prefixed routes
-        .route("/{lang}", get(routes::home::index))
-        .route("/{lang}/ds2000", get(routes::ds2000::ds2000))
-        .route(
-            "/{lang}/ds2000/terms-of-service",
-            get(routes::ds2000::terms_of_service),
-        )
-        .route(
-            "/{lang}/ds2000/privacy-policy",
-            get(routes::ds2000::privacy_policy),
-        )
-        .route("/{lang}/blog", get(routes::blog::blog))
-        .route("/{lang}/blog/{id}", get(routes::blog::blog_post))
-        .route(
-            "/{lang}/contact",
-            get(routes::contact::contact).post(routes::contact::contact_submit),
-        )
-        .route("/{lang}/contact_success", get(routes::contact::contact_success))
-        .route("/{lang}/me", get(routes::me::me))
         .route("/static/{*path}", get(serve_static))
+        // Routes without language prefix (redirect to language-prefixed versions)
+        .route("/me", get(redirect_me))
+        .route("/contact", get(redirect_contact).post(redirect_contact))
+        .route("/contact_success", get(redirect_contact_success))
+        .route("/blog", get(redirect_blog))
+        // Language-prefixed routes (most specific routes FIRST)
+        .route("/{lang}/me", get(routes::me::me))
+        .route("/{lang}/contact", get(routes::contact::contact).post(routes::contact::contact_submit))
+        .route("/{lang}/contact_success", get(routes::contact::contact_success))
+        .route("/{lang}/blog/{id}", get(routes::blog::blog_post))
+        .route("/{lang}/blog", get(routes::blog::blog))
+        .route("/{lang}/ds2000/terms-of-service", get(routes::ds2000::terms_of_service))
+        .route("/{lang}/ds2000/privacy-policy", get(routes::ds2000::privacy_policy))
+        .route("/{lang}/ds2000", get(routes::ds2000::ds2000))
+        .route("/{lang}", get(routes::home::index))
+        // Fallback for unmapped routes
+        .fallback(|path: axum::extract::Path<String>, headers: HeaderMap| {
+            fallback(path, headers)
+        })
         .layer(Extension(tera))
         .layer(Extension(rate_limit))
         .layer(Extension(translations));
