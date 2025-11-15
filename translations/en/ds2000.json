@@ -1,5 +1,6 @@
 {
   "ds2000": {
+    "title": "DS2000 – Discord Button Box",
     "description": "Control your communications with the DS2000, a USB button box with 3 buttons and 2 RGB LEDs designed to mute/unmute, deafen/undeafen, and disconnect from channels in Discord.",
     "buy": "Buy",
     "features": {

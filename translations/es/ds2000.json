@@ -1,5 +1,6 @@
 {
   "ds2000": {
+    "title": "DS2000 – Botonera de Discord",
     "description": "Controlá tus comunicaciones con el DS2000, una botonera USB con 3 botones y 2 LEDs RGB diseñada para mutear/desmutear, ensordecer/desensordecer y desconectar de canales en Discord.",
     "buy": "Comprar",
     "features": {
