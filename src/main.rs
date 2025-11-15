@@ -25,7 +25,7 @@ mod translations;
 // Redirect root to detected or default language
 async fn redirect_to_default_lang(headers: HeaderMap) -> impl IntoResponse {
     let detected_lang = language_detection::detect_language(&headers);
-    Redirect::permanent(&format!("/{}", detected_lang.as_str()))
+    Redirect::temporary(&format!("/{}", detected_lang.as_str()))
 }
 
 // Handlers for routes without language prefix that redirect to language-prefixed versions
