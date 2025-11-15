@@ -1,4 +1,5 @@
 use crate::data::blog_data::get_posts;
+use crate::json_ld;
 use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
@@ -47,11 +48,33 @@ pub async fn blog(
         })
         .collect();
 
+    // Determine og_locale based on language
+    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+
+    // Generate JSON-LD schema
+    let schema = json_ld::webpage_schema(
+        "Blog",
+        "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.",
+        "Blog",
+        language.as_str()
+    );
+    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", "Blog");
     context.insert("posts", &posts_view);
     context.insert("t", &t);
+    context.insert("json_ld_schema", &json_ld_schema);
+
+    // SEO meta tags
+    context.insert("meta_description", "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.");
+    context.insert("meta_keywords", "blog, rust, blockchain, tutorials, software development");
+    context.insert("og_title", "Blog");
+    context.insert("og_description", "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.");
+    context.insert("og_type", "website");
+    context.insert("og_locale", og_locale);
+    context.insert("canonical_path", "blog");
 
     let rendered = tera
         .render("blog.html", &context)
@@ -93,11 +116,44 @@ pub async fn blog_post(
         date: post.date,
     };
 
+    // Determine og_locale based on language
+    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+
+    // Build canonical path for individual blog post
+    let canonical_path = format!("blog/{}", id);
+
+    // Generate JSON-LD schema for blog post
+    let description = post_view.summary.as_ref()
+        .map(|s| s.chars().take(155).collect::<String>())
+        .unwrap_or_else(|| "Mechardo Labs Blog".to_string());
+    let date_str = post_view.date.format("%Y-%m-%d").to_string();
+    let schema = json_ld::blog_post_schema(
+        &post_view.title,
+        &description,
+        &date_str,
+        "Lucas Rack",
+        language.as_str()
+    );
+    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", &post_view.title);
     context.insert("post", &post_view);
     context.insert("t", &t);
+    context.insert("json_ld_schema", &json_ld_schema);
+
+    // SEO meta tags for blog post
+    let meta_description = post_view.summary.as_ref()
+        .map(|s| s.chars().take(155).collect::<String>())
+        .unwrap_or_else(|| "Mechardo Labs Blog - Articles about Rust, Blockchain, Electronics, and Software Development.".to_string());
+    context.insert("meta_description", &meta_description);
+    context.insert("meta_keywords", "blog, rust, blockchain, tutorials, software development");
+    context.insert("og_title", &post_view.title);
+    context.insert("og_description", &meta_description);
+    context.insert("og_type", "article");
+    context.insert("og_locale", og_locale);
+    context.insert("canonical_path", &canonical_path);
 
     if let Some(post_content_route) = &post.route {
         let content = fs::read_to_string(format!(

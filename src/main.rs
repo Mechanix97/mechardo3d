@@ -14,6 +14,7 @@ use tracing::info;
 
 mod data;
 mod date_format;
+mod json_ld;
 mod language;
 mod language_detection;
 mod models;

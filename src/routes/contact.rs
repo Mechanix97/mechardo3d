@@ -1,3 +1,4 @@
+use crate::json_ld;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
 use axum::{
@@ -59,14 +60,36 @@ pub async fn contact(
         .and_then(|v| v.as_str())
         .unwrap_or("Contact");
 
+    // Determine og_locale based on language
+    let og_locale = if language.as_str() == "es" { "es_ES" } else { "en_US" };
+
+    // Generate JSON-LD schema
+    let schema = json_ld::webpage_schema(
+        title,
+        "Contact Mechardo Labs - Get in touch via email, GitHub, LinkedIn, or Discord.",
+        "ContactPage",
+        language.as_str()
+    );
+    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", title);
     context.insert("t", &t);
+    context.insert("json_ld_schema", &json_ld_schema);
     context.insert(
         "recaptcha_site_key",
         "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8",
     );
+
+    // SEO meta tags
+    context.insert("meta_description", "Contact Mechardo Labs - Get in touch via email, GitHub, LinkedIn, or Discord.");
+    context.insert("meta_keywords", "contact, mechardo labs, lucas rack");
+    context.insert("og_title", title);
+    context.insert("og_description", "Contact Mechardo Labs - Get in touch via email, GitHub, LinkedIn, or Discord.");
+    context.insert("og_type", "website");
+    context.insert("og_locale", og_locale);
+    context.insert("canonical_path", "contact");
     let rendered = tera
         .render("contact.html", &context)
         .expect("Error rendering template");
@@ -88,10 +111,20 @@ pub async fn contact_success(
         .and_then(|v| v.as_str())
         .unwrap_or("Message Sent");
 
+    // Generate JSON-LD schema
+    let schema = json_ld::webpage_schema(
+        title,
+        "Contact Mechardo Labs - Message sent successfully.",
+        "ContactPage",
+        language.as_str()
+    );
+    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
+
     let mut context = Context::new();
     context.insert("lang", language.as_str());
     context.insert("title", title);
     context.insert("t", &t);
+    context.insert("json_ld_schema", &json_ld_schema);
     let rendered = tera
         .render("contact_success.html", &context)
         .expect("Error rendering template");
