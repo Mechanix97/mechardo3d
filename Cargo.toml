@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 axum = "0.8"
-tokio = { version = "1.0", features = ["full"] }
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread", "sync", "fs"] }
 serde = { version = "1.0", features = ["derive"] }
 chrono = { version = "0.4", features = ["serde"] }
 serde_json = "1.0"
@@ -15,4 +15,3 @@ tera = "1.20"
 mime_guess = "2.0"
 rand = "0.9.2"
 reqwest = { version = "0.12", features = ["json"] }
-askama = "0.14"

@@ -16,28 +16,6 @@ impl Language {
         }
     }
 
-    #[allow(dead_code)]
-    pub fn display_name(&self) -> &'static str {
-        match self {
-            Language::English => "English",
-            Language::Spanish => "Español",
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn flag_emoji(&self) -> &'static str {
-        match self {
-            Language::English => "🇬🇧",
-            Language::Spanish => "🇪🇸",
-        }
-    }
-
-    /// Returns all supported languages in order
-    #[allow(dead_code)]
-    pub fn all() -> &'static [Language] {
-        &[Language::Spanish, Language::English]
-    }
-
     pub fn from_str(s: &str) -> Option<Self> {
         match s {
             "en" => Some(Language::English),

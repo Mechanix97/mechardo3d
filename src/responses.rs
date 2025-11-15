@@ -1,6 +1,6 @@
 use crate::language::Language;
 use axum::{
-    http::StatusCode,
+    http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
 };
 
@@ -18,19 +18,18 @@ impl HtmlWithLang {
 
 impl IntoResponse for HtmlWithLang {
     fn into_response(self) -> Response {
-        let cookie_header = format!(
-            "language={}; Path=/; Max-Age=31536000; SameSite=Lax",
-            self.lang.as_str()
+        let mut headers = HeaderMap::new();
+        headers.insert("Content-Type", "text/html; charset=utf-8".parse().unwrap());
+        headers.insert(
+            "Set-Cookie",
+            format!(
+                "language={}; Path=/; Max-Age=31536000; SameSite=Lax",
+                self.lang.as_str()
+            )
+            .parse()
+            .unwrap(),
         );
 
-        (
-            StatusCode::OK,
-            [
-                ("Content-Type", "text/html; charset=utf-8"),
-                ("Set-Cookie", &cookie_header),
-            ],
-            self.html,
-        )
-            .into_response()
+        (StatusCode::OK, headers, self.html).into_response()
     }
 }
