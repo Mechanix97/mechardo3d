@@ -4,15 +4,14 @@ use axum::http::HeaderMap;
 /// Detect language from cookie first, then fallback to Accept-Language header
 pub fn detect_language(headers: &HeaderMap) -> Language {
     // First, try to get language from cookie
+    #[allow(clippy::collapsible_if)]
     if let Some(cookie_header) = headers.get("cookie") {
         if let Ok(cookie_str) = cookie_header.to_str() {
             for cookie in cookie_str.split(';') {
                 let cookie = cookie.trim();
-                if cookie.starts_with("language=") {
-                    if let Some(lang) = cookie.strip_prefix("language=") {
-                        if let Some(language) = Language::from_str(lang) {
-                            return language;
-                        }
+                if let Some(lang) = cookie.strip_prefix("language=") {
+                    if let Some(language) = Language::from_str(lang) {
+                        return language;
                     }
                 }
             }
