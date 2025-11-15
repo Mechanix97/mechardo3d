@@ -1,8 +1,8 @@
+use crate::language::Language;
 use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
 };
-use crate::language::Language;
 
 /// Response wrapper that automatically sets a language cookie
 pub struct HtmlWithLang {

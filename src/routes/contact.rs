@@ -1,4 +1,5 @@
 use crate::responses::HtmlWithLang;
+use crate::translations::get_translations_for_lang;
 use axum::{
     Extension,
     extract::{ConnectInfo, Form},
@@ -8,7 +9,7 @@ use axum::{
 use chrono::Utc;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::fs;
 use std::net::SocketAddr;
@@ -17,7 +18,6 @@ use std::sync::Arc;
 use tera::{Context, Tera};
 use tokio::sync::RwLock;
 use tracing::{error, info};
-use crate::translations::get_translations_for_lang;
 
 #[derive(Deserialize, Serialize)]
 pub struct ContactForm {
@@ -53,7 +53,8 @@ pub async fn contact(
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
-    let title = t.get("page_titles")
+    let title = t
+        .get("page_titles")
         .and_then(|pt| pt.get("contact"))
         .and_then(|v| v.as_str())
         .unwrap_or("Contact");
@@ -81,7 +82,8 @@ pub async fn contact_success(
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
-    let title = t.get("page_titles")
+    let title = t
+        .get("page_titles")
         .and_then(|pt| pt.get("message_sent"))
         .and_then(|v| v.as_str())
         .unwrap_or("Message Sent");
@@ -198,7 +200,11 @@ pub async fn contact_submit(
                                     return Err((
                                         StatusCode::FORBIDDEN,
                                         Json(ErrorResponse {
-                                            error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
+                                            error: get_error_msg(
+                                                &translations,
+                                                language.as_str(),
+                                                "recaptcha_failed",
+                                            ),
                                         }),
                                     ));
                                 }
@@ -211,7 +217,11 @@ pub async fn contact_submit(
                                 return Err((
                                     StatusCode::INTERNAL_SERVER_ERROR,
                                     Json(ErrorResponse {
-                                        error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
+                                        error: get_error_msg(
+                                            &translations,
+                                            language.as_str(),
+                                            "recaptcha_failed",
+                                        ),
                                     }),
                                 ));
                             }
@@ -225,7 +235,11 @@ pub async fn contact_submit(
                         return Err((
                             StatusCode::INTERNAL_SERVER_ERROR,
                             Json(ErrorResponse {
-                                error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
+                                error: get_error_msg(
+                                    &translations,
+                                    language.as_str(),
+                                    "recaptcha_failed",
+                                ),
                             }),
                         ));
                     }
@@ -327,5 +341,8 @@ pub async fn contact_submit(
     rate_limit.insert(ip, now);
 
     // Redirect to /contact_success
-    Ok(Redirect::to(&format!("/{}/contact_success", language.as_str())))
+    Ok(Redirect::to(&format!(
+        "/{}/contact_success",
+        language.as_str()
+    )))
 }

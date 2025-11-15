@@ -2,7 +2,7 @@ use crate::data::blog_data::get_posts;
 use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
-use axum::{extract::Path, Extension};
+use axum::{Extension, extract::Path};
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 use serde_json::Value;
@@ -32,14 +32,18 @@ pub async fn index(
         Ok(mut posts) => {
             // Sort by date descending and take the 3 most recent
             posts.sort_by(|a, b| b.date.cmp(&a.date));
-            posts.into_iter().take(3).map(|post| BlogPostView {
-                id: post.id.clone(),
-                title: post.get_title(language.as_str()).to_string(),
-                summary: post.get_summary(language.as_str()).map(|s| s.to_string()),
-                route: post.route.clone(),
-                thumbnail: post.thumbnail.clone(),
-                date: post.date,
-            }).collect::<Vec<BlogPostView>>()
+            posts
+                .into_iter()
+                .take(3)
+                .map(|post| BlogPostView {
+                    id: post.id.clone(),
+                    title: post.get_title(language.as_str()).to_string(),
+                    summary: post.get_summary(language.as_str()).map(|s| s.to_string()),
+                    route: post.route.clone(),
+                    thumbnail: post.thumbnail.clone(),
+                    date: post.date,
+                })
+                .collect::<Vec<BlogPostView>>()
         }
         Err(e) => {
             eprintln!("Error loading blog posts from data/blog_posts.json: {}", e);
@@ -50,7 +54,8 @@ pub async fn index(
     // Get translations for current language
     let t = get_translations_for_lang(&translations, language.as_str());
 
-    let title = t.get("page_titles")
+    let title = t
+        .get("page_titles")
         .and_then(|pt| pt.get("home"))
         .and_then(|v| v.as_str())
         .unwrap_or("Home");
@@ -67,10 +72,13 @@ pub async fn index(
         Ok(rendered) => HtmlWithLang::new(rendered, language),
         Err(e) => {
             eprintln!("Error rendering index.html: {}", e);
-            HtmlWithLang::new(format!(
-                "<html><body><h1>Error rendering page</h1><p>{}</p></body></html>",
-                e
-            ), language)
+            HtmlWithLang::new(
+                format!(
+                    "<html><body><h1>Error rendering page</h1><p>{}</p></body></html>",
+                    e
+                ),
+                language,
+            )
         }
     }
 }

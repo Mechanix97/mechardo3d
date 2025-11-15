@@ -1,12 +1,12 @@
 use crate::data::blog_data::get_posts;
 use crate::language::Language;
-use crate::translations::get_translations_for_lang;
 use crate::responses::HtmlWithLang;
+use crate::translations::get_translations_for_lang;
 use axum::{Extension, extract::Path};
 use chrono::{DateTime, Utc};
 use rand::rng;
 use rand::seq::IteratorRandom;
-use serde::{Serialize};
+use serde::Serialize;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::fs;
@@ -35,14 +35,17 @@ pub async fn blog(
     let t = get_translations_for_lang(&translations, language.as_str());
 
     // Convert posts to localized view
-    let posts_view: Vec<BlogPostView> = posts.iter().map(|post| BlogPostView {
-        id: post.id.clone(),
-        title: post.get_title(language.as_str()).to_string(),
-        summary: post.get_summary(language.as_str()).map(|s| s.to_string()),
-        route: post.route.clone(),
-        thumbnail: post.thumbnail.clone(),
-        date: post.date,
-    }).collect();
+    let posts_view: Vec<BlogPostView> = posts
+        .iter()
+        .map(|post| BlogPostView {
+            id: post.id.clone(),
+            title: post.get_title(language.as_str()).to_string(),
+            summary: post.get_summary(language.as_str()).map(|s| s.to_string()),
+            route: post.route.clone(),
+            thumbnail: post.thumbnail.clone(),
+            date: post.date,
+        })
+        .collect();
 
     let mut context = Context::new();
     context.insert("lang", language.as_str());
@@ -62,11 +65,21 @@ pub async fn blog_post(
     Extension(translations): Extension<Arc<HashMap<String, Value>>>,
 ) -> Result<HtmlWithLang, (axum::http::StatusCode, String)> {
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
-    let posts = get_posts().map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Error loading posts: {}", e)))?;
+    let posts = get_posts().map_err(|e| {
+        (
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Error loading posts: {}", e),
+        )
+    })?;
     let post: &crate::models::blog_post::BlogPost = posts
         .iter()
         .find(|p: &&crate::models::blog_post::BlogPost| p.id == id)
-        .ok_or_else(|| (axum::http::StatusCode::NOT_FOUND, format!("Post not found: {}", id)))?;
+        .ok_or_else(|| {
+            (
+                axum::http::StatusCode::NOT_FOUND,
+                format!("Post not found: {}", id),
+            )
+        })?;
 
     let t = get_translations_for_lang(&translations, language.as_str());
 
@@ -87,8 +100,20 @@ pub async fn blog_post(
     context.insert("t", &t);
 
     if let Some(post_content_route) = &post.route {
-        let content = fs::read_to_string(format!("templates/blog/{}/{}.html", post_content_route, language.as_str()))
-            .map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Post content not found: {} - Error: {}", post_content_route, e)))?;
+        let content = fs::read_to_string(format!(
+            "templates/blog/{}/{}.html",
+            post_content_route,
+            language.as_str()
+        ))
+        .map_err(|e| {
+            (
+                axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                format!(
+                    "Post content not found: {} - Error: {}",
+                    post_content_route, e
+                ),
+            )
+        })?;
         context.insert("content", &content);
     } else {
         context.insert("content", &post_view.summary);
@@ -112,8 +137,11 @@ pub async fn blog_post(
 
     context.insert("related_posts", &related_posts);
 
-    let rendered = tera
-        .render("blog_post.html", &context)
-        .map_err(|e| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, format!("Error rendering post: {}", e)))?;
+    let rendered = tera.render("blog_post.html", &context).map_err(|e| {
+        (
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Error rendering post: {}", e),
+        )
+    })?;
     Ok(HtmlWithLang::new(rendered, language))
 }

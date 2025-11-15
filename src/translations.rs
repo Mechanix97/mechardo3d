@@ -56,14 +56,11 @@ fn load_language_translations(lang: &str) -> Result<Value, Box<dyn std::error::E
 /// Get translations for a specific language
 /// Returns the translation object that can be passed to Tera context as "t"
 pub fn get_translations_for_lang(translations: &HashMap<String, Value>, lang: &str) -> Value {
-    translations
-        .get(lang)
-        .cloned()
-        .unwrap_or_else(|| {
-            // Fallback to Spanish if language not found
-            translations
-                .get("es")
-                .cloned()
-                .unwrap_or(Value::Object(serde_json::Map::new()))
-        })
+    translations.get(lang).cloned().unwrap_or_else(|| {
+        // Fallback to Spanish if language not found
+        translations
+            .get("es")
+            .cloned()
+            .unwrap_or(Value::Object(serde_json::Map::new()))
+    })
 }

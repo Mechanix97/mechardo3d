@@ -1,7 +1,7 @@
 use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
-use axum::{extract::Path, Extension};
+use axum::{Extension, extract::Path};
 use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::Arc;

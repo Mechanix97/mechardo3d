@@ -1,5 +1,5 @@
-use axum::http::HeaderMap;
 use crate::language::Language;
+use axum::http::HeaderMap;
 
 /// Detect language from cookie first, then fallback to Accept-Language header
 pub fn detect_language(headers: &HeaderMap) -> Language {
@@ -49,7 +49,7 @@ pub fn detect_from_accept_language(headers: &HeaderMap) -> Language {
                 .strip_prefix("q=")
                 .and_then(|q| q.parse::<f32>().ok())
                 .unwrap_or(1.0);
-            
+
             // Extract base language (e.g., "en-US" -> "en")
             let base_lang = lang.split('-').next().unwrap_or(&lang).to_string();
             languages.push((base_lang, q));
@@ -83,21 +83,30 @@ mod tests {
     #[test]
     fn test_detect_english() {
         let mut headers = HeaderMap::new();
-        headers.insert("accept-language", HeaderValue::from_static("en-US,en;q=0.9"));
+        headers.insert(
+            "accept-language",
+            HeaderValue::from_static("en-US,en;q=0.9"),
+        );
         assert_eq!(detect_from_accept_language(&headers), Language::English);
     }
 
     #[test]
     fn test_detect_spanish() {
         let mut headers = HeaderMap::new();
-        headers.insert("accept-language", HeaderValue::from_static("es-ES,es;q=0.9"));
+        headers.insert(
+            "accept-language",
+            HeaderValue::from_static("es-ES,es;q=0.9"),
+        );
         assert_eq!(detect_from_accept_language(&headers), Language::Spanish);
     }
 
     #[test]
     fn test_detect_with_quality() {
         let mut headers = HeaderMap::new();
-        headers.insert("accept-language", HeaderValue::from_static("fr-FR,fr;q=0.9,es;q=0.8,en;q=0.7"));
+        headers.insert(
+            "accept-language",
+            HeaderValue::from_static("fr-FR,fr;q=0.9,es;q=0.8,en;q=0.7"),
+        );
         // Should return Spanish (first supported language)
         assert_eq!(detect_from_accept_language(&headers), Language::Spanish);
     }

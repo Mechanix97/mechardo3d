@@ -1,8 +1,8 @@
 use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::translations::get_translations_for_lang;
-use axum::extract::Path;
 use axum::Extension;
+use axum::extract::Path;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -16,7 +16,8 @@ pub async fn me(
     let language = Language::from_str(&lang).unwrap_or_else(Language::default);
     let t = get_translations_for_lang(&translations, language.as_str());
 
-    let title = t.get("page_titles")
+    let title = t
+        .get("page_titles")
         .and_then(|pt| pt.get("about"))
         .and_then(|v| v.as_str())
         .unwrap_or("About Me");
