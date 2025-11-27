@@ -53,6 +53,11 @@ services:
         hard: 262144
     environment:
       - CLICKHOUSE_DB=plausible_events_db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     networks:
       - proxy
 
@@ -68,6 +73,11 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@plausible_db:5432/plausible
       - CLICKHOUSE_DATABASE_URL=http://plausible_clickhouse:8123/plausible_events_db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     networks:
       - proxy
 
