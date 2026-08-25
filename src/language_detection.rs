@@ -4,16 +4,15 @@ use axum::http::HeaderMap;
 /// Detect language from cookie first, then fallback to Accept-Language header
 pub fn detect_language(headers: &HeaderMap) -> Language {
     // First, try to get language from cookie
-    #[allow(clippy::collapsible_if)]
-    if let Some(cookie_header) = headers.get("cookie") {
-        if let Ok(cookie_str) = cookie_header.to_str() {
-            for cookie in cookie_str.split(';') {
-                let cookie = cookie.trim();
-                if let Some(lang) = cookie.strip_prefix("language=") {
-                    if let Some(language) = Language::from_str(lang) {
-                        return language;
-                    }
-                }
+    if let Some(cookie_header) = headers.get("cookie")
+        && let Ok(cookie_str) = cookie_header.to_str()
+    {
+        for cookie in cookie_str.split(';') {
+            let cookie = cookie.trim();
+            if let Some(lang) = cookie.strip_prefix("language=")
+                && let Some(language) = Language::from_str(lang.trim())
+            {
+                return language;
             }
         }
     }
@@ -114,5 +113,37 @@ mod tests {
     fn test_default_on_empty() {
         let headers = HeaderMap::new();
         assert_eq!(detect_from_accept_language(&headers), Language::default());
+    }
+
+    #[test]
+    fn cookie_wins_over_accept_language() {
+        let mut headers = HeaderMap::new();
+        headers.insert(
+            "accept-language",
+            HeaderValue::from_static("es-ES,es;q=0.9"),
+        );
+        headers.insert(
+            "cookie",
+            HeaderValue::from_static("theme=dark; language=en"),
+        );
+        assert_eq!(detect_language(&headers), Language::English);
+    }
+
+    #[test]
+    fn unsupported_cookie_falls_back_to_the_header() {
+        let mut headers = HeaderMap::new();
+        headers.insert(
+            "accept-language",
+            HeaderValue::from_static("en-US,en;q=0.9"),
+        );
+        headers.insert("cookie", HeaderValue::from_static("language=fr"));
+        assert_eq!(detect_language(&headers), Language::English);
+    }
+
+    #[test]
+    fn ignores_malformed_quality_values() {
+        let mut headers = HeaderMap::new();
+        headers.insert("accept-language", HeaderValue::from_static("en;q=bogus"));
+        assert_eq!(detect_from_accept_language(&headers), Language::English);
     }
 }

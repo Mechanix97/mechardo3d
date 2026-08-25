@@ -43,6 +43,9 @@ jobs:
       - name: Run clippy
         run: cargo clippy -- -D warnings
 
+      - name: Run tests
+        run: cargo test --locked
+
       - name: Validate JSON translations
         run: |
           for file in translations/**/*.json; do

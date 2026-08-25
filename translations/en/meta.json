@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "home": {
+      "description": "Mechardo Labs: software and electronics engineering. Rust, blockchain and custom hardware. Portfolio, projects and blog.",
+      "keywords": "software engineer, rust, blockchain, electronics, portfolio, mechardo labs"
+    },
+    "about": {
+      "description": "Lucas Rack: Rust developer, blockchain engineer and electronics enthusiast. Experience with Ethereum, smart contracts and P2P protocols.",
+      "keywords": "lucas rack, rust developer, blockchain engineer, ethereum, electronics"
+    },
+    "blog": {
+      "description": "Mechardo Labs blog: articles about Rust, blockchain, electronics and software development.",
+      "keywords": "blog, rust, blockchain, tutorials, software development"
+    },
+    "blog_post": {
+      "description": "An article from the Mechardo Labs blog about Rust, blockchain, electronics and software development.",
+      "keywords": "blog, rust, blockchain, tutorials, software development"
+    },
+    "contact": {
+      "description": "Get in touch with Mechardo Labs by email, GitHub, LinkedIn or Discord.",
+      "keywords": "contact, mechardo labs, lucas rack"
+    },
+    "message_sent": {
+      "description": "We got your message and will get back to you shortly.",
+      "keywords": "contact, mechardo labs"
+    },
+    "ds2000": {
+      "description": "DS2000: USB Discord button box with 3 programmable buttons and RGB LEDs. Mute, deafen and disconnect with one click.",
+      "keywords": "discord button, discord mute, usb button box, streaming gear, ds2000"
+    },
+    "terms_of_service": {
+      "description": "Terms of service for the DS2000, the USB Discord button box by Mechardo Labs.",
+      "keywords": "ds2000, terms of service, mechardo labs"
+    },
+    "privacy_policy": {
+      "description": "Privacy policy for the DS2000, the USB Discord button box by Mechardo Labs.",
+      "keywords": "ds2000, privacy policy, mechardo labs"
+    },
+    "not_found": {
+      "description": "The page you are looking for does not exist or has moved.",
+      "keywords": "mechardo labs"
+    }
+  }
+}

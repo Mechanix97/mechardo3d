@@ -1,8 +1,9 @@
 www.mechardo3d.xyz {
-    reverse_proxy mechardo3d:3000
+    redir https://mechardo3d.xyz{uri} permanent
 }
 
 mechardo3d.xyz {
+    encode zstd gzip
     reverse_proxy mechardo3d:3000
 }
 

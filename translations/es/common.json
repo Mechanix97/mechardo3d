@@ -11,7 +11,12 @@
     "contact": "Contacto",
     "message_sent": "Mensaje Enviado",
     "about": "Sobre mí",
-    "blog": "Blog"
+    "blog": "Blog",
+    "ds2000": "DS2000",
+    "terms_of_service": "Términos del servicio",
+    "privacy_policy": "Política de privacidad",
+    "not_found": "Página no encontrada",
+    "server_error": "Error del servidor"
   },
   "social": {
     "instagram": {
@@ -36,6 +41,13 @@
     "recaptcha_failed": "Falló la verificación de reCAPTCHA. Probá de nuevo.",
     "save_failed": "Error al guardar el mensaje. Probá de nuevo.",
     "contact_unknown": "Ocurrió un error desconocido. Probá de nuevo.",
-    "contact_submit": "Error al enviar el formulario. Probá de nuevo."
+    "contact_submit": "Error al enviar el formulario. Probá de nuevo.",
+    "invalid_email": "Revisá la dirección de email.",
+    "too_long": "El nombre o el email son demasiado largos.",
+    "message_too_long": "El mensaje es demasiado largo.",
+    "not_found_title": "Página no encontrada",
+    "not_found_message": "La página que buscás no existe o cambió de dirección.",
+    "back_home": "Volver al inicio",
+    "server_error_message": "Algo salió mal. Probá de nuevo en unos minutos."
   }
 }

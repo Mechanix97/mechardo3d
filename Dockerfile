@@ -35,7 +35,6 @@ COPY src ./src
 COPY Cargo.toml Cargo.lock ./
 COPY templates ./templates
 COPY data ./data
-COPY secrets ./secrets
 COPY static ./static
 COPY translations ./translations
 COPY --from=tailwind /mechardo3d/static/style.css ./static/style.css
@@ -51,11 +50,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /mechardo3d/data ./data
-COPY --from=builder /mechardo3d/secrets ./secrets
 COPY --from=builder /mechardo3d/target/release/mechardo3d .
 COPY --from=builder /mechardo3d/templates ./templates
 COPY --from=builder /mechardo3d/static ./static
 COPY --from=builder /mechardo3d/translations ./translations
 
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:3000/health || exit 1
+
 ENTRYPOINT ["./mechardo3d"]

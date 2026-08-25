@@ -9,7 +9,7 @@
             "es": "Este es el contenido de mi primera publicación en el blog.",
             "en": "This is the content of my first blog post."
         },
-        "thumbnail": "\\static\\images\\martin-fierro.avif",
+        "thumbnail": "/static/images/martin-fierro.avif",
         "date": "27-07-2025"
     },
     {
@@ -22,7 +22,7 @@
             "es": "Aquí va el contenido de la segunda publicación.",
             "en": "Here is the content of the second post."
         },
-        "thumbnail": "\\static\\images\\martin-fierro.avif",
+        "thumbnail": "/static/images/martin-fierro.avif",
         "date": "28-07-2025"
     },
     {
@@ -35,7 +35,7 @@
             "es": "Aquí va el contenido de la tercera publicación.",
             "en": "Here is the content of the third post."
         },
-        "thumbnail": "\\static\\images\\martin-fierro.avif",
+        "thumbnail": "/static/images/martin-fierro.avif",
         "date": "30-07-2025"
     },
     {
@@ -48,7 +48,7 @@
             "es": "Un sistema de alarma IoT completo que integra hardware y software utilizando tecnologías modernas de código abierto.",
             "en": "A complete IoT alarm system integrating hardware and software using modern open-source technologies."
         },
-        "thumbnail": "\\static\\images\\blog\\alarma-iot\\thumbnail.png",
+        "thumbnail": "/static/images/blog/alarma-iot/thumbnail.png",
         "route": "iot-alarm",
         "date": "18-08-2025"
     }
