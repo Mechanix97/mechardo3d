@@ -1,3 +1,4 @@
+use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::fs;
 use std::io;
@@ -126,7 +127,7 @@ fn read_posts(path: &Path) -> io::Result<Vec<BlogPost>> {
             format!("Error parsing {}: {}", path.display(), e),
         )
     })?;
-    posts.sort_by(|a, b| b.date.cmp(&a.date));
+    posts.sort_by_key(|post| Reverse(post.date));
     Ok(posts)
 }
 
