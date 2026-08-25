@@ -11,7 +11,12 @@
     "contact": "Contact",
     "message_sent": "Message Sent",
     "about": "About Me",
-    "blog": "Blog"
+    "blog": "Blog",
+    "ds2000": "DS2000",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "not_found": "Page not found",
+    "server_error": "Server error"
   },
   "social": {
     "instagram": {
@@ -36,6 +41,13 @@
     "recaptcha_failed": "reCAPTCHA verification failed. Please try again.",
     "save_failed": "Error saving message. Please try again.",
     "contact_unknown": "An unknown error occurred. Please try again.",
-    "contact_submit": "Error submitting form. Please try again."
+    "contact_submit": "Error submitting form. Please try again.",
+    "invalid_email": "Please check the email address.",
+    "too_long": "The name or the email is too long.",
+    "message_too_long": "The message is too long.",
+    "not_found_title": "Page not found",
+    "not_found_message": "The page you are looking for does not exist or has moved.",
+    "back_home": "Back to home",
+    "server_error_message": "Something went wrong. Please try again in a few minutes."
   }
 }

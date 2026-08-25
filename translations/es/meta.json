@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "home": {
+      "description": "Mechardo Labs: ingeniería de software y electrónica. Rust, blockchain y hardware a medida. Portfolio, proyectos y blog.",
+      "keywords": "ingeniero de software, rust, blockchain, electrónica, portfolio, mechardo labs"
+    },
+    "about": {
+      "description": "Lucas Rack: desarrollador Rust, ingeniero blockchain y entusiasta de la electrónica. Experiencia en Ethereum, smart contracts y protocolos P2P.",
+      "keywords": "lucas rack, desarrollador rust, ingeniero blockchain, ethereum, electrónica"
+    },
+    "blog": {
+      "description": "Blog de Mechardo Labs: artículos sobre Rust, blockchain, electrónica y desarrollo de software.",
+      "keywords": "blog, rust, blockchain, tutoriales, desarrollo de software"
+    },
+    "blog_post": {
+      "description": "Artículo del blog de Mechardo Labs sobre Rust, blockchain, electrónica y desarrollo de software.",
+      "keywords": "blog, rust, blockchain, tutoriales, desarrollo de software"
+    },
+    "contact": {
+      "description": "Escribinos a Mechardo Labs por email, GitHub, LinkedIn o Discord.",
+      "keywords": "contacto, mechardo labs, lucas rack"
+    },
+    "message_sent": {
+      "description": "Recibimos tu mensaje. Te respondemos a la brevedad.",
+      "keywords": "contacto, mechardo labs"
+    },
+    "ds2000": {
+      "description": "DS2000: botonera USB para Discord con 3 botones programables y LEDs RGB. Muteá, ensordecé y desconectate con un clic.",
+      "keywords": "botonera discord, mutear discord, botonera usb, streaming, ds2000"
+    },
+    "terms_of_service": {
+      "description": "Términos del servicio del DS2000, la botonera USB para Discord de Mechardo Labs.",
+      "keywords": "ds2000, términos del servicio, mechardo labs"
+    },
+    "privacy_policy": {
+      "description": "Política de privacidad del DS2000, la botonera USB para Discord de Mechardo Labs.",
+      "keywords": "ds2000, política de privacidad, mechardo labs"
+    },
+    "not_found": {
+      "description": "La página que buscás no existe o cambió de dirección.",
+      "keywords": "mechardo labs"
+    }
+  }
+}

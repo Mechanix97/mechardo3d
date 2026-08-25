@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('contact.js loaded');
     const form = document.getElementById('contact-form');
     const errorAlert = document.getElementById('error-alert');
     const errorMessage = document.getElementById('error-message');
 
-    // Check if elements exist
     if (!form) {
         console.error('Form with id="contact-form" not found');
         return;
@@ -14,25 +12,25 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    const submitUrl = form.getAttribute('action') || '/contact';
+    const successUrl = form.dataset.successUrl || '/contact_success';
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorAlert.classList.remove('hidden');
+    }
+
     form.addEventListener('submit', function (event) {
         event.preventDefault();
-        console.log('Form submit event triggered');
-
-        // Hide any existing error message
         errorAlert.classList.add('hidden');
 
         grecaptcha.ready(function () {
-            console.log('reCAPTCHA ready');
-            grecaptcha.execute('6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8', { action: 'submit' }).then(function (token) {
-                console.log('reCAPTCHA token obtained:', token);
+            grecaptcha.execute(window.recaptchaSiteKey, { action: 'submit' }).then(function (token) {
                 document.getElementById('g-recaptcha-response').value = token;
 
-                // Convert FormData to URL-encoded string
-                const formData = new FormData(form);
-                const urlEncodedData = new URLSearchParams(formData).toString();
+                const urlEncodedData = new URLSearchParams(new FormData(form)).toString();
 
-                // Submit form via fetch
-                fetch('/contact', {
+                fetch(submitUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -40,37 +38,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: urlEncodedData,
                 })
                     .then(response => {
-                        console.log('Fetch response received:', response.status);
                         if (response.ok) {
-                            console.log('Form submission successful, redirecting to /contact_success');
-                            window.location.href = '/contact_success';
-                        } else {
-                            return response.json().then(data => {
-                                console.log('Error response data:', data);
-                                if (data.error) {
-                                    errorMessage.textContent = data.error;
-                                    errorAlert.classList.remove('hidden');
-                                } else {
-                                    console.error('No error message in response');
-                                    errorMessage.textContent = window.contactTranslations.unknownError;
-                                    errorAlert.classList.remove('hidden');
-                                }
-                            }).catch(err => {
-                                console.error('Failed to parse JSON response:', err);
-                                errorMessage.textContent = window.contactTranslations.submitError;
-                                errorAlert.classList.remove('hidden');
-                            });
+                            window.location.href = response.redirected ? response.url : successUrl;
+                            return;
                         }
+
+                        return response.json()
+                            .then(data => showError(data.error || window.contactTranslations.unknownError))
+                            .catch(() => showError(window.contactTranslations.submitError));
                     })
                     .catch(error => {
                         console.error('Fetch error:', error);
-                        errorMessage.textContent = window.contactTranslations.submitError;
-                        errorAlert.classList.remove('hidden');
+                        showError(window.contactTranslations.submitError);
                     });
             }).catch(error => {
                 console.error('reCAPTCHA error:', error);
-                errorMessage.textContent = window.contactTranslations.recaptchaError;
-                errorAlert.classList.remove('hidden');
+                showError(window.contactTranslations.recaptchaError);
             });
         });
     });

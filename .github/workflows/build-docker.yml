@@ -16,11 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create fake secrets file
-        run: |
-          mkdir -p secrets
-          echo "RECAPTCHA_SECRET_KEY=6adsadas" > secrets/recaptcha.env
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -31,6 +26,19 @@ jobs:
       - name: Run Docker container
         run: |
           make run-image
-          sleep 5  # Wait for the container to start
-          curl -f http://localhost:3000 || exit 1
+          for attempt in $(seq 1 15); do
+            if curl -fsS http://localhost:3000/health; then
+              healthy=1
+              break
+            fi
+            sleep 2
+          done
+          if [ -z "$healthy" ]; then
+            docker logs mechardo3d
+            make stop-image
+            exit 1
+          fi
+          curl -fsS -o /dev/null http://localhost:3000/es
+          curl -fsS -o /dev/null http://localhost:3000/en/blog
+          curl -fsS -o /dev/null http://localhost:3000/sitemap.xml
           make stop-image

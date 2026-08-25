@@ -73,7 +73,8 @@
     <!-- Contact form -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">{{ t.contact.form.title }}</h2>
-        <form method="POST" action="/{{ lang | default(value='es') }}/contact" class="space-y-4" id="contact-form">
+        <form method="POST" action="/{{ lang | default(value='es') }}/contact"
+            data-success-url="/{{ lang | default(value='es') }}/contact_success" class="space-y-4" id="contact-form">
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t.contact.form.name }}</label>
                 <input type="text" id="name" name="name" value="{{ name | default(value='') }}"
@@ -105,9 +106,10 @@
     </div>
 </div>
 <!-- reCAPTCHA v3 script -->
-<script src="https://www.google.com/recaptcha/api.js?render=6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8"></script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
 <script>
-    // Pass translations to JavaScript
+    // Configuration and translations passed from the server
+    window.recaptchaSiteKey = "{{ recaptcha_site_key }}";
     window.contactTranslations = {
         unknownError: "{{ t.errors.contact_unknown }}",
         submitError: "{{ t.errors.contact_submit }}",

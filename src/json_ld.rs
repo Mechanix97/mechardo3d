@@ -1,23 +1,33 @@
 use serde_json::{Value, json};
 
-/// Generate JSON-LD schema for a Person (used on /me page)
-pub fn person_schema(lang: &str) -> Value {
-    let locale = if lang == "es" { "es-ES" } else { "en-US" };
+use crate::config::AppConfig;
+use crate::language::Language;
+use crate::models::blog_post::BlogPostView;
+
+const AUTHOR: &str = "Lucas Rack";
+const GITHUB_URL: &str = "https://github.com/Mechanix97";
+const LINKEDIN_URL: &str = "https://linkedin.com/in/lucasalexisrack";
+
+/// JSON-LD for a Person (used on `/me`).
+pub fn person_schema(config: &AppConfig, lang: Language) -> Value {
+    let job_title = match lang {
+        Language::Spanish => "Ingeniero de Software",
+        Language::English => "Software Engineer",
+    };
+    let description = match lang {
+        Language::Spanish => {
+            "Ingeniero de Software especializado en Rust, Blockchain y Electrónica"
+        }
+        Language::English => "Software Engineer specialized in Rust, Blockchain, and Electronics",
+    };
 
     json!({
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Lucas Rack",
-        "url": "https://mechardo3d.xyz",
-        "sameAs": [
-            "https://github.com/Mechanix97",
-            "https://linkedin.com/in/lucasalexisrack"
-        ],
-        "jobTitle": if lang == "es" {
-            "Ingeniero de Software"
-        } else {
-            "Software Engineer"
-        },
+        "name": AUTHOR,
+        "url": config.url(""),
+        "sameAs": [GITHUB_URL, LINKEDIN_URL],
+        "jobTitle": job_title,
         "knowsAbout": [
             "Rust",
             "Blockchain",
@@ -29,115 +39,197 @@ pub fn person_schema(lang: &str) -> Value {
             "Electronics"
         ],
         "email": "lucas_rack@live.com.ar",
-        "description": if lang == "es" {
-            "Ingeniero de Software especializado en Rust, Blockchain y Electrónica"
-        } else {
-            "Software Engineer specialized in Rust, Blockchain, and Electronics"
-        },
-        "inLanguage": locale
+        "description": description,
+        "inLanguage": lang.locale()
     })
 }
 
-/// Generate JSON-LD schema for Organization (used on home page)
-pub fn organization_schema(lang: &str) -> Value {
-    let locale = if lang == "es" { "es-ES" } else { "en-US" };
+/// JSON-LD for the Organization (used on the home page).
+pub fn organization_schema(config: &AppConfig, lang: Language) -> Value {
+    let description = match lang {
+        Language::Spanish => "Laboratorio de Electrónica y Software Engineering",
+        Language::English => "Electronics and Software Engineering Lab",
+    };
 
     json!({
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Mechardo Labs",
-        "url": "https://mechardo3d.xyz",
-        "description": if lang == "es" {
-            "Laboratorio de Electrónica y Software Engineering"
-        } else {
-            "Electronics and Software Engineering Lab"
-        },
-        "sameAs": [
-            "https://github.com/Mechanix97",
-            "https://linkedin.com/in/lucasalexisrack"
-        ],
-        "inLanguage": locale
+        "url": config.url(""),
+        "logo": config.url("static/images/Mechardo-labs.png"),
+        "description": description,
+        "sameAs": [GITHUB_URL, LINKEDIN_URL],
+        "inLanguage": lang.locale()
     })
 }
 
-/// Generate JSON-LD schema for a Product (used on DS2000 page)
-pub fn product_schema(lang: &str) -> Value {
-    let locale = if lang == "es" { "es-ES" } else { "en-US" };
+/// JSON-LD for the DS2000 product page.
+pub fn product_schema(config: &AppConfig, lang: Language) -> Value {
+    let description = match lang {
+        Language::Spanish => "Botonera USB para Discord con 3 botones programables y 2 LEDs RGB",
+        Language::English => "USB Discord Button Box with 3 programmable buttons and 2 RGB LEDs",
+    };
+    let buttons = match lang {
+        Language::Spanish => {
+            "3 botones programables para mutear/desmutear, ensordecer/desensordecer, desconectar"
+        }
+        Language::English => "3 programmable buttons for mute/unmute, deafen/undeafen, disconnect",
+    };
+    let leds = match lang {
+        Language::Spanish => "2 LEDs RGB configurables",
+        Language::English => "2 configurable RGB LEDs",
+    };
+    let platforms = match lang {
+        Language::Spanish => "Compatible con Windows, macOS y Linux",
+        Language::English => "Compatible with Windows, macOS and Linux",
+    };
 
     json!({
         "@context": "https://schema.org",
         "@type": "Product",
         "name": "DS2000",
-        "description": if lang == "es" {
-            "Botonera USB para Discord con 3 botones programables y 2 LEDs RGB"
-        } else {
-            "USB Discord Button Box with 3 programmable buttons and 2 RGB LEDs"
-        },
-        "url": format!("https://mechardo3d.xyz/{}/ds2000", lang),
-        "image": "https://mechardo3d.xyz/static/images/og-image.png",
+        "description": description,
+        "url": config.url(&format!("{}/ds2000", lang.as_str())),
+        "image": config.url("static/images/og-image.png"),
         "brand": {
             "@type": "Brand",
             "name": "Mechardo Labs"
         },
-        "features": [
-            if lang == "es" {
-                "3 botones programables para mutear/desmutear, ensordecer/desensordecer, desconectar"
-            } else {
-                "3 programmable buttons for mute/unmute, deafen/undeafen, disconnect"
-            },
-            if lang == "es" {
-                "2 LEDs RGB configurables"
-            } else {
-                "2 configurable RGB LEDs"
-            },
-            "USB Plug-and-Play",
-            "Compatible con Windows, macOS, Linux"
-        ],
-        "inLanguage": locale
+        "features": [buttons, leds, "USB Plug-and-Play", platforms],
+        "inLanguage": lang.locale()
     })
 }
 
-/// Generate JSON-LD schema for a BlogPosting
+/// JSON-LD for a single blog post.
 pub fn blog_post_schema(
-    title: &str,
+    config: &AppConfig,
+    lang: Language,
+    post: &BlogPostView,
     description: &str,
-    date: &str,
-    author: &str,
-    lang: &str,
+    url_path: &str,
 ) -> Value {
-    let locale = if lang == "es" { "es-ES" } else { "en-US" };
-
-    json!({
+    let mut schema = json!({
         "@context": "https://schema.org",
         "@type": "BlogPosting",
-        "headline": title,
+        "headline": post.title,
         "description": description,
-        "datePublished": date,
-        "dateModified": date,
+        "datePublished": post.date.format("%Y-%m-%d").to_string(),
+        "dateModified": post.date.format("%Y-%m-%d").to_string(),
+        "mainEntityOfPage": config.url(url_path),
         "author": {
             "@type": "Person",
-            "name": author,
-            "url": "https://mechardo3d.xyz"
+            "name": AUTHOR,
+            "url": config.url("")
         },
         "publisher": {
             "@type": "Organization",
             "name": "Mechardo Labs",
-            "url": "https://mechardo3d.xyz"
+            "url": config.url("")
         },
-        "inLanguage": locale
-    })
+        "inLanguage": lang.locale()
+    });
+
+    if let Some(image) = post.thumbnail.as_deref()
+        && let Some(object) = schema.as_object_mut()
+    {
+        object.insert(
+            "image".to_string(),
+            Value::String(config.url(image.trim_start_matches('/'))),
+        );
+    }
+
+    schema
 }
 
-/// Generate JSON-LD schema for a WebPage
-pub fn webpage_schema(title: &str, description: &str, page_type: &str, lang: &str) -> Value {
-    let locale = if lang == "es" { "es-ES" } else { "en-US" };
-
+/// JSON-LD for a generic page.
+pub fn webpage_schema(
+    config: &AppConfig,
+    lang: Language,
+    title: &str,
+    description: &str,
+    page_type: &str,
+    url_path: &str,
+) -> Value {
     json!({
         "@context": "https://schema.org",
         "@type": page_type,
         "name": title,
         "description": description,
-        "url": format!("https://mechardo3d.xyz/{}", lang),
-        "inLanguage": locale
+        "url": config.url(url_path),
+        "inLanguage": lang.locale()
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn config() -> AppConfig {
+        AppConfig::from_env()
+    }
+
+    #[test]
+    fn uses_the_configured_base_url() {
+        let config = config();
+        let schema = organization_schema(&config, Language::Spanish);
+        assert_eq!(schema["url"], json!(format!("{}/", config.base_url)));
+    }
+
+    #[test]
+    fn describes_pages_with_their_own_url() {
+        let config = config();
+        let schema = webpage_schema(
+            &config,
+            Language::English,
+            "Blog",
+            "Posts",
+            "Blog",
+            "en/blog",
+        );
+        assert_eq!(schema["url"], json!(config.url("en/blog")));
+        assert_eq!(schema["inLanguage"], json!("en-US"));
+    }
+
+    #[test]
+    fn adds_an_image_to_blog_posts_when_available() {
+        let config = config();
+        let mut post = post();
+        let schema = blog_post_schema(
+            &config,
+            Language::Spanish,
+            &post,
+            "Description",
+            "es/blog/4",
+        );
+        assert_eq!(
+            schema["image"],
+            json!(config.url("static/images/thumb.png"))
+        );
+        assert_eq!(schema["headline"], json!("Hola"));
+        assert_eq!(schema["datePublished"], json!("2025-08-18"));
+
+        post.thumbnail = None;
+        let without_image = blog_post_schema(
+            &config,
+            Language::Spanish,
+            &post,
+            "Description",
+            "es/blog/4",
+        );
+        assert!(without_image.get("image").is_none());
+    }
+
+    fn post() -> BlogPostView {
+        let post: crate::models::blog_post::BlogPost = serde_json::from_str(
+            r#"{
+                "id": "4",
+                "title": { "es": "Hola", "en": "Hello" },
+                "summary": { "es": "Resumen", "en": "Summary" },
+                "thumbnail": "/static/images/thumb.png",
+                "date": "18-08-2025"
+            }"#,
+        )
+        .expect("post should deserialize");
+        BlogPostView::new(&post, Language::Spanish)
+    }
 }

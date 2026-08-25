@@ -4,6 +4,18 @@ run:
 build:
 	@cargo build
 
+test:
+	@cargo test
+
+fmt:
+	@cargo fmt
+
+lint:
+	@cargo fmt -- --check
+	@cargo clippy -- -D warnings
+
+check: lint test
+
 build-image:
 	@docker build -t mechardo3d .
 

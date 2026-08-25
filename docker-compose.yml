@@ -3,10 +3,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    restart: unless-stopped
+    # Only reachable through Caddy; not published on the host.
+    expose:
+      - "3000"
+    env_file:
+      - ./secrets/recaptcha.env
     environment:
       - RUST_LOG=info
+      - BASE_URL=https://mechardo3d.xyz
+      - COOKIE_SECURE=true
+      - TRUST_PROXY_HEADERS=true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
     networks:
       - proxy
     volumes:

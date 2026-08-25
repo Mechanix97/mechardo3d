@@ -1,38 +1,40 @@
-use crate::json_ld;
-use crate::responses::HtmlWithLang;
-use crate::translations::get_translations_for_lang;
-use axum::{
-    Extension,
-    extract::{ConnectInfo, Form},
-    http::StatusCode,
-    response::{Json, Redirect},
-};
+use axum::Extension;
+use axum::extract::{ConnectInfo, Form};
+use axum::http::{HeaderMap, HeaderValue, StatusCode, header};
+use axum::response::{IntoResponse, Json, Redirect, Response};
 use chrono::Utc;
-use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use serde_json::{Value, json};
-use std::collections::HashMap;
-use std::fs;
 use std::net::SocketAddr;
-use std::path::Path as StdPath;
-use std::sync::Arc;
-use tera::{Context, Tera};
-use tokio::sync::RwLock;
-use tracing::{error, info};
+use tracing::{error, info, warn};
+
+use crate::client_ip::client_ip;
+use crate::data::messages::ContactMessage;
+use crate::extract::Lang;
+use crate::json_ld;
+use crate::language::Language;
+use crate::pages::{self, page_meta};
+use crate::state::AppState;
+
+const MAX_NAME_CHARS: usize = 100;
+const MAX_EMAIL_CHARS: usize = 254;
+const RECAPTCHA_VERIFY_URL: &str = "https://www.google.com/recaptcha/api/siteverify";
 
 #[derive(Deserialize, Serialize)]
 pub struct ContactForm {
     name: String,
     email: String,
     message: String,
-    #[serde(rename = "g-recaptcha-response")]
+    #[serde(rename = "g-recaptcha-response", default)]
     g_recaptcha_response: String,
 }
 
 #[derive(Deserialize)]
-pub struct RecaptchaResponse {
+struct RecaptchaResponse {
     success: bool,
-    score: f32,
+    /// Absent for reCAPTCHA v2 and for error responses.
+    score: Option<f32>,
+    #[serde(rename = "error-codes", default)]
+    error_codes: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -40,352 +42,347 @@ pub struct ErrorResponse {
     error: String,
 }
 
-pub type RateLimitState = Arc<RwLock<HashMap<String, chrono::DateTime<Utc>>>>;
-
-use crate::language::Language;
-use axum::extract::Path as AxumPath;
-
-// Handler for GET /contact
-pub async fn contact(
-    AxumPath(lang): AxumPath<String>,
-    Extension(tera): Extension<Tera>,
-    Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> HtmlWithLang {
-    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
-    let t = get_translations_for_lang(&translations, language.as_str());
-
-    let title = t
-        .get("page_titles")
-        .and_then(|pt| pt.get("contact"))
-        .and_then(|v| v.as_str())
-        .unwrap_or("Contact");
-
-    // Determine og_locale based on language
-    let og_locale = if language.as_str() == "es" {
-        "es_ES"
-    } else {
-        "en_US"
-    };
-
-    // Generate JSON-LD schema
-    let schema = json_ld::webpage_schema(
-        title,
-        "Contact Mechardo Labs - Get in touch via email, GitHub, LinkedIn, or Discord.",
-        "ContactPage",
-        language.as_str(),
-    );
-    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
-
-    let mut context = Context::new();
-    context.insert("lang", language.as_str());
-    context.insert("title", title);
-    context.insert("t", &t);
-    context.insert("json_ld_schema", &json_ld_schema);
-    context.insert(
-        "recaptcha_site_key",
-        "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8",
-    );
-
-    // SEO meta tags
-    context.insert(
-        "meta_description",
-        "Contact Mechardo Labs - Get in touch via email, GitHub, LinkedIn, or Discord.",
-    );
-    context.insert("meta_keywords", "contact, mechardo labs, lucas rack");
-    context.insert("og_title", title);
-    context.insert(
-        "og_description",
-        "Contact Mechardo Labs - Get in touch via email, GitHub, LinkedIn, or Discord.",
-    );
-    context.insert("og_type", "website");
-    context.insert("og_locale", og_locale);
-    context.insert("canonical_path", "contact");
-    let rendered = tera
-        .render("contact.html", &context)
-        .expect("Error rendering template");
-    HtmlWithLang::new(rendered, language)
+/// Error returned to the contact form's `fetch` call.
+pub struct ContactError {
+    status: StatusCode,
+    message: String,
+    retry_after: Option<i64>,
 }
 
-// Handler for GET /contact_success
-pub async fn contact_success(
-    AxumPath(lang): AxumPath<String>,
-    Extension(tera): Extension<Tera>,
-    Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-) -> HtmlWithLang {
-    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
-    let t = get_translations_for_lang(&translations, language.as_str());
-
-    let title = t
-        .get("page_titles")
-        .and_then(|pt| pt.get("message_sent"))
-        .and_then(|v| v.as_str())
-        .unwrap_or("Message Sent");
-
-    // Generate JSON-LD schema
-    let schema = json_ld::webpage_schema(
-        title,
-        "Contact Mechardo Labs - Message sent successfully.",
-        "ContactPage",
-        language.as_str(),
-    );
-    let json_ld_schema = serde_json::to_string(&schema).unwrap_or_default();
-
-    let mut context = Context::new();
-    context.insert("lang", language.as_str());
-    context.insert("title", title);
-    context.insert("t", &t);
-    context.insert("json_ld_schema", &json_ld_schema);
-    let rendered = tera
-        .render("contact_success.html", &context)
-        .expect("Error rendering template");
-    HtmlWithLang::new(rendered, language)
-}
-
-/// Helper function to get error message translation
-fn get_error_msg(translations: &HashMap<String, Value>, lang: &str, key: &str) -> String {
-    let t = get_translations_for_lang(translations, lang);
-    t.get("errors")
-        .and_then(|e| e.get(key))
-        .and_then(|v| v.as_str())
-        .unwrap_or(key)
-        .to_string()
-}
-
-// Handler for POST /contact
-pub async fn contact_submit(
-    AxumPath(lang): AxumPath<String>,
-    Extension(rate_limit): Extension<RateLimitState>,
-    Extension(translations): Extension<Arc<HashMap<String, Value>>>,
-    ConnectInfo(addr): ConnectInfo<SocketAddr>,
-    Form(form): Form<ContactForm>,
-) -> Result<Redirect, (StatusCode, Json<ErrorResponse>)> {
-    let language = Language::from_str(&lang).unwrap_or_else(Language::default);
-    info!("Processing contact form submission from IP: {}", addr.ip());
-
-    // Rate limiting by IP (1 message every 5 minutes)
-    let ip: String = addr.ip().to_string();
-    let mut rate_limit = rate_limit.write().await;
-    let now = Utc::now();
-    if let Some(last_submission) = rate_limit.get(&ip) {
-        let elapsed = now.signed_duration_since(*last_submission).num_seconds();
-        if elapsed < 300 {
-            info!("Rate limit exceeded for IP: {}", ip);
-            return Err((
-                StatusCode::TOO_MANY_REQUESTS,
-                Json(ErrorResponse {
-                    error: get_error_msg(&translations, language.as_str(), "rate_limit"),
-                }),
-            ));
+impl ContactError {
+    fn new(state: &AppState, lang: Language, status: StatusCode, key: &str) -> Self {
+        Self {
+            status,
+            message: state
+                .translations
+                .text_or(lang, &format!("errors.{}", key), key)
+                .to_string(),
+            retry_after: None,
         }
     }
 
-    // Validate form fields
-    if form.name.trim().is_empty() || form.email.trim().is_empty() || form.message.trim().is_empty()
-    {
-        info!("Invalid form data from IP: {}", ip);
-        return Err((
-            StatusCode::BAD_REQUEST,
+    fn retry_after(mut self, seconds: i64) -> Self {
+        self.retry_after = Some(seconds);
+        self
+    }
+}
+
+impl IntoResponse for ContactError {
+    fn into_response(self) -> Response {
+        let mut response = (
+            self.status,
             Json(ErrorResponse {
-                error: get_error_msg(&translations, language.as_str(), "fill_fields"),
+                error: self.message,
             }),
+        )
+            .into_response();
+
+        if let Some(seconds) = self.retry_after
+            && let Ok(value) = HeaderValue::from_str(&seconds.to_string())
+        {
+            response.headers_mut().insert(header::RETRY_AFTER, value);
+        }
+
+        response
+    }
+}
+
+/// `GET /{lang}/contact`
+pub async fn contact(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
+    let meta = page_meta(&state, lang, "contact").path("contact");
+    let schema = json_ld::webpage_schema(
+        &state.config,
+        lang,
+        &meta.title,
+        &meta.description,
+        "ContactPage",
+        &format!("{}/contact", lang.as_str()),
+    );
+    let meta = meta.schema(schema);
+
+    let mut context = pages::base_context(&state, lang, &meta);
+    context.insert("recaptcha_site_key", &state.config.recaptcha.site_key);
+
+    pages::render(&state, "contact.html", &context, lang)
+}
+
+/// `GET /{lang}/contact_success`
+pub async fn contact_success(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
+    let meta = page_meta(&state, lang, "message_sent").path("contact_success");
+    let schema = json_ld::webpage_schema(
+        &state.config,
+        lang,
+        &meta.title,
+        &meta.description,
+        "ContactPage",
+        &format!("{}/contact_success", lang.as_str()),
+    );
+    let meta = meta.schema(schema);
+
+    let context = pages::base_context(&state, lang, &meta);
+    pages::render(&state, "contact_success.html", &context, lang)
+}
+
+/// `POST /{lang}/contact`
+pub async fn contact_submit(
+    Lang(lang): Lang,
+    Extension(state): Extension<AppState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
+    Form(form): Form<ContactForm>,
+) -> Result<Redirect, ContactError> {
+    let ip = client_ip(&headers, addr, state.config.trust_proxy_headers);
+    let now = Utc::now();
+
+    if let Some(retry_after) = state.contact_rate_limit.retry_after(&ip, now) {
+        info!("Rate limit hit for {}", ip);
+        return Err(
+            ContactError::new(&state, lang, StatusCode::TOO_MANY_REQUESTS, "rate_limit")
+                .retry_after(retry_after),
+        );
+    }
+
+    let message = validate(&form, state.config.max_message_chars).map_err(|key| {
+        info!("Rejected contact submission from {}: {}", ip, key);
+        ContactError::new(&state, lang, StatusCode::BAD_REQUEST, key)
+    })?;
+
+    verify_recaptcha(&state, lang, &form.g_recaptcha_response, &ip).await?;
+
+    let stored = ContactMessage {
+        name: message.name,
+        email: message.email,
+        message: message.message,
+        timestamp: now,
+    };
+
+    if let Err(e) = state.messages.append(&stored).await {
+        error!("Failed to store contact message: {}", e);
+        return Err(ContactError::new(
+            &state,
+            lang,
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "save_failed",
         ));
     }
 
-    // Read reCAPTCHA secret key from secrets/recaptcha.env
-    let recaptcha_secret = match fs::read_to_string("secrets/recaptcha.env") {
-        Ok(content) => content
-            .lines()
-            .find_map(|line| {
-                let parts: Vec<&str> = line.splitn(2, '=').collect();
-                if parts.len() == 2 && parts[0].trim() == "RECAPTCHA_SECRET_KEY" {
-                    Some(parts[1].trim().to_string())
-                } else {
-                    None
-                }
-            })
-            .unwrap_or_else(|| {
-                error!("RECAPTCHA_SECRET_KEY not found in secrets/recaptcha.env");
-                String::from("") // Fallback for local testing
-            }),
-        Err(e) => {
-            error!("Failed to read secrets/recaptcha.env: {}", e);
-            String::from("") // Fallback for local testing
-        }
-    };
+    state.contact_rate_limit.record(&ip, now);
+    info!("Stored contact message from {}", ip);
 
-    // Verify reCAPTCHA
-    info!("Verifying reCAPTCHA for IP: {}", ip);
-    let client = Client::new();
-    let recaptcha_response = client
-        .post("https://www.google.com/recaptcha/api/siteverify")
+    Ok(Redirect::to(&format!("/{}/contact_success", lang.as_str())))
+}
+
+struct ValidatedMessage {
+    name: String,
+    email: String,
+    message: String,
+}
+
+/// Validate the submitted form, returning the translation key of the failure.
+fn validate(
+    form: &ContactForm,
+    max_message_chars: usize,
+) -> Result<ValidatedMessage, &'static str> {
+    let name = form.name.trim();
+    let email = form.email.trim();
+    let message = form.message.trim();
+
+    if name.is_empty() || email.is_empty() || message.is_empty() {
+        return Err("fill_fields");
+    }
+    if name.chars().count() > MAX_NAME_CHARS || email.chars().count() > MAX_EMAIL_CHARS {
+        return Err("too_long");
+    }
+    if message.chars().count() > max_message_chars {
+        return Err("message_too_long");
+    }
+    if !is_plausible_email(email) {
+        return Err("invalid_email");
+    }
+
+    Ok(ValidatedMessage {
+        name: name.to_string(),
+        email: email.to_string(),
+        message: message.to_string(),
+    })
+}
+
+/// Cheap sanity check; the real verification is the reply the sender gets.
+fn is_plausible_email(email: &str) -> bool {
+    if email.chars().any(|c| c.is_whitespace() || c == ',') {
+        return false;
+    }
+    let Some((local, domain)) = email.split_once('@') else {
+        return false;
+    };
+    if local.is_empty() || domain.contains('@') {
+        return false;
+    }
+    match domain.split_once('.') {
+        Some((host, tld)) => !host.is_empty() && tld.len() >= 2 && !tld.starts_with('.'),
+        None => false,
+    }
+}
+
+async fn verify_recaptcha(
+    state: &AppState,
+    lang: Language,
+    token: &str,
+    ip: &str,
+) -> Result<(), ContactError> {
+    let config = &state.config.recaptcha;
+
+    if config.disabled {
+        warn!(
+            "reCAPTCHA verification is disabled; accepting submission from {}",
+            ip
+        );
+        return Ok(());
+    }
+
+    if config.secret.is_empty() {
+        error!("Refusing contact submission: no reCAPTCHA secret configured");
+        return Err(recaptcha_error(
+            state,
+            lang,
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ));
+    }
+
+    if token.trim().is_empty() {
+        info!("Contact submission from {} carried no reCAPTCHA token", ip);
+        return Err(recaptcha_error(state, lang, StatusCode::FORBIDDEN));
+    }
+
+    let response = state
+        .http
+        .post(RECAPTCHA_VERIFY_URL)
         .form(&[
-            ("secret", &recaptcha_secret),
-            ("response", &form.g_recaptcha_response),
-            ("remoteip", &ip),
+            ("secret", config.secret.as_str()),
+            ("response", token),
+            ("remoteip", ip),
         ])
         .send()
-        .await;
+        .await
+        .map_err(|e| {
+            error!("reCAPTCHA request failed: {}", e);
+            recaptcha_error(state, lang, StatusCode::INTERNAL_SERVER_ERROR)
+        })?;
 
-    match recaptcha_response {
-        Ok(response) => {
-            info!("reCAPTCHA response status: {}", response.status());
-            if response.status().is_success() {
-                match response.text().await {
-                    Ok(text) => {
-                        info!("reCAPTCHA response body: {}", text);
-                        match serde_json::from_str::<RecaptchaResponse>(&text) {
-                            Ok(recaptcha_data) => {
-                                if !recaptcha_data.success || recaptcha_data.score < 0.6 {
-                                    info!(
-                                        "reCAPTCHA verification failed for IP: {}. Success: {}, Score: {}",
-                                        ip, recaptcha_data.success, recaptcha_data.score
-                                    );
-                                    return Err((
-                                        StatusCode::FORBIDDEN,
-                                        Json(ErrorResponse {
-                                            error: get_error_msg(
-                                                &translations,
-                                                language.as_str(),
-                                                "recaptcha_failed",
-                                            ),
-                                        }),
-                                    ));
-                                }
-                            }
-                            Err(e) => {
-                                error!(
-                                    "Failed to parse reCAPTCHA response for IP: {}: {}. Response body: {}",
-                                    ip, e, text
-                                );
-                                return Err((
-                                    StatusCode::INTERNAL_SERVER_ERROR,
-                                    Json(ErrorResponse {
-                                        error: get_error_msg(
-                                            &translations,
-                                            language.as_str(),
-                                            "recaptcha_failed",
-                                        ),
-                                    }),
-                                ));
-                            }
-                        }
-                    }
-                    Err(e) => {
-                        error!(
-                            "Failed to read reCAPTCHA response body for IP: {}: {}",
-                            ip, e
-                        );
-                        return Err((
-                            StatusCode::INTERNAL_SERVER_ERROR,
-                            Json(ErrorResponse {
-                                error: get_error_msg(
-                                    &translations,
-                                    language.as_str(),
-                                    "recaptcha_failed",
-                                ),
-                            }),
-                        ));
-                    }
-                }
-            } else {
-                let status = response.status();
-                let text = response
-                    .text()
-                    .await
-                    .unwrap_or_else(|_| "No response body".to_string());
-                error!(
-                    "reCAPTCHA request failed for IP: {}. Status: {}. Response: {}",
-                    ip, status, text
-                );
-                return Err((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(ErrorResponse {
-                        error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
-                    }),
-                ));
-            }
-        }
-        Err(e) => {
-            error!("reCAPTCHA request error for IP: {}: {}", ip, e);
-            return Err((
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(ErrorResponse {
-                    error: get_error_msg(&translations, language.as_str(), "recaptcha_failed"),
-                }),
-            ));
+    if !response.status().is_success() {
+        error!("reCAPTCHA responded with status {}", response.status());
+        return Err(recaptcha_error(
+            state,
+            lang,
+            StatusCode::INTERNAL_SERVER_ERROR,
+        ));
+    }
+
+    let verification: RecaptchaResponse = response.json().await.map_err(|e| {
+        error!("Could not parse the reCAPTCHA response: {}", e);
+        recaptcha_error(state, lang, StatusCode::INTERNAL_SERVER_ERROR)
+    })?;
+
+    let score = verification.score.unwrap_or(config.min_score);
+    if !verification.success || score < config.min_score {
+        info!(
+            "reCAPTCHA rejected {} (success={}, score={}, errors={:?})",
+            ip, verification.success, score, verification.error_codes
+        );
+        return Err(recaptcha_error(state, lang, StatusCode::FORBIDDEN));
+    }
+
+    Ok(())
+}
+
+fn recaptcha_error(state: &AppState, lang: Language, status: StatusCode) -> ContactError {
+    // The visitor sees the same message either way; the cause is in the logs.
+    ContactError::new(state, lang, status, "recaptcha_failed")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn form(name: &str, email: &str, message: &str) -> ContactForm {
+        ContactForm {
+            name: name.to_string(),
+            email: email.to_string(),
+            message: message.to_string(),
+            g_recaptcha_response: "token".to_string(),
         }
     }
 
-    // Save message to messages.json
-    info!("Saving message to messages.json for IP: {}", ip);
-    let message = json!({
-        "name": form.name,
-        "email": form.email,
-        "message": form.message,
-        "timestamp": chrono::Utc::now().to_rfc3339(),
-    });
+    #[test]
+    fn accepts_a_complete_form() {
+        let validated = validate(&form(" Lucas ", "lucas@example.com", " hola "), 5000)
+            .expect("form should validate");
+        assert_eq!(validated.name, "Lucas");
+        assert_eq!(validated.message, "hola");
+    }
 
-    let messages_file = "data/messages.json";
-    let mut messages: Vec<serde_json::Value> = if StdPath::new(messages_file).exists() {
-        match fs::read_to_string(messages_file) {
-            Ok(data) => match serde_json::from_str(&data) {
-                Ok(messages) => messages,
-                Err(e) => {
-                    error!("Failed to parse messages.json: {}", e);
-                    return Err((
-                        StatusCode::INTERNAL_SERVER_ERROR,
-                        Json(ErrorResponse {
-                            error: get_error_msg(&translations, language.as_str(), "save_failed"),
-                        }),
-                    ));
-                }
-            },
-            Err(e) => {
-                error!("Failed to read messages.json: {}", e);
-                return Err((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(ErrorResponse {
-                        error: get_error_msg(&translations, language.as_str(), "save_failed"),
-                    }),
-                ));
-            }
-        }
-    } else {
-        vec![]
-    };
+    #[test]
+    fn rejects_empty_fields() {
+        assert_eq!(
+            validate(&form("", "lucas@example.com", "hola"), 5000).err(),
+            Some("fill_fields")
+        );
+        assert_eq!(
+            validate(&form("Lucas", "lucas@example.com", "   "), 5000).err(),
+            Some("fill_fields")
+        );
+    }
 
-    messages.push(message);
-    match serde_json::to_string_pretty(&messages) {
-        Ok(data) => match fs::write(messages_file, &data) {
-            Ok(_) => info!("Message saved to messages.json for IP: {}", ip),
-            Err(e) => {
-                error!("Failed to write to messages.json: {}", e);
-                return Err((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(ErrorResponse {
-                        error: get_error_msg(&translations, language.as_str(), "save_failed"),
-                    }),
-                ));
-            }
-        },
-        Err(e) => {
-            error!("Failed to serialize messages to JSON: {}", e);
-            return Err((
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(ErrorResponse {
-                    error: get_error_msg(&translations, language.as_str(), "save_failed"),
-                }),
-            ));
+    #[test]
+    fn rejects_oversized_input() {
+        let long_name = "a".repeat(MAX_NAME_CHARS + 1);
+        assert_eq!(
+            validate(&form(&long_name, "lucas@example.com", "hola"), 5000).err(),
+            Some("too_long")
+        );
+        let long_message = "a".repeat(11);
+        assert_eq!(
+            validate(&form("Lucas", "lucas@example.com", &long_message), 10).err(),
+            Some("message_too_long")
+        );
+    }
+
+    #[test]
+    fn rejects_implausible_emails() {
+        for email in [
+            "lucas",
+            "lucas@",
+            "@example.com",
+            "lucas@example",
+            "a b@c.com",
+        ] {
+            assert_eq!(
+                validate(&form("Lucas", email, "hola"), 5000).err(),
+                Some("invalid_email"),
+                "accepted {}",
+                email
+            );
         }
     }
 
-    // Update rate limit for IP
-    info!("Updating rate limit for IP: {}", ip);
-    rate_limit.insert(ip, now);
+    #[test]
+    fn accepts_ordinary_emails() {
+        for email in [
+            "lucas@example.com",
+            "lucas.rack+tag@sub.example.co.uk",
+            "l@e.io",
+        ] {
+            assert!(is_plausible_email(email), "rejected {}", email);
+        }
+    }
 
-    // Redirect to /contact_success
-    Ok(Redirect::to(&format!(
-        "/{}/contact_success",
-        language.as_str()
-    )))
+    #[test]
+    fn parses_recaptcha_responses_without_a_score() {
+        let parsed: RecaptchaResponse =
+            serde_json::from_str(r#"{"success": false, "error-codes": ["timeout-or-duplicate"]}"#)
+                .expect("response should parse");
+        assert!(!parsed.success);
+        assert!(parsed.score.is_none());
+        assert_eq!(parsed.error_codes, vec!["timeout-or-duplicate"]);
+    }
 }
