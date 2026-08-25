@@ -86,8 +86,29 @@ pub fn strip_trailing_slash(path: &str) -> Option<&str> {
     }
 }
 
+/// Top-level segments that belong to the site's own routes.
+///
+/// Some of them are two letters long (`me`), which would otherwise be mistaken
+/// for a language tag and swapped away instead of prefixed.
+const SITE_SEGMENTS: [&str; 10] = [
+    "me",
+    "blog",
+    "contact",
+    "contact_success",
+    "ds2000",
+    "static",
+    "health",
+    "robots.txt",
+    "sitemap.xml",
+    "favicon.ico",
+];
+
 /// `fr`, `pt-BR`, ... - a prefix a visitor meant as a language.
 fn looks_like_language_tag(segment: &str) -> bool {
+    if SITE_SEGMENTS.contains(&segment) {
+        return false;
+    }
+
     let (primary, region) = match segment.split_once('-') {
         Some((primary, region)) => (primary, Some(region)),
         None => (segment, None),
@@ -119,8 +140,25 @@ mod tests {
         assert!(looks_like_language_tag("fr"));
         assert!(looks_like_language_tag("pt-BR"));
         assert!(!looks_like_language_tag("ds2000"));
-        assert!(!looks_like_language_tag("me"));
         assert!(!looks_like_language_tag(""));
+    }
+
+    #[test]
+    fn never_mistakes_a_route_for_a_language() {
+        for segment in SITE_SEGMENTS {
+            assert!(
+                !looks_like_language_tag(segment),
+                "{} was taken for a language tag",
+                segment
+            );
+        }
+    }
+
+    #[test]
+    fn keeps_two_letter_routes_intact() {
+        // `/me` is a page, not Montenegrin.
+        assert_eq!(localized_target("/me", None, Language::Spanish), "/es/me");
+        assert_eq!(localized_target("/me", None, Language::English), "/en/me");
     }
 
     #[test]
