@@ -123,8 +123,8 @@ mod tests {
 
         assert!(store.append(&message("first")).await.is_err());
         assert_eq!(
-            std::fs::read(store.path()).expect("file still there"),
-            b"{not json"
+            std::fs::read_to_string(store.path()).expect("file still there"),
+            "{not json"
         );
 
         let _ = std::fs::remove_dir_all(&dir);

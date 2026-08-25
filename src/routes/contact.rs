@@ -324,12 +324,12 @@ mod tests {
     #[test]
     fn rejects_empty_fields() {
         assert_eq!(
-            validate(&form("", "lucas@example.com", "hola"), 5000).unwrap_err(),
-            "fill_fields"
+            validate(&form("", "lucas@example.com", "hola"), 5000).err(),
+            Some("fill_fields")
         );
         assert_eq!(
-            validate(&form("Lucas", "lucas@example.com", "   "), 5000).unwrap_err(),
-            "fill_fields"
+            validate(&form("Lucas", "lucas@example.com", "   "), 5000).err(),
+            Some("fill_fields")
         );
     }
 
@@ -337,13 +337,13 @@ mod tests {
     fn rejects_oversized_input() {
         let long_name = "a".repeat(MAX_NAME_CHARS + 1);
         assert_eq!(
-            validate(&form(&long_name, "lucas@example.com", "hola"), 5000).unwrap_err(),
-            "too_long"
+            validate(&form(&long_name, "lucas@example.com", "hola"), 5000).err(),
+            Some("too_long")
         );
         let long_message = "a".repeat(11);
         assert_eq!(
-            validate(&form("Lucas", "lucas@example.com", &long_message), 10).unwrap_err(),
-            "message_too_long"
+            validate(&form("Lucas", "lucas@example.com", &long_message), 10).err(),
+            Some("message_too_long")
         );
     }
 
@@ -357,8 +357,8 @@ mod tests {
             "a b@c.com",
         ] {
             assert_eq!(
-                validate(&form("Lucas", email, "hola"), 5000).unwrap_err(),
-                "invalid_email",
+                validate(&form("Lucas", email, "hola"), 5000).err(),
+                Some("invalid_email"),
                 "accepted {}",
                 email
             );
