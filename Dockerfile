@@ -18,7 +18,8 @@ COPY package.json package-lock.json ./
 RUN npm install
 COPY static/tailwind.css ./static/
 COPY templates ./templates
-COPY tailwind.config.js ./
+# The JS builds class names too (language picker), so Tailwind has to scan it.
+COPY static/js ./static/js
 RUN npx tailwindcss -i static/tailwind.css -o static/style.css
 
 FROM chef AS planner

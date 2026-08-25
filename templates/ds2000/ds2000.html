@@ -9,54 +9,67 @@
     <!-- DS2000 logo -->
     <div
         class="flex justify-center items-center w-full h-[12rem] md:h-[16rem] bg-[#13120E] rounded-lg shadow-xl overflow-hidden mb-12 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-        <img src="/static/images/DS2000/logo/ds2000-logo.png" alt="DS2000 Logo"
-            class="w-full h-full object-contain p-4" />
+        <img src="/static/images/DS2000/logo/ds2000-logo.webp" alt="DS2000" width="746" height="764"
+            decoding="async" class="w-full h-full object-contain p-4" />
     </div>
 
     <!-- Deslizador de fotos con modal -->
     <div class="relative mb-12">
-        <div id="carousel"
+        <div id="carousel" role="region" aria-roledescription="carousel" aria-label="{{ t.ds2000.images.carousel }}"
             class="relative w-full overflow-hidden rounded-lg shadow-md aspect-[3/2] max-h-[24rem] sm:max-h-[32rem]">
             <div id="carousel-items" class="flex transition-transform duration-500 ease-in-out">
-                <div class="min-w-full">
-                    <img src="/static/images/DS2000/renders/frente.png" alt="{{ t.ds2000.images.front }}"
-                        class="w-full h-auto object-contain sm:object-cover cursor-pointer"
-                        data-fullscreen="/static/images/DS2000/renders/frente.png">
+                <div class="min-w-full" role="group" aria-roledescription="slide" aria-label="1 / 3">
+                    <button type="button" class="block w-full cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        data-fullscreen="/static/images/DS2000/renders/frente.webp"
+                        aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.front }}">
+                        <img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}"
+                            width="1536" height="1024" fetchpriority="high" decoding="async"
+                            class="w-full h-auto object-contain sm:object-cover">
+                    </button>
                 </div>
-                <div class="min-w-full">
-                    <img src="/static/images/DS2000/renders/trasero.png" alt="{{ t.ds2000.images.back }}"
-                        class="w-full h-auto object-contain sm:object-cover cursor-pointer"
-                        data-fullscreen="/static/images/DS2000/renders/trasero.png">
+                <div class="min-w-full" role="group" aria-roledescription="slide" aria-label="2 / 3">
+                    <button type="button" class="block w-full cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        data-fullscreen="/static/images/DS2000/renders/trasero.webp"
+                        aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.back }}">
+                        <img src="/static/images/DS2000/renders/trasero.webp" alt="{{ t.ds2000.images.back }}"
+                            width="1536" height="1024" loading="lazy" decoding="async"
+                            class="w-full h-auto object-contain sm:object-cover">
+                    </button>
                 </div>
-                <div class="min-w-full">
-                    <img src="/static/images/DS2000/renders/superior.png" alt="{{ t.ds2000.images.top }}"
-                        class="w-full h-auto object-contain sm:object-cover cursor-pointer"
-                        data-fullscreen="/static/images/DS2000/renders/superior.png">
+                <div class="min-w-full" role="group" aria-roledescription="slide" aria-label="3 / 3">
+                    <button type="button" class="block w-full cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        data-fullscreen="/static/images/DS2000/renders/superior.webp"
+                        aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.top }}">
+                        <img src="/static/images/DS2000/renders/superior.webp" alt="{{ t.ds2000.images.top }}"
+                            width="1536" height="1024" loading="lazy" decoding="async"
+                            class="w-full h-auto object-contain sm:object-cover">
+                    </button>
                 </div>
             </div>
             <!-- Botones de navegación -->
-            <button id="prev-slide"
-                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <button id="prev-slide" type="button" aria-label="{{ t.ds2000.images.previous }}"
+                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
                 </svg>
             </button>
-            <button id="next-slide"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <button id="next-slide" type="button" aria-label="{{ t.ds2000.images.next }}"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8.59 16.59L13.17 12l-4.58-4.59L10 6l6 6-6 6-1.41-1.41z" />
                 </svg>
             </button>
         </div>
         <!-- Modal para imagen ampliada -->
-        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50">
+        <div id="image-modal" role="dialog" aria-modal="true" aria-label="{{ t.ds2000.images.enlarged }}"
+            class="fixed inset-0 bg-black/75 hidden z-50">
             <div class="flex items-center justify-center min-h-screen">
                 <div class="relative max-w-[90vw] max-h-[90vh]">
                     <img id="modal-image" src="" alt="{{ t.ds2000.images.enlarged }}"
                         class="w-full h-auto max-h-[90vh] object-contain rounded-lg">
-                    <button id="close-modal"
-                        class="absolute top-2 right-2 bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <button id="close-modal" type="button" aria-label="{{ t.ds2000.images.close }}"
+                        class="absolute top-2 right-2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
                         </svg>
@@ -72,8 +85,8 @@
 
     <!-- Botón de compra en Mercado Libre -->
     <section class="mb-12 text-center">
-        <a href="https://www.mercadolibre.com.ar/p/DS2000" target="_blank"
-            class="font-bold text-2xl inline-block px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        <a href="https://www.mercadolibre.com.ar/p/DS2000" target="_blank" rel="noopener noreferrer"
+            class="font-bold text-2xl inline-block px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             {{ t.ds2000.buy }}
         </a>
     </section>
@@ -85,7 +98,7 @@
         <ul class="space-y-6">
             <li
                 class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 shrink-0" fill="currentColor"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.22-1.79L9 14v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.91-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 3.08-1.77 5.75-4.1 7.49z" />
@@ -97,7 +110,7 @@
             </li>
             <li
                 class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 shrink-0" fill="currentColor"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
@@ -109,7 +122,7 @@
             </li>
             <li
                 class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 shrink-0" fill="currentColor"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z" />
@@ -121,7 +134,7 @@
             </li>
             <li
                 class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 flex-shrink-0" fill="currentColor"
+                <svg class="w-8 h-8 text-blue-500 dark:text-blue-300 shrink-0" fill="currentColor"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z" />

@@ -114,13 +114,30 @@ atomically
 ### Template System
 - Templates use Tera engine, located in `templates/` directory
 - Every page extends `base.html`, which renders the SEO/`hreflang` tags from the shared context
+- Shared markup lives in `templates/macros/`; the blog post card is
+  `cards::post_card(post=..., lang=..., t=..., level="h2"|"h3")`, imported with
+  `{% import "macros/cards.html" as cards %}` at the top of the page template
 - Date formatting uses the `date_format` filter for localized month names
+- One `<h1>` per page, rendered by the page template - blog post bodies under
+  `templates/blog/` are fragments and start at `<h2>`
+- Never nest a link inside another link; a card links from its title and its call to action,
+  and its thumbnail link is `aria-hidden`
 
 ### Styling
-- Tailwind CSS v4 (alpha version)
+- Tailwind CSS v4, configured from CSS: `@source` directives in `static/tailwind.css`
+  (there is no `tailwind.config.js` - v4 ignores it unless referenced with `@config`)
 - Source: `static/tailwind.css`
 - Output: `static/style.css`
 - Build via `npm run build:css` or `make build-css`
+- Use v4 utility names (`shrink-0`, `bg-black/75`), not the v3 spellings
+  (`flex-shrink-0`, `bg-opacity-75`) - those silently generate nothing
+- Text and buttons use `blue-600`/`blue-700`; white on `blue-500` is 3.68:1 and fails WCAG AA
+
+### Images
+- Ship WebP; keep the source file out of `static/`
+- Set `width`/`height` whenever CSS does not fix the height, so the page does not reflow
+- `loading="lazy"` below the fold, `fetchpriority="high"` on the one image that is the LCP
+- `alt=""` for a thumbnail whose link text already names the destination
 
 ### Deployment
 - Docker multi-stage build (see `Dockerfile`), with a `HEALTHCHECK` against `/health`

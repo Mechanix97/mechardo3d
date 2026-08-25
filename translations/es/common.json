@@ -1,6 +1,12 @@
 {
   "nav": {
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "main": "Navegación principal",
+    "home": "Mechardo Labs, ir al inicio",
+    "skip_to_content": "Saltar al contenido",
+    "language": "Elegir idioma",
+    "theme_dark": "Activar modo oscuro",
+    "theme_light": "Activar modo claro"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",

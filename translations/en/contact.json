@@ -14,7 +14,8 @@
       "email_placeholder": "your@email.com",
       "message": "Message",
       "message_placeholder": "Write your message here",
-      "submit": "Send Message"
+      "submit": "Send Message",
+      "sending": "Sending…"
     }
   },
   "contact_success": {

@@ -56,7 +56,12 @@
       "front": "DS2000 vista frontal",
       "back": "DS2000 vista posterior",
       "top": "DS2000 conectado",
-      "enlarged": "Imagen ampliada del DS2000"
+      "enlarged": "Imagen ampliada del DS2000",
+      "carousel": "Fotos del DS2000",
+      "enlarge": "Ampliar:",
+      "previous": "Foto anterior",
+      "next": "Foto siguiente",
+      "close": "Cerrar la imagen ampliada"
     }
   }
 }

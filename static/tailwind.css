@@ -1,3 +1,8 @@
 @import "tailwindcss";
 
+/* Tailwind v4 is configured from CSS. These replace the old tailwind.config.js,
+   which v4 ignored unless referenced explicitly with @config. */
+@source "../templates";
+@source "../static/js";
+
 @custom-variant dark (&:where(.dark, .dark *));
