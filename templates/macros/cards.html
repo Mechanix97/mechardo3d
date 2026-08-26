@@ -4,7 +4,7 @@
    "h2" under a page title, "h3" under a section heading. #}
 {% macro post_card(post, lang, t, level) %}
 <article
-    class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700/60 hover:shadow-[0_20px_40px_-16px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_40px_-16px_rgba(167,139,250,0.3)] hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 transform hover:-translate-y-1">
     {# The thumbnail repeats the title link, so it is hidden from assistive tech
        instead of announcing the same destination twice. #}
     <a href="/{{ lang }}/blog/{{ post.id }}" tabindex="-1" aria-hidden="true" class="block">
@@ -32,8 +32,7 @@
         </div>
         <p class="text-gray-700 dark:text-gray-200 mb-4 line-clamp-3">{{ post.summary |
             default(value=t.blog.summary_default) }}</p>
-        <a href="/{{ lang }}/blog/{{ post.id }}"
-            class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">{{
+        <a href="/{{ lang }}/blog/{{ post.id }}" class="btn-primary">{{
             t.blog.read_more }}<span class="sr-only">: {{ post.title }}</span></a>
     </div>
 </article>

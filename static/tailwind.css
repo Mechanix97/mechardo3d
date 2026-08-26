@@ -6,3 +6,294 @@
 @source "../static/js";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   Design system additions
+   Plain CSS, not @apply: this file has to survive a build we can't run here,
+   and an unknown class inside @apply fails the whole build - a bare property
+   value never does.
+   Every dark-mode rule mirrors the project's own dark variant selector
+   (":where(.dark, .dark *)") so these classes stay in sync with the
+   light/dark toggle instead of prefers-color-scheme.
+   ========================================================================== */
+
+/* Wordmark: an external, cacheable SVG shape used as a CSS mask, painted
+   with a gradient so it still switches with the theme. Needs mask-type
+   luminance semantics, so the source SVG's glyphs must be white on a
+   transparent background - swap the fill and the gradient stays outside
+   the shape. */
+.logo-mark {
+    display: block;
+    aspect-ratio: 1280 / 720;
+    background-image: linear-gradient(90deg, #3b82f6, #1d4ed8);
+    -webkit-mask-image: url("/static/images/mechardo-wordmark.svg");
+    mask-image: url("/static/images/mechardo-wordmark.svg");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+.logo-mark:where(.dark, .dark *) {
+    background-image: linear-gradient(90deg, #60a5fa, #2563eb);
+}
+
+/* Eyebrow badge: small label above a page's H1 ("Rust - Blockchain -
+   Electronics"). */
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1d4ed8;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(124, 58, 237, 0.08));
+    border: 1px solid rgba(37, 99, 235, 0.18);
+}
+
+.eyebrow:where(.dark, .dark *) {
+    color: #93c5fd;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.14), rgba(167, 139, 250, 0.14));
+    border-color: rgba(96, 165, 250, 0.28);
+}
+
+.eyebrow-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #3b82f6, #7c3aed);
+    flex-shrink: 0;
+}
+
+/* Aura: soft blurred gradient blobs behind a hero section. Decorative only
+   (aria-hidden in the markup) and scoped to whichever wrapper opts in, so
+   it never affects page layout or scroll width. */
+.aura {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.aura-blob {
+    position: absolute;
+    z-index: -1;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: 0.35;
+    pointer-events: none;
+    animation: aura-drift 18s ease-in-out infinite;
+}
+
+.aura-blob:where(.dark, .dark *) {
+    opacity: 0.22;
+}
+
+.aura-blob-a {
+    top: -6rem;
+    left: -4rem;
+    width: 22rem;
+    height: 22rem;
+    background: radial-gradient(circle, #60a5fa, transparent 70%);
+}
+
+.aura-blob-b {
+    bottom: -8rem;
+    right: -5rem;
+    width: 24rem;
+    height: 24rem;
+    background: radial-gradient(circle, #a78bfa, transparent 70%);
+    animation-delay: -9s;
+}
+
+@keyframes aura-drift {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(1.5rem, 1rem) scale(1.08);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aura-blob {
+        animation: none;
+    }
+}
+
+/* Chip: icon + label pill, used for social/contact/driver links. Replaces
+   the same block of utility classes that used to be repeated on every
+   link. */
+.chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.chip:hover,
+.chip:focus-visible {
+    transform: translateY(-2px);
+    border-color: #93c5fd;
+    background: #eff6ff;
+    box-shadow: 0 10px 24px -8px rgba(37, 99, 235, 0.35);
+}
+
+.chip:where(.dark, .dark *) {
+    background: #1f2937;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.chip:hover:where(.dark, .dark *),
+.chip:focus-visible:where(.dark, .dark *) {
+    border-color: rgba(96, 165, 250, 0.5);
+    background: rgba(30, 58, 138, 0.28);
+    box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons. Hover always moves to a darker stop, never lighter - white text
+   on the lighter end of these gradients (blue-500) fails WCAG AA, darker
+   never does. */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    background-image: linear-gradient(135deg, #2563eb, #7c3aed);
+    box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-image 0.25s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+    background-image: linear-gradient(135deg, #1d4ed8, #6d28d9);
+    box-shadow: 0 14px 30px -8px rgba(37, 99, 235, 0.55);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* CTA modifier: a slow breathing ring for the one purchase button on the
+   site. Off under reduced motion. */
+.btn-cta {
+    animation: cta-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes cta-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.45), 0 0 0 0 rgba(124, 58, 237, 0.35);
+    }
+
+    50% {
+        box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.45), 0 0 0 12px rgba(124, 58, 237, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-cta {
+        animation: none;
+    }
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    background: transparent;
+    border: 1.5px solid #93c5fd;
+    transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible {
+    background: #eff6ff;
+    border-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+.btn-outline:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.btn-outline:where(.dark, .dark *) {
+    color: #93c5fd;
+    border-color: rgba(147, 197, 253, 0.4);
+}
+
+.btn-outline:hover:where(.dark, .dark *),
+.btn-outline:focus-visible:where(.dark, .dark *) {
+    background: rgba(59, 130, 246, 0.14);
+    border-color: #60a5fa;
+}
+
+/* Nav: sliding gradient underline, solid on the active link. */
+.nav-link {
+    position: relative;
+    padding-bottom: 0.25rem;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: 0;
+    height: 2px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    transition: right 0.25s ease;
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+    right: 0;
+}
+
+.nav-link[aria-current="page"]::after {
+    right: 0;
+    background: linear-gradient(90deg, #93c5fd, #c4b5fd);
+}
+
+/* Footer: a subtle seam line on top of the existing gradient. */
+.site-footer {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}

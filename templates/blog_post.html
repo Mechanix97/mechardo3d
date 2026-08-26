@@ -8,7 +8,7 @@
         class="w-full h-64 md:h-96 object-cover rounded-lg shadow-md mb-8 transition-transform duration-300 hover:scale-[1.02]">
 
     <!-- Título -->
-    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-6 text-center leading-tight">{{
+    <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-6 text-center leading-tight">{{
         post.title }}</h1>
 
     <!-- Metadatos -->
@@ -26,8 +26,7 @@
 
     <!-- Botón Volver -->
     <div class="text-center">
-        <a href="/{{ lang | default(value='es') }}/blog"
-            class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        <a href="/{{ lang | default(value='es') }}/blog" class="btn-outline">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -39,7 +38,7 @@
     <!-- Publicaciones relacionadas -->
     {% if related_posts %}
     <section class="mt-12" aria-labelledby="related-heading">
-        <h2 id="related-heading" class="text-3xl font-bold text-blue-700 dark:text-blue-300 mb-8 text-center">{{
+        <h2 id="related-heading" class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-8 text-center">{{
             t.blog_post.keep_reading }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {% for related in related_posts %}
