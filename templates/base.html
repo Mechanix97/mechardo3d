@@ -44,15 +44,8 @@
     <link rel="stylesheet" href="/static/style.css?v=3">
     <link rel="icon" type="image/x-icon" href="/static/images/favicon/favicon.ico">
     <script>
-        // Set language cookie for current page
-        (function () {
-            const lang = '{{ lang }}';
-            const expirationDate = new Date();
-            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-            document.cookie = `language=${lang}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Lax`;
-        })();
-
-        // Fix for flashing
+        // Applied before first paint so the page does not flash the wrong theme.
+        // The language cookie is set by the server on every HTML response.
         (function () {
             const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             if (theme === 'dark') {
@@ -63,6 +56,12 @@
         })();
     </script>
     <style>
+        /* Logo gradient: blue-500 -> blue-700, lighter in dark mode. */
+        .stop1 { stop-color: #3b82f6; }
+        .stop2 { stop-color: #1d4ed8; }
+        .dark .stop1 { stop-color: #60a5fa; }
+        .dark .stop2 { stop-color: #2563eb; }
+
         .grecaptcha-badge {
             right: unset !important;
             left: 4px !important;
@@ -83,21 +82,30 @@
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
-    <nav class="bg-gray-800 dark:bg-gray-800 p-4">
+    <a href="#main-content"
+        class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg">{{
+        t.nav.skip_to_content }}</a>
+
+    <nav class="bg-gray-800 dark:bg-gray-800 p-4" aria-label="{{ t.nav.main }}">
         <div class="flex justify-center items-center max-w-6xl mx-auto">
             <ul class="flex justify-center gap-12">
-                <li><a href="/{{ lang | default(value='es') }}/ds2000" class="text-white hover:underline font-bold">DS2000</a></li>
-                <li><a href="/{{ lang | default(value='es') }}/blog" class="text-white hover:underline font-bold">Blog</a></li>
-                <li><a href="/{{ lang | default(value='es') }}/contact" class="text-white hover:underline font-bold">{{ t.nav.contact }}</a></li>
+                <li><a href="/{{ lang | default(value='es') }}/ds2000" class="text-white hover:underline font-bold"
+                        {% if canonical_path is starting_with("ds2000") %}aria-current="page"{% endif %}>DS2000</a></li>
+                <li><a href="/{{ lang | default(value='es') }}/blog" class="text-white hover:underline font-bold"
+                        {% if canonical_path is starting_with("blog") %}aria-current="page"{% endif %}>Blog</a></li>
+                <li><a href="/{{ lang | default(value='es') }}/contact" class="text-white hover:underline font-bold"
+                        {% if canonical_path is starting_with("contact") %}aria-current="page"{% endif %}>{{ t.nav.contact }}</a></li>
             </ul>
         </div>
     </nav>
-    <main class="w-auto mx-auto p-4">
+    <main id="main-content" class="w-auto mx-auto p-4">
         <div class="flex justify-center container mx-auto px-4 py-8  max-w-4xl">
-            <a href="/{{ lang | default(value='es') }}">
+            <a href="/{{ lang | default(value='es') }}" aria-label="{{ t.nav.home }}">
                 <svg class="w-full h-auto object-contain transform hover:scale-105 transition-all duration-300"
+                    role="img" aria-labelledby="logo-title"
                     version="1.0" xmlns="http://www.w3.org/2000/svg" width="1280.000000pt" height="720.000000pt"
                     viewBox="0 0 1280.000000 720.000000" preserveAspectRatio="xMidYMid meet">
+                    <title id="logo-title">Mechardo Labs</title>
                     <defs>
                         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" class="stop1" />
@@ -322,48 +330,28 @@
             </a>
         </div>
 
-        <style>
-            /* Light mode gradient: blue-500 to blue-700 */
-            .stop1 {
-                stop-color: #3b82f6;
-                /* Tailwind blue-500 */
-            }
-
-            .stop2 {
-                stop-color: #1d4ed8;
-                /* Tailwind blue-700 */
-            }
-
-            /* Dark mode gradient: blue-400 to blue-600 */
-            .dark .stop1 {
-                stop-color: #60a5fa;
-                /* Tailwind blue-400 */
-            }
-
-            .dark .stop2 {
-                stop-color: #2563eb;
-                /* Tailwind blue-600 */
-            }
-        </style>
         {% block content %}
         {% endblock %}
     </main>
     <!-- Language Selector Dropdown -->
     <div class="fixed bottom-20 right-4 z-50">
         <div class="relative">
-            <button id="lang-dropdown-btn" aria-label="Language selector"
-                class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors font-bold">
+            <button id="lang-dropdown-btn" type="button" aria-label="{{ t.nav.language }}" aria-haspopup="true"
+                aria-expanded="false" aria-controls="lang-dropdown-menu"
+                class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-bold">
                 <span id="current-lang-flag">ES</span>
             </button>
-            <div id="lang-dropdown-menu" class="hidden absolute bottom-12 right-0 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden min-w-[140px] border border-gray-700">
-                <!-- Language options will be populated by JS -->
+            <div id="lang-dropdown-menu" role="menu" aria-labelledby="lang-dropdown-btn"
+                class="hidden absolute bottom-12 right-0 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden min-w-[140px] border border-gray-700">
+                <!-- Language options are populated by language-selector.js -->
             </div>
         </div>
     </div>
 
     <!-- Theme Toggle -->
-    <button id="theme-toggle" aria-label="Toggle dark mode"
-        class="fixed bottom-4 right-4 p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <button id="theme-toggle" type="button" aria-pressed="false"
+        data-label-light="{{ t.nav.theme_light }}" data-label-dark="{{ t.nav.theme_dark }}"
+        class="fixed bottom-4 right-4 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
         <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path id="sun" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -374,22 +362,17 @@
         </svg>
     </button>
 
-    <script src="/static/js/theme-toggle.js"></script>
-    <script src="/static/js/language-selector.js"></script>
-    <script>
-        // Initialize language selector with current language
-        document.addEventListener('DOMContentLoaded', function() {
-            initLanguageSelector('{{ lang | default(value='es') }}');
-        });
-    </script>
+    <!-- Footer -->
+    <footer
+        class="text-center py-4 bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white">
+        <p class="text-lg">
+            &copy; 2025 Mechardo Labs. {{ t.footer.rights }}
+            <a href="/{{ lang | default(value='es') }}/contact" class="underline hover:text-blue-100">{{ t.footer.contact }}</a>
+        </p>
+    </footer>
+
+    <script src="/static/js/theme-toggle.js" defer></script>
+    <script src="/static/js/language-selector.js" defer></script>
 </body>
-<!-- Footer -->
-<footer
-    class="text-center py-4 bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600 text-white">
-    <p class="text-lg">
-        &copy; 2025 Mechardo Labs. {{ t.footer.rights }}
-        <a href="/{{ lang | default(value='es') }}/contact" class="underline hover:text-blue-200">{{ t.footer.contact }}</a>
-    </p>
-</footer>
 
 </html>

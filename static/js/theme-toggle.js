@@ -3,39 +3,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const sunIcon = document.getElementById('sun');
     const moonIcon = document.getElementById('moon');
+    if (!themeToggle) return;
 
-    // Función para actualizar el ícono según el tema
-    const updateIcon = () => {
-        if (html.classList.contains('dark')) {
-            sunIcon.classList.remove('hidden');
-            moonIcon.classList.add('hidden');
-        } else {
-            sunIcon.classList.add('hidden');
-            moonIcon.classList.remove('hidden');
+    // Reflect the current theme in the icon and in the button's state, so the
+    // control is understandable without seeing it.
+    const render = () => {
+        const isDark = html.classList.contains('dark');
+        if (sunIcon && moonIcon) {
+            sunIcon.classList.toggle('hidden', !isDark);
+            moonIcon.classList.toggle('hidden', isDark);
         }
+        themeToggle.setAttribute('aria-pressed', String(isDark));
+        const label = isDark ? themeToggle.dataset.labelLight : themeToggle.dataset.labelDark;
+        if (label) themeToggle.setAttribute('aria-label', label);
     };
 
-    // Inicializar el ícono según el tema actual
-    updateIcon();
+    render();
 
-    // Escuchar cambios en el tema
     themeToggle.addEventListener('click', () => {
-        const isDark = html.classList.contains('dark');
-        if (isDark) {
-            html.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        } else {
-            html.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        }
-        updateIcon();
+        const isDark = html.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        render();
     });
 
-    // Escuchar cambios en prefers-color-scheme
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         if (!localStorage.getItem('theme')) {
             html.classList.toggle('dark', e.matches);
-            updateIcon();
+            render();
         }
     });
 });
