@@ -109,6 +109,10 @@ when the file's modification time changes
 **`src/data/messages.rs`** - `MessageStore`: contact messages, written through a mutex and replaced
 atomically
 
+**`src/data/resume.rs`** - `ResumeStore`: the CV PDF, fetched from the latest release of a private
+GitHub repository and cached in memory. Without `GITHUB_TOKEN` it stays disabled and `/me` renders
+no download button
+
 **`src/models/blog_post.rs`** - `BlogPost` (data) and `BlogPostView` (resolved to one language)
 
 ### Template System
@@ -208,3 +212,6 @@ Every template receives:
   changes touches the disk
 - Contact form includes reCAPTCHA validation for spam protection, and refuses to accept submissions
   when no secret is configured unless `RECAPTCHA_DISABLED=true`
+- `/me` reads its experience, skills and projects from arrays in `translations/{lang}/about.json`;
+  adding a job or a project is a JSON edit, and the key-parity test walks arrays by index so a list
+  that grew in one language only fails the build

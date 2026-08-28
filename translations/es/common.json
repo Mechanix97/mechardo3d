@@ -6,7 +6,8 @@
     "skip_to_content": "Saltar al contenido",
     "language": "Elegir idioma",
     "theme_dark": "Activar modo oscuro",
-    "theme_light": "Activar modo claro"
+    "theme_light": "Activar modo claro",
+    "about": "Sobre mí"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",

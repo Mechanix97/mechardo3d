@@ -9,6 +9,9 @@ const GITHUB_URL: &str = "https://github.com/Mechanix97";
 const LINKEDIN_URL: &str = "https://linkedin.com/in/lucasalexisrack";
 
 /// JSON-LD for a Person (used on `/me`).
+///
+/// The job title, employer and university mirror what the page itself renders,
+/// so a search result cannot describe a role the portfolio no longer claims.
 pub fn person_schema(config: &AppConfig, lang: Language) -> Value {
     let job_title = match lang {
         Language::Spanish => "Ingeniero de Software",
@@ -16,28 +19,54 @@ pub fn person_schema(config: &AppConfig, lang: Language) -> Value {
     };
     let description = match lang {
         Language::Spanish => {
-            "Ingeniero de Software especializado en Rust, Blockchain y Electrónica"
+            "Ingeniero de software especializado en aplicaciones de AI/LLM, \
+             sistemas distribuidos en Rust y electrónica"
         }
-        Language::English => "Software Engineer specialized in Rust, Blockchain, and Electronics",
+        Language::English => {
+            "Software engineer specialized in AI/LLM applications, distributed \
+             systems in Rust, and electronics"
+        }
+    };
+    let alumni_of = match lang {
+        Language::Spanish => "Universidad de Buenos Aires",
+        Language::English => "University of Buenos Aires",
     };
 
     json!({
         "@context": "https://schema.org",
         "@type": "Person",
         "name": AUTHOR,
-        "url": config.url(""),
+        "url": config.url(&format!("{}/me", lang.as_str())),
         "sameAs": [GITHUB_URL, LINKEDIN_URL],
         "jobTitle": job_title,
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Lenovo",
+            "url": "https://www.lenovo.com/"
+        },
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": alumni_of,
+            "url": "https://www.fi.uba.ar/"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Buenos Aires",
+            "addressCountry": "AR"
+        },
         "knowsAbout": [
+            "Artificial Intelligence",
+            "Large Language Models",
+            "Retrieval-Augmented Generation",
+            "Python",
             "Rust",
-            "Blockchain",
+            "Distributed Systems",
             "Ethereum",
             "Smart Contracts",
-            "P2P Protocols",
-            "Python",
-            "Docker",
+            "Embedded Systems",
             "Electronics"
         ],
+        "knowsLanguage": ["es", "en"],
         "email": "lucas_rack@live.com.ar",
         "description": description,
         "inLanguage": lang.locale()
