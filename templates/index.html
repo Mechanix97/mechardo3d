@@ -44,7 +44,9 @@
             class="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-500 to-violet-600 dark:from-blue-400 dark:to-violet-400 text-transparent bg-clip-text">
             {{ t.home.blog.title }}
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {# The column count follows the number of posts, so a single entry reads
+           as one deliberate card instead of a third of an empty row. #}
+        <div class="grid grid-cols-1 gap-6 {% if posts | length == 1 %}max-w-xl mx-auto{% elif posts | length == 2 %}md:grid-cols-2{% else %}md:grid-cols-3{% endif %}">
             {% for post in posts %}
             <div
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700/60 hover:shadow-[0_20px_40px_-16px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_40px_-16px_rgba(167,139,250,0.3)] hover:-translate-y-1 transition-all duration-300">
