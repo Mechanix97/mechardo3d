@@ -17,6 +17,10 @@ const DEFAULT_RESUME_REPO: &str = "Mechanix97/Resume";
 /// Latin America; English visitors get the one without.
 const DEFAULT_RESUME_ASSET_ES: &str = "Lucas_Rack_Software_Engineer_CV.pdf";
 const DEFAULT_RESUME_ASSET_EN: &str = "Lucas_Rack_Software_Engineer_Resume.pdf";
+const DEFAULT_REPORT_REPO: &str = "Mechanix97/Informe-Trabajo-Practico-Profesional";
+/// The report is one Spanish document, so both languages get the same asset.
+const DEFAULT_REPORT_ASSET: &str = "main.pdf";
+const DEFAULT_REPORT_DOWNLOAD: &str = "Lucas_Rack_TPP_Medicion_IoT.pdf";
 
 /// Runtime configuration, resolved once at startup.
 ///
@@ -40,7 +44,8 @@ pub struct AppConfig {
     /// Whether to send `Strict-Transport-Security` (`HSTS_ENABLED`).
     pub hsts_enabled: bool,
     pub recaptcha: RecaptchaConfig,
-    pub resume: ResumeConfig,
+    pub resume: ReleaseAssetConfig,
+    pub report: ReleaseAssetConfig,
     /// Minimum delay between two contact submissions from the same client.
     pub contact_rate_limit: Duration,
     /// Largest accepted contact message, in characters.
@@ -51,14 +56,14 @@ pub struct AppConfig {
     pub translations_dir: PathBuf,
 }
 
-/// Where `/{lang}/cv` gets the PDF from.
+/// Where a downloadable PDF comes from.
 ///
 /// The resume lives in a private repository that publishes a release on every
 /// push, so the site serves the latest release asset instead of carrying a
 /// copy that goes stale. Without a token the whole feature switches off and
 /// the download button is not rendered at all.
 #[derive(Debug, Clone)]
-pub struct ResumeConfig {
+pub struct ReleaseAssetConfig {
     /// `owner/name` of the repository holding the releases.
     pub repo: String,
     /// GitHub token with read access to that repository's contents.
@@ -67,11 +72,13 @@ pub struct ResumeConfig {
     pub asset_es: String,
     /// Release asset served to English visitors.
     pub asset_en: String,
+    /// Name the browser saves the file under. `None` uses the asset's own name.
+    pub download_name: Option<String>,
     /// How long a downloaded PDF is reused before GitHub is asked again.
     pub cache_ttl: Duration,
 }
 
-impl ResumeConfig {
+impl ReleaseAssetConfig {
     /// Whether the CV download can work at all.
     pub fn enabled(&self) -> bool {
         !self.token.is_empty() && !self.repo.is_empty()
@@ -130,6 +137,8 @@ impl AppConfig {
             .map(|s| s.trim().to_string())
             .or_else(|| read_optional_secret_file(&github_secret_file, "GITHUB_TOKEN"))
             .unwrap_or_default();
+        // Both downloads read the same repositories' releases with the same token.
+        let github_token_report = github_token.clone();
 
         let config = Self {
             bind_addr,
@@ -146,12 +155,21 @@ impl AppConfig {
                 min_score: env_parse("RECAPTCHA_MIN_SCORE", 0.6_f32),
                 disabled,
             },
-            resume: ResumeConfig {
+            resume: ReleaseAssetConfig {
                 repo: env_string("RESUME_REPO", DEFAULT_RESUME_REPO),
                 token: github_token,
                 asset_es: env_string("RESUME_ASSET_ES", DEFAULT_RESUME_ASSET_ES),
                 asset_en: env_string("RESUME_ASSET_EN", DEFAULT_RESUME_ASSET_EN),
+                download_name: None,
                 cache_ttl: Duration::from_secs(env_parse("RESUME_CACHE_SECS", 3600)),
+            },
+            report: ReleaseAssetConfig {
+                repo: env_string("REPORT_REPO", DEFAULT_REPORT_REPO),
+                token: github_token_report,
+                asset_es: env_string("REPORT_ASSET", DEFAULT_REPORT_ASSET),
+                asset_en: env_string("REPORT_ASSET", DEFAULT_REPORT_ASSET),
+                download_name: Some(env_string("REPORT_DOWNLOAD_NAME", DEFAULT_REPORT_DOWNLOAD)),
+                cache_ttl: Duration::from_secs(env_parse("REPORT_CACHE_SECS", 21600)),
             },
             contact_rate_limit: Duration::from_secs(env_parse("CONTACT_RATE_LIMIT_SECS", 300)),
             max_message_chars: env_parse("MAX_MESSAGE_CHARS", 5000),
@@ -164,7 +182,7 @@ impl AppConfig {
         if !config.resume.enabled() {
             info!(
                 "No GitHub token found (set GITHUB_TOKEN or {}). \
-                 The CV download on /me stays hidden.",
+                 The CV and report downloads stay hidden.",
                 github_secret_file
             );
         }
@@ -331,11 +349,20 @@ mod tests {
                 min_score: 0.6,
                 disabled: false,
             },
-            resume: ResumeConfig {
+            resume: ReleaseAssetConfig {
                 repo: "owner/repo".to_string(),
                 token: String::new(),
                 asset_es: "cv-es.pdf".to_string(),
                 asset_en: "cv-en.pdf".to_string(),
+                download_name: None,
+                cache_ttl: Duration::from_secs(3600),
+            },
+            report: ReleaseAssetConfig {
+                repo: "owner/report".to_string(),
+                token: String::new(),
+                asset_es: "main.pdf".to_string(),
+                asset_en: "main.pdf".to_string(),
+                download_name: Some("report.pdf".to_string()),
                 cache_ttl: Duration::from_secs(3600),
             },
             contact_rate_limit: Duration::from_secs(300),

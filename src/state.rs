@@ -9,7 +9,7 @@ use tracing::{info, warn};
 use crate::config::AppConfig;
 use crate::data::blog_data::BlogStore;
 use crate::data::messages::MessageStore;
-use crate::data::resume::ResumeStore;
+use crate::data::release_asset::ReleaseAssetStore;
 use crate::date_format;
 use crate::rate_limit::RateLimiter;
 use crate::translations::Translations;
@@ -25,7 +25,8 @@ pub struct AppStateInner {
     pub blog: BlogStore,
     pub messages: MessageStore,
     pub contact_rate_limit: RateLimiter,
-    pub resume: ResumeStore,
+    pub resume: ReleaseAssetStore,
+    pub report: ReleaseAssetStore,
     pub http: Client,
 }
 
@@ -60,7 +61,8 @@ impl AppState {
                 Client::new()
             });
 
-        let resume = ResumeStore::new(config.resume.clone(), http.clone());
+        let resume = ReleaseAssetStore::new(config.resume.clone(), http.clone());
+        let report = ReleaseAssetStore::new(config.report.clone(), http.clone());
 
         Ok(Self(Arc::new(AppStateInner {
             config,
@@ -70,6 +72,7 @@ impl AppState {
             messages,
             contact_rate_limit,
             resume,
+            report,
             http,
         })))
     }

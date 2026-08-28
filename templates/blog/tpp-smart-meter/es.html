@@ -1,0 +1,290 @@
+<section class="surface p-6 sm:p-8 mb-12">
+
+    <p class="text-lg text-gray-700 dark:text-gray-200 mb-6">
+        En el área metropolitana de Buenos Aires, el <strong>40,6 %</strong> del agua potable que se entrega no
+        se contabiliza. No es que se pierda toda: es que nadie sabe dónde va. Y solo el <strong>19 %</strong> de
+        las unidades funcionales tiene un medidor conectado, así que la mayoría de los usuarios paga una tarifa
+        catastral, calculada por las características del inmueble y no por lo que consume. Sin medición no hay
+        forma de detectar una fuga domiciliaria, ni de gestionar la demanda, ni de saber cuánto de ese 40 % es
+        pérdida de red y cuánto es derroche.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Ese es el problema que tomamos para nuestro trabajo profesional de Ingeniería Electrónica en la FIUBA:
+        diseñar, construir y validar un sistema de telemedición completo, desde el dispositivo que se instala en
+        la caja del medidor hasta el servidor que recibe los datos. Lo <strong>defiendo el 7 de septiembre</strong>,
+        y quería dejar escrito qué construimos y, sobre todo, qué se rompió en el camino.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El proyecto lo hicimos entre dos. Yo me ocupé del <strong>servidor central</strong> y del
+        <strong>circuito impreso</strong>;
+        <a href="https://github.com/PuyGonzalo" target="_blank" rel="noopener"
+            class="text-blue-700 dark:text-blue-300 hover:underline">Gonzalo Puy</a>
+        se ocupó del <strong>firmware</strong>, en el que también metí mano. El informe lo escribimos entre los dos.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Qué construimos</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El sistema tiene cuatro piezas. Un <strong>dispositivo IoT alimentado a batería</strong> que se instala
+        dentro de la caja domiciliaria del medidor y se conecta al emisor de pulsos del caudalímetro: cada pulso
+        equivale a una cantidad fija de litros. Un <strong>firmware</strong> que cuenta esos pulsos y despierta
+        una vez por día para reportar. Una <strong>PCB propia</strong> con el microcontrolador, el módulo celular
+        y su antena. Y un <strong>servidor central</strong>, el HES, que recibe los datos, los persiste y los deja
+        disponibles para la empresa proveedora.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/contexto-instalacion.webp"
+        alt="Diagrama del contexto de instalación: el medidor de agua con salida de pulsos y el dispositivo IoT dentro de la caja domiciliaria, comunicándose por red celular con el servidor HES"
+        width="1400" height="764" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        La restricción que ordena todo el diseño es que <strong>la caja del medidor no tiene electricidad</strong>.
+        El dispositivo funciona a batería y tiene que durar más de ocho años sin que nadie lo toque, porque mandar
+        una cuadrilla a cambiar pilas casa por casa destruye la economía del proyecto. Todo lo demás —la elección
+        del microcontrolador, la del módem, el diseño del protocolo— sale de ahí.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Ocho años con una batería</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El dispositivo pasa casi toda su vida dormido. Un <strong>STM32L031K6</strong>, un Cortex-M0+ con 32 KB de
+        flash, queda en modo Stop contando pulsos por interrupción, y el módulo celular
+        <strong>Quectel BG95-M3</strong> está completamente apagado. Una vez por día el reloj de tiempo real lo
+        despierta, prende el módem, se adjunta a la red, manda el reporte y vuelve a apagar todo.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Caracterizamos el consumo con un <strong>Nordic Power Profiler Kit II</strong>, midiendo por separado el
+        dominio del microcontrolador y el del módem. Los números del ciclo completo:
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/consumo-sesion.webp"
+        alt="Traza de corriente del módem durante una sesión completa: 97,53 mA de promedio, 411,72 mA de pico y 1,43 C de carga en 14,70 segundos"
+        width="1400" height="664" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <ul class="marker-list mb-6">
+        <li><strong>Piso de reposo del micro:</strong> 2,94 µA de promedio, apenas por encima del STM32L031 desnudo.</li>
+        <li><strong>Piso real del producto:</strong> ~15,9 µA, sumando la fuga del módem apagado. El piso lo domina
+            el módulo celular, no el microcontrolador.</li>
+        <li><strong>Una sesión:</strong> unos 15 segundos y 0,41 mAh. El módem se lleva casi todo: 97,5 mA de
+            promedio con picos de 411,72 mA en la transmisión, contra 2,93 mA del micro.</li>
+        <li><strong>Consumo anual:</strong> alrededor de 0,3 Ah, repartido casi por mitades entre las sesiones y la
+            fuga del módem apagado.</li>
+    </ul>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Contra una batería de litio-cloruro de tionilo de <strong>17 Ah</strong>, esos 0,3 Ah al año dejan el
+        objetivo de ocho años cumplido con margen amplio. El resultado interesante es cuál pasa a ser el factor
+        limitante: <strong>ya no es el consumo del dispositivo sino la autodescarga de la propia batería</strong>.
+        Cuando el diseño llega a ese punto, seguir optimizando firmware deja de tener sentido.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Por qué un subconjunto de IEC 62056 y no DLMS completo</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Los sistemas de medición inteligente estándar hablan DLMS/COSEM, la familia de normas IEC 62056. La pila
+        completa es grande: para un dispositivo con 32 KB de flash y 8 KB de RAM, implementarla entera no entraba,
+        y forzarla hubiera comido el presupuesto de memoria que necesitábamos para el resto.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        La decisión fue quedarnos con la <strong>semántica</strong> de la norma y no con su pila: los objetos
+        COSEM y el direccionamiento OBIS, sobre un protocolo binario propio y mínimo. Un dispositivo nuestro no
+        interopera con un concentrador DLMS comercial, pero los datos que produce y la forma de pedirlos son
+        conceptualmente los mismos, así que migrar a la pila completa más adelante es un cambio de transporte y no
+        un rediseño. La sesión periódica son siete mensajes: <code>HANDSHAKE</code>, <code>READ</code>,
+        <code>WRITE</code> y el <code>ACK</code> de cierre, con sus respuestas.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">El servidor: por qué un clúster para un prototipo</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El HES está escrito en <strong>Rust</strong>. La pregunta razonable es por qué un prototipo de tesis
+        necesita un clúster, y la respuesta está en el párrafo anterior sobre la batería: si el servidor se cae o
+        se satura, los dispositivos no completan la sesión, se quedan esperando y reintentan. Cada reintento
+        prende la radio. <strong>Un problema de disponibilidad del servidor se paga en batería en todo el
+        parque</strong>, y esa batería no se puede reponer sin mandar una cuadrilla.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/arquitectura-hes.webp"
+        alt="Diagrama de la arquitectura del HES: el backdoor recibe los mensajes, asigna bucket al scheduler, ambos persisten en la capa de persistencia y reportan al sistema de monitoreo"
+        width="997" height="836" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6 sm:max-w-lg sm:mx-auto">
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Los nodos se descubren por <em>gossip</em> y se vigilan con <strong>detección de fallos SWIM</strong>;
+        cuando un nodo cae, sus dispositivos se delegan a otro. El <em>scheduler</em> reparte el parque en
+        <strong>48 <em>buckets</em></strong> horarios y asigna cada dispositivo nuevo al menos cargado, de modo que
+        las sesiones se distribuyen en el día en lugar de amontonarse. La persistencia es PostgreSQL y todo el
+        sistema publica métricas a Prometheus, con tableros de Grafana.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Para validarlo levantamos <strong>tres nodos</strong> —uno en el servidor de desarrollo y dos en una
+        estación local, unidos por una red privada— contra una única base de datos, y les tiramos
+        <strong>80 dispositivos simulados</strong> en tres oleadas. En modo de prueba el <em>scheduler</em>
+        programa las sesiones a los cinco minutos en lugar del horario diario, así se observan muchos ciclos
+        completos en poco tiempo.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/grafana-nodos.webp"
+        alt="Panel de Grafana mostrando la distribución de dispositivos entre los nodos del clúster"
+        width="1084" height="373" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Lo que no funcionó</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Esta es la parte que más me sirvió del proyecto, y la que no aparece en ningún diagrama de arquitectura.
+    </p>
+
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">La red celular real no permitía el diseño</h3>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El protocolo estaba diseñado como <em>pull</em>: el HES abre la conexión hacia el dispositivo en su ventana
+        de despertar. Es el modelo correcto, porque deja al servidor decidir cuándo habla cada medidor. Presupone
+        una sola cosa: que el dispositivo sea alcanzable en una dirección estable.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Con una SIM comercial sobre APN público, eso no se cumple. La operadora asigna
+        <strong>direcciones IPv6 dinámicas</strong> que cambian entre activaciones, así que la dirección que el
+        dispositivo anuncia al registrarse ya no sirve en la siguiente ventana. Y el tráfico atraviesa un
+        <strong>CGNAT</strong>: una conexión iniciada desde el servidor no encuentra ninguna traducción abierta y
+        se descarta antes de llegar al dispositivo. El diseño era correcto y la red simplemente no lo permitía.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/cgnat.webp"
+        alt="Comparación de topologías: sobre APN público el pull directo del HES queda bloqueado por el CGNAT y la sesión la inicia el dispositivo; con APN privada e IP fija el pull directo funciona"
+        width="1400" height="764" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        La salida fue <strong>invertir temporalmente quién inicia la sesión</strong>. El dispositivo ya mantiene
+        abierto un socket saliente hacia el servidor, y ese socket sí atraviesa el CGNAT dejando un
+        <em>pinhole</em> por el que el servidor puede responder. Agregamos un mensaje,
+        <code>SESSION_START_REQUEST</code>, cuya única función es avisarle al HES que dispare la sesión sobre ese
+        socket. El resto del protocolo y toda la máquina de estados del firmware se reutilizan sin tocar nada.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Lo que más me importó fue que <strong>no dejara deuda</strong>. Toda esa lógica está condicionada a la
+        compilación, detrás de un <em>flag</em> en el firmware y de una <em>feature</em> en el HES: se compila sin
+        ellos y vuelve el modelo original, intacto. La solución de producción no es de software sino comercial:
+        una APN privada con IP fija por dispositivo y una interconexión privada con la operadora. La lección es
+        esa: <strong>en un sistema IoT, el aprovisionamiento de red es una decisión de arquitectura y se negocia
+        al principio del proyecto, no cuando ya tenés el prototipo andando</strong>.
+    </p>
+
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Los 32 KB que no alcanzaron</h3>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El STM32L031K6 se eligió por consumo, y para la operación normal del medidor la elección fue buena: la
+        lógica de aplicación, las máquinas de estado del módem y el protocolo entran cómodos. El límite apareció
+        con dos funciones que el protocolo ya tenía previstas. La <strong>actualización remota</strong> necesita
+        alojar dos imágenes de firmware a la vez más un <em>bootloader</em> que las valide, y eso no entra en
+        32 KB de banco único. La <strong>autenticación de mensajes</strong> compite por esa misma memoria, sobre
+        un núcleo sin aceleración criptográfica.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Acá no hubo solución elegante: hubo un compromiso aceptado y documentado. Las dos funciones quedaron
+        pendientes, con el lugar reservado en el protocolo —la operación <code>EXECUTE</code> y el campo del MAC— y
+        un camino de resolución concreto: una segunda revisión con un STM32L4, que el margen de autonomía medido
+        banca sin comprometer los ocho años. La lección, cara: <strong>la memoria de un microcontrolador se
+        dimensiona para la funcionalidad de todo el ciclo de vida del producto, no para la de la primera
+        versión</strong>.
+    </p>
+
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Un cuello de botella del servidor se paga en batería</h3>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        La primera implementación del receptor de mensajes era secuencial: recibía un datagrama, lo procesaba
+        entero —validación, escritura en la base, respuesta— y recién después volvía a escuchar. Alcanzaba para
+        las pruebas funcionales y era claramente insuficiente para una ráfaga: un despliegue masivo, o todos los
+        dispositivos reintentando juntos después de un corte.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Mientras el bucle está ocupado escribiendo en PostgreSQL, los datagramas UDP se acumulan en el
+        <em>buffer</em> del socket hasta desbordarlo, y el sistema operativo los descarta <strong>sin avisar</strong>.
+        Cada mensaje perdido es un dispositivo que agota su ventana de espera, reintenta y vuelve a prender la
+        radio. Ahí es donde la cosa se pone interesante: en un sistema alimentado a batería, <strong>una decisión
+        de concurrencia del servidor se traduce en años de vida útil en el campo</strong>.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        El receptor se rediseñó como despachador concurrente sobre Tokio: el bucle principal recibe y decodifica, y
+        delega cada mensaje en una tarea independiente. Un semáforo con tope configurable da la contrapresión para
+        que una ráfaga no agote la memoria ni las conexiones a la base. Validado con oleadas de registros
+        concurrentes, sin pérdida de mensajes.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">La placa</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        La PCB la diseñé en KiCad: microcontrolador, módulo celular con su adaptación de impedancia y antena,
+        alimentación desde la batería con el supercapacitor de reservorio que absorbe los picos de 411 mA de la
+        transmisión, y los planos de masa. Tiene que entrar en la caja domiciliaria, ser estanca y cumplir las
+        normas de compatibilidad electromagnética.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/pcb-render.webp"
+        alt="Render 3D de la placa del medidor, con el módulo celular, el microcontrolador y la bornera de conexión"
+        width="1400" height="787" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Qué queda pendiente</h2>
+
+    <ul class="marker-list mb-6">
+        <li><strong>Un piloto con aprovisionamiento de producción:</strong> APN privada con IP fija e
+            interconexión con la operadora, para validar el modelo <em>pull</em> original en campo y sacar el
+            mecanismo provisional.</li>
+        <li><strong>La segunda revisión de hardware</strong> con un microcontrolador de más memoria, que habilita
+            la actualización remota y la autenticación de mensajes.</li>
+        <li><strong>Tecnologías de acceso alternativas:</strong> NB-IoT como principal donde la cobertura CAT-M1
+            sea pobre, y una variante LoRaWAN si la proveedora prefiere operar sus propios <em>gateways</em>.</li>
+    </ul>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">El código</h2>
+
+    <ul class="marker-list mb-6">
+        <li><a href="https://github.com/Mechanix97/Head-end-system-TPP" target="_blank" rel="noopener"
+                class="text-blue-700 dark:text-blue-300 hover:underline font-semibold">Head-end-system-TPP</a> —
+            el servidor central en Rust: clúster, <em>scheduler</em>, persistencia y monitoreo.</li>
+        <li><a href="https://github.com/PuyGonzalo/Smart-Meter-Firmware-TPP" target="_blank" rel="noopener"
+                class="text-blue-700 dark:text-blue-300 hover:underline font-semibold">Smart-Meter-Firmware-TPP</a> —
+            el firmware del dispositivo, en C, de Gonzalo Puy.</li>
+        <li><a href="https://github.com/Mechanix97/TPP-PCB" target="_blank" rel="noopener"
+                class="text-blue-700 dark:text-blue-300 hover:underline font-semibold">TPP-PCB</a> —
+            el proyecto de KiCad: esquemáticos, <em>layout</em> y verificaciones.</li>
+    </ul>
+
+    <div class="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/25 p-6 mb-6">
+        <p class="text-gray-800 dark:text-gray-100 mb-4">
+            El informe completo desarrolla todo esto con el detalle que un post no permite: la comparativa de
+            tecnologías LPWAN, el presupuesto energético teórico, el diseño del protocolo mensaje por mensaje, el
+            diseño del PCB y el análisis de viabilidad económica.
+        </p>
+        <a href="/es/tpp" class="btn-primary">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+            </svg>
+            Descargar el informe
+        </a>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">PDF, unos 14 MB</p>
+    </div>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Cierre</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Lo que más me llevo no es ninguna de las piezas por separado, sino haber tenido que hacerlas funcionar
+        juntas: electrónica de bajo consumo, radiofrecuencia, firmware embebido, diseño de protocolos, sistemas
+        distribuidos y evaluación económica. Son disciplinas que en la carrera se ejercitan por separado, y el
+        proyecto no dejaba escaparse de ninguna. Los tres problemas que conté salieron todos de la misma raíz:
+        una decisión tomada en una de esas capas apareciendo, muchos meses después, como un síntoma en otra.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300">
+        La defensa es el 7 de septiembre de 2026.
+    </p>
+
+</section>
