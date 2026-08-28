@@ -12,6 +12,12 @@ pub async fn me(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Resp
         .path("me")
         .schema(json_ld::person_schema(&state.config, lang));
 
-    let context = pages::base_context(&state, lang, &meta);
+    let mut context = pages::base_context(&state, lang, &meta);
+    // Absent when no GitHub token is configured, which is what hides the
+    // download button rather than rendering a link that cannot resolve.
+    if state.resume.enabled() {
+        context.insert("cv_url", &format!("/{}/cv", lang.as_str()));
+    }
+
     pages::render(&state, "me.html", &context, lang)
 }

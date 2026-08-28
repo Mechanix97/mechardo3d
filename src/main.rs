@@ -81,6 +81,7 @@ fn router(state: AppState) -> Router {
         .route("/static/{*path}", get(static_files::serve_static))
         // Language-prefixed pages (most specific first)
         .route("/{lang}/me", get(routes::me::me))
+        .route("/{lang}/cv", get(routes::cv::cv))
         .route(
             "/{lang}/contact",
             get(routes::contact::contact).post(routes::contact::contact_submit),

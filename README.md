@@ -46,6 +46,12 @@ default, so `cargo run` works with nothing set.
 | `RECAPTCHA_MIN_SCORE` | `0.6` | Minimum score accepted from reCAPTCHA v3 |
 | `RECAPTCHA_DISABLED` | `false` | Skips verification - local development only |
 | `CONTACT_RATE_LIMIT_SECS` | `300` | Minimum delay between submissions from one client |
+| `GITHUB_TOKEN` | from `secrets/github.env` | Read-only token for the resume repository. Unset hides the CV download |
+| `GITHUB_SECRET_FILE` | `secrets/github.env` | Fallback file for the token |
+| `RESUME_REPO` | `Mechanix97/Resume` | `owner/name` of the repository publishing the resume releases |
+| `RESUME_ASSET_ES` | `Lucas_Rack_Software_Engineer_CV.pdf` | Release asset served to Spanish visitors |
+| `RESUME_ASSET_EN` | `Lucas_Rack_Software_Engineer_Resume.pdf` | Release asset served to English visitors |
+| `RESUME_CACHE_SECS` | `3600` | How long a downloaded PDF is reused before GitHub is asked again |
 | `MAX_MESSAGE_CHARS` | `5000` | Longest accepted contact message |
 | `DATA_DIR` | `data` | Blog posts and stored messages |
 | `STATIC_DIR` | `static` | Served under `/static` |
@@ -59,6 +65,7 @@ default, so `cargo run` works with nothing set.
 | `/` | Redirects to the visitor's language |
 | `/{lang}` | Home (`es`, `en`) |
 | `/{lang}/me`, `/{lang}/blog`, `/{lang}/blog/{id}` | Pages |
+| `/{lang}/cv` | The resume PDF, proxied from the latest release of `RESUME_REPO` |
 | `/{lang}/contact` | `GET` renders the form, `POST` accepts it |
 | `/{lang}/contact_success` | Confirmation |
 | `/{lang}/ds2000`, `/{lang}/ds2000/terms-of-service`, `/{lang}/ds2000/privacy-policy` | Product |

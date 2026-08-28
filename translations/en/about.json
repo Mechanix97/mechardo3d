@@ -2,48 +2,241 @@
   "about": {
     "title": "About",
     "name": "Lucas Rack",
-    "role": "Software Engineer & Blockchain Developer",
-    "contact_section": "Connect With Me",
+    "role": "Software Engineer · AI & Distributed Systems",
+    "summary": "Software engineer with 5+ years across AI/LLM applications, distributed systems and enterprise data platforms. Currently building retrieval-augmented generation and machine-learning automation over Lenovo's supply chain systems.",
+    "location": "Buenos Aires, Argentina",
+    "availability": "Open to projects",
+    "jump_to": "Jump to section",
+    "nav_experience": "Experience",
+    "nav_projects": "Projects",
+    "nav_skills": "Technologies",
+    "cv_download": "Download CV",
+    "cv_hint": "PDF, always the latest version",
+    "contact_section": "Where to find me",
+    "contact_intro": "Email is the fastest way to reach me. I also answer on LinkedIn.",
     "github": "GitHub",
+    "github_handle": "@Mechanix97",
     "linkedin": "LinkedIn",
+    "linkedin_handle": "in/lucasalexisrack",
     "email": "Email",
+    "email_handle": "lucas_rack@live.com.ar",
     "education_section": "Education",
-    "education_title": "Bachelor of Engineering in Electronics",
-    "education_school": "Universidad de Buenos Aires",
-    "education_desc": "Specialization in Digital Systems and Computers (in progress)",
+    "education_title": "Engineer's Degree in Electronics",
+    "education_school": "Universidad de Buenos Aires · FIUBA",
+    "education_period": "2015 — 2026",
+    "education_status": "Degree completed",
+    "education_orientation": "Major in Digital Systems and Computers",
+    "education_thesis_label": "Capstone project",
+    "education_thesis": "Drinking-water metering over IoT: low-power firmware, a custom PCB with a cellular module, and a distributed head-end system written in Rust.",
+    "education_extra_label": "Languages",
+    "education_extra": "English Proficiency Exam N1 (UBA), passed in August 2025.",
     "experience_section": "Experience",
-    "exp_current_title": "System Engineer",
-    "exp_current_company": "LambdaClass",
-    "exp_current_period": "March 2025 - present",
-    "exp_current_desc_1": "Rust development: Developed high-performance Rust applications for Ethereum Layer 1 and Layer 2 clients, enhancing blockchain transaction efficiency.",
-    "exp_current_desc_2": "Solidity Smart Contracts: Designed and implemented secure smart contracts in Solidity for decentralized blockchain applications.",
-    "exp_current_desc_3": "P2P Protocols: Implemented peer-to-peer communication protocols to enable efficient and secure data exchange in distributed blockchain systems.",
-    "exp_prev_1_title": "Business Consultant",
-    "exp_prev_1_company": "Qaracter",
-    "exp_prev_1_period": "September 2021 - February 2025",
-    "exp_prev_1_desc_1": "Analysis and Requirements: Performed functional and technical requirement analysis for Santander Global Tech projects, delivering optimized financial solutions.",
-    "exp_prev_1_desc_2": "SQL Optimization: Optimized PL-SQL queries using SQL Developer for efficient data processing in large-scale financial systems.",
-    "exp_prev_1_desc_3": "Python Scripting: Created Python scripts for data processing and API integrations, improving system interoperability.",
-    "exp_prev_1_desc_4": "DevOps: Managed CI/CD pipelines and containerized applications with Docker, ensuring reliable deployments and scalable infrastructure.",
-    "exp_prev_2_title": "Software Engineer",
-    "exp_prev_2_company": "Eldar",
-    "exp_prev_2_period": "June 2021 - September 2021",
-    "exp_prev_2_desc_1": "C/C++ Firmware: Developed firmware for Point of Sale (POS) systems in C/C++ for reliable transactions.",
-    "exp_prev_2_desc_2": "Rust Desktop application: Created desktop applications in Rust using Tauri for serial communication with pinpad devices.",
-    "exp_prev_3_title": "Teaching Assistant",
-    "exp_prev_3_company": "Universidad de Favaloro",
-    "exp_prev_3_period": "January 2021 - June 2021",
-    "exp_prev_3_desc_1": "OOP Teaching: Taught C++ object-oriented programming and UML design in the Programming Laboratory course for Biomedical Engineering.",
-    "projects_section": "Featured Projects",
-    "project_1_title": "MQTT Alarm System",
-    "project_1_desc": "Designed an IoT-based alarm system using MQTT for real-time communication and intelligent automation.",
-    "project_2_title": "Portal Game",
-    "project_2_desc": "Developed a 2D puzzle game inspired by Portal using Rust and Bevy game engine with physics simulation.",
-    "project_3_title": "On-board Computer",
-    "project_3_desc": "Built an embedded system for vehicle diagnostics with real-time data processing and analytics.",
-    "project_4_title": "Wilson Quadruped Robot",
-    "project_4_desc": "Created a quadruped robot with ROS integration for autonomous navigation and obstacle avoidance.",
-    "project_5_title": "Al-go-oh! Card Game",
-    "project_5_desc": "Implemented a digital card game with multiplayer support and real-time synchronization using WebSockets."
+    "experience_current": "Current",
+    "experience": [
+      {
+        "role": "AI Engineer, Supply Chain Systems",
+        "company": "Lenovo",
+        "company_url": "https://www.lenovo.com/",
+        "period": "Oct 2025 — present",
+        "current": true,
+        "items": [
+          {
+            "label": "LLM & RAG systems",
+            "text": "Built retrieval-augmented generation systems over internal supply chain documentation, so teams can query operational knowledge in natural language."
+          },
+          {
+            "label": "Production support",
+            "text": "Provide level 2 support for production systems, diagnosing and resolving incidents to keep critical supply chain operations running."
+          },
+          {
+            "label": "ML automation",
+            "text": "Automated manual workflows through machine-learning classification and data extraction, cutting processing time and human error across 24/7 global systems."
+          }
+        ]
+      },
+      {
+        "role": "Systems Engineer",
+        "company": "LambdaClass",
+        "company_url": "https://lambdaclass.com/",
+        "period": "Mar 2025 — Aug 2025",
+        "current": false,
+        "items": [
+          {
+            "label": "Rust development",
+            "text": "Developed high-performance Rust applications for Ethereum Layer 1 and Layer 2 clients, improving transaction processing efficiency."
+          },
+          {
+            "label": "Solidity smart contracts",
+            "text": "Designed and implemented secure smart contracts in Solidity for decentralized applications."
+          },
+          {
+            "label": "P2P protocols",
+            "text": "Implemented peer-to-peer communication protocols for efficient and secure data exchange across distributed blockchain systems."
+          }
+        ]
+      },
+      {
+        "role": "Business Consultant",
+        "company": "Qaracter",
+        "company_url": "https://www.qaracter.com/",
+        "period": "Sep 2021 — Feb 2025",
+        "current": false,
+        "items": [
+          {
+            "label": "Analysis and requirements",
+            "text": "Performed functional and technical requirement analysis for Santander Global Tech projects, delivering optimized financial solutions."
+          },
+          {
+            "label": "SQL optimization",
+            "text": "Optimized PL/SQL queries with SQL Developer for efficient data processing in large-scale financial systems."
+          },
+          {
+            "label": "Python scripting",
+            "text": "Wrote Python scripts for data processing and API integrations, improving interoperability between systems."
+          },
+          {
+            "label": "DevOps",
+            "text": "Managed CI/CD pipelines and containerized applications with Docker, ensuring reliable deployments and scalable infrastructure."
+          }
+        ]
+      },
+      {
+        "role": "Software Engineer",
+        "company": "Eldar",
+        "company_url": "https://www.eldars.com.ar/",
+        "period": "Jun 2021 — Sep 2021",
+        "current": false,
+        "items": [
+          {
+            "label": "C/C++ firmware",
+            "text": "Developed firmware for point-of-sale (POS) terminals in C/C++, aiming at reliable transactions."
+          },
+          {
+            "label": "Rust applications",
+            "text": "Built desktop applications in Rust with Tauri for serial communication with pinpad devices."
+          }
+        ]
+      },
+      {
+        "role": "Teaching Assistant",
+        "company": "Universidad Favaloro",
+        "company_url": "https://www.favaloro.edu.ar/",
+        "period": "Jan 2021 — Jun 2021",
+        "current": false,
+        "items": [
+          {
+            "label": "Object-oriented programming",
+            "text": "Taught C++ object-oriented programming and UML design in the Programming Laboratory course, for the Biomedical Engineering degree."
+          }
+        ]
+      }
+    ],
+    "skills_section": "Technologies",
+    "skills_intro": "What I use daily, and what I reach for when a project calls for it.",
+    "skills": [
+      {
+        "group": "Languages",
+        "items": ["Python", "Rust", "SQL / PL-SQL", "C / C++", "Solidity", "Java"]
+      },
+      {
+        "group": "AI and machine learning",
+        "items": ["LLMs", "RAG", "Vector databases", "Self-hosted inference", "Hugging Face", "OpenAI and Anthropic APIs", "NLP"]
+      },
+      {
+        "group": "Data",
+        "items": ["Oracle", "SAP HANA", "ETL and pipelines", "Query optimization", "PostgreSQL"]
+      },
+      {
+        "group": "Infrastructure",
+        "items": ["Docker", "CI/CD", "Linux", "Git", "REST APIs", "Prometheus and Grafana"]
+      },
+      {
+        "group": "Embedded systems and hardware",
+        "items": ["STM32", "ESP32", "ARM Cortex-M", "KiCad", "MQTT", "PCB design"]
+      },
+      {
+        "group": "Blockchain",
+        "items": ["Ethereum", "Smart contracts", "P2P protocols", "L1 and L2 clients"]
+      }
+    ],
+    "projects_section": "Projects",
+    "projects_intro": "A selection of what I have built, across distributed software, electronics and custom hardware.",
+    "projects_cta": "View the repository",
+    "projects_cta_video": "Watch the video",
+    "projects_more": "See all 23 repositories on GitHub",
+    "projects": [
+      {
+        "name": "IoT Head-End System",
+        "description": "A distributed head-end system for drinking-water telemetering, written in Rust. Clustering with SWIM failure detection, device delegation across nodes, a custom scheduler, persistence, and observability through Prometheus and Grafana. This is the software half of my capstone project, alongside the low-power firmware and the cellular PCB.",
+        "tech": ["Rust", "Tokio", "Clustering", "PostgreSQL", "Grafana", "Docker"],
+        "url": "https://github.com/Mechanix97/Head-end-system-TPP",
+        "image": "/static/images/projects/head-end-system.webp",
+        "image_alt": "3D render of the meter board, showing the cellular module and the microcontroller",
+        "cta": "repo"
+      },
+      {
+        "name": "DS2000",
+        "description": "A USB button box for Discord, built end to end: a Rust desktop application with Tauri, C++ firmware on the microcontroller, and a custom PCB designed in KiCad. Mute, deafen and disconnect from a physical button, with RGB LEDs mirroring the state.",
+        "tech": ["Rust", "Tauri", "C++", "KiCad", "USB HID"],
+        "url": "https://github.com/Mechanix97/DS-2000",
+        "image": "/static/images/DS2000/renders/frente.webp",
+        "image_alt": "Front view of the DS2000 button box",
+        "cta": "repo"
+      },
+      {
+        "name": "mechardo3d.xyz",
+        "description": "This very site: a Rust server on Axum, with Tera templates and Tailwind, and no framework JavaScript. Bilingual with language detection, a sitemap generated from the routing table, a rate-limited contact form, and a Docker deployment behind Caddy.",
+        "tech": ["Rust", "Axum", "Tera", "Tailwind", "Docker", "Caddy"],
+        "url": "https://github.com/Mechanix97/mechardo3d",
+        "image": "/static/images/projects/mechardo3d.webp",
+        "image_alt": "Home page of mechardo3d.xyz",
+        "cta": "repo"
+      },
+      {
+        "name": "IoT alarm over MQTT",
+        "description": "A connected home alarm: an ESP32 running ESPHome watches the motion, door and doorbell sensors, publishes events to an MQTT broker, and a bridge written in Rust forwards them to Telegram. Real-time alerts on hardware that was already installed.",
+        "tech": ["Rust", "ESP32", "ESPHome", "MQTT", "Telegram"],
+        "url": "https://github.com/Mechanix97/mqtt-IoT-alarm",
+        "image": "/static/images/blog/alarma-iot/thumbnail.webp",
+        "image_alt": "Inside of the alarm enclosure, showing the ESP32 and the relays",
+        "cta": "repo"
+      },
+      {
+        "name": "Motorcycle on-board computer",
+        "description": "An on-board computer for a motorcycle built on ARM Cortex-M3, with two OLED screens, GPS and Bluetooth connectivity. An embedded system designed to read, process and display vehicle telemetry while riding.",
+        "tech": ["C", "ARM Cortex-M3", "OLED", "GPS", "Bluetooth"],
+        "url": "https://www.youtube.com/watch?v=SR3X2kFW1ZU",
+        "image": "/static/images/projects/ordenador-de-abordo.webp",
+        "image_alt": "On-board computer mounted on a motorcycle dashboard",
+        "cta": "video"
+      },
+      {
+        "name": "Wilson the quadruped",
+        "description": "A quadruped robot on Arduino, programmed entirely in AVR Assembly. Gait control and servo driving written by hand, with no libraries in between: an exercise in low-level programming and hardware control.",
+        "tech": ["AVR Assembly", "Arduino", "Servos", "Robotics"],
+        "url": "https://github.com/Mechanix97/Cuadrupedo-Wilson-Laboratorio-de-Microprocesadores-8607-FIUBA",
+        "image": "/static/images/projects/cuadrupedo-wilson.webp",
+        "image_alt": "The Wilson quadruped robot assembled on a workbench",
+        "cta": "repo"
+      },
+      {
+        "name": "Portal",
+        "description": "An online multiplayer game inspired by Portal, written in C++ with SDL and Qt. A client-server architecture over sockets and threads, with its own level editor and real-time physics simulation.",
+        "tech": ["C++", "SDL", "Qt", "Sockets", "Multiplayer"],
+        "url": "https://github.com/Mechanix97/Portal-Taller-de-Programacion-9508-FIUBA",
+        "image": "/static/images/projects/portal.webp",
+        "image_alt": "Screenshot of a Portal game session",
+        "cta": "repo"
+      },
+      {
+        "name": "Al-Go-Oh!",
+        "description": "A card game based on Yu-Gi-Oh!, written in Java with a JavaFX interface. A large exercise in object-oriented design: the rules of the game modelled with design patterns and covered by tests.",
+        "tech": ["Java", "JavaFX", "OOP", "Design patterns"],
+        "url": "https://github.com/Mechanix97/al-go-oh-algoritmos-y-programacion-iii-9502-FIUBA",
+        "image": "/static/images/projects/al-go-oh.webp",
+        "image_alt": "Board of the Al-Go-Oh! card game",
+        "cta": "repo"
+      }
+    ]
   }
 }

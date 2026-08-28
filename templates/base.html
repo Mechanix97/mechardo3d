@@ -87,10 +87,13 @@
                 class="shrink-0 transition-transform duration-300 hover:scale-105">
                 <span class="logo-mark w-32 sm:w-36" aria-hidden="true"></span>
             </a>
-            <ul class="flex items-center gap-6 sm:gap-10">
+            <ul class="flex items-center gap-4 sm:gap-8">
                 <li><a href="/{{ lang | default(value='es') }}/ds2000" class="nav-link text-white font-bold"
                         {% if canonical_path is starting_with("ds2000") %}aria-current="page"{% endif %}>DS2000</a>
                 </li>
+                <li><a href="/{{ lang | default(value='es') }}/me" class="nav-link text-white font-bold"
+                        {% if canonical_path is starting_with("me") %}aria-current="page"{% endif %}>{{ t.nav.about
+                        }}</a></li>
                 <li><a href="/{{ lang | default(value='es') }}/blog" class="nav-link text-white font-bold"
                         {% if canonical_path is starting_with("blog") %}aria-current="page"{% endif %}>Blog</a></li>
                 <li><a href="/{{ lang | default(value='es') }}/contact" class="nav-link text-white font-bold"

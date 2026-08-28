@@ -121,17 +121,30 @@ mod tests {
         Translations::load(Path::new("translations"))
     }
 
+    /// Every path in a translation tree. Arrays are walked by index, so a list
+    /// that gained an entry in one language only - an extra job, an extra
+    /// project - shows up as a missing key rather than passing unnoticed.
     fn key_paths(value: &Value, prefix: &str, out: &mut BTreeSet<String>) {
-        if let Value::Object(map) = value {
-            for (key, child) in map {
-                let path = if prefix.is_empty() {
-                    key.clone()
-                } else {
-                    format!("{}.{}", prefix, key)
-                };
-                out.insert(path.clone());
-                key_paths(child, &path, out);
+        match value {
+            Value::Object(map) => {
+                for (key, child) in map {
+                    let path = if prefix.is_empty() {
+                        key.clone()
+                    } else {
+                        format!("{}.{}", prefix, key)
+                    };
+                    out.insert(path.clone());
+                    key_paths(child, &path, out);
+                }
             }
+            Value::Array(items) => {
+                for (index, child) in items.iter().enumerate() {
+                    let path = format!("{}.{}", prefix, index);
+                    out.insert(path.clone());
+                    key_paths(child, &path, out);
+                }
+            }
+            _ => {}
         }
     }
 

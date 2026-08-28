@@ -6,7 +6,8 @@
     "skip_to_content": "Skip to content",
     "language": "Choose language",
     "theme_dark": "Switch to dark mode",
-    "theme_light": "Switch to light mode"
+    "theme_light": "Switch to light mode",
+    "about": "About"
   },
   "footer": {
     "rights": "All rights reserved.",

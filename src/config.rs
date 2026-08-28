@@ -11,6 +11,12 @@ use tracing::{info, warn};
 const DEFAULT_RECAPTCHA_SITE_KEY: &str = "6LfuI5YrAAAAAOEUv-Xp1Ewo4dhr1TgCrCG_aqa8";
 const DEFAULT_BASE_URL: &str = "https://mechardo3d.xyz";
 const DEFAULT_SECRET_FILE: &str = "secrets/recaptcha.env";
+const DEFAULT_GITHUB_SECRET_FILE: &str = "secrets/github.env";
+const DEFAULT_RESUME_REPO: &str = "Mechanix97/Resume";
+/// Spanish visitors get the variant with a photo, the convention in much of
+/// Latin America; English visitors get the one without.
+const DEFAULT_RESUME_ASSET_ES: &str = "Lucas_Rack_Software_Engineer_CV.pdf";
+const DEFAULT_RESUME_ASSET_EN: &str = "Lucas_Rack_Software_Engineer_Resume.pdf";
 
 /// Runtime configuration, resolved once at startup.
 ///
@@ -34,6 +40,7 @@ pub struct AppConfig {
     /// Whether to send `Strict-Transport-Security` (`HSTS_ENABLED`).
     pub hsts_enabled: bool,
     pub recaptcha: RecaptchaConfig,
+    pub resume: ResumeConfig,
     /// Minimum delay between two contact submissions from the same client.
     pub contact_rate_limit: Duration,
     /// Largest accepted contact message, in characters.
@@ -42,6 +49,33 @@ pub struct AppConfig {
     pub static_dir: PathBuf,
     pub templates_dir: PathBuf,
     pub translations_dir: PathBuf,
+}
+
+/// Where `/{lang}/cv` gets the PDF from.
+///
+/// The resume lives in a private repository that publishes a release on every
+/// push, so the site serves the latest release asset instead of carrying a
+/// copy that goes stale. Without a token the whole feature switches off and
+/// the download button is not rendered at all.
+#[derive(Debug, Clone)]
+pub struct ResumeConfig {
+    /// `owner/name` of the repository holding the releases.
+    pub repo: String,
+    /// GitHub token with read access to that repository's contents.
+    pub token: String,
+    /// Release asset served to Spanish visitors.
+    pub asset_es: String,
+    /// Release asset served to English visitors.
+    pub asset_en: String,
+    /// How long a downloaded PDF is reused before GitHub is asked again.
+    pub cache_ttl: Duration,
+}
+
+impl ResumeConfig {
+    /// Whether the CV download can work at all.
+    pub fn enabled(&self) -> bool {
+        !self.token.is_empty() && !self.repo.is_empty()
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -89,6 +123,14 @@ impl AppConfig {
             );
         }
 
+        let github_secret_file = env_string("GITHUB_SECRET_FILE", DEFAULT_GITHUB_SECRET_FILE);
+        let github_token = env::var("GITHUB_TOKEN")
+            .ok()
+            .filter(|s| !s.trim().is_empty())
+            .map(|s| s.trim().to_string())
+            .or_else(|| read_optional_secret_file(&github_secret_file, "GITHUB_TOKEN"))
+            .unwrap_or_default();
+
         let config = Self {
             bind_addr,
             base_url,
@@ -104,6 +146,13 @@ impl AppConfig {
                 min_score: env_parse("RECAPTCHA_MIN_SCORE", 0.6_f32),
                 disabled,
             },
+            resume: ResumeConfig {
+                repo: env_string("RESUME_REPO", DEFAULT_RESUME_REPO),
+                token: github_token,
+                asset_es: env_string("RESUME_ASSET_ES", DEFAULT_RESUME_ASSET_ES),
+                asset_en: env_string("RESUME_ASSET_EN", DEFAULT_RESUME_ASSET_EN),
+                cache_ttl: Duration::from_secs(env_parse("RESUME_CACHE_SECS", 3600)),
+            },
             contact_rate_limit: Duration::from_secs(env_parse("CONTACT_RATE_LIMIT_SECS", 300)),
             max_message_chars: env_parse("MAX_MESSAGE_CHARS", 5000),
             data_dir: PathBuf::from(env_string("DATA_DIR", "data")),
@@ -112,12 +161,21 @@ impl AppConfig {
             translations_dir: PathBuf::from(env_string("TRANSLATIONS_DIR", "translations")),
         };
 
+        if !config.resume.enabled() {
+            info!(
+                "No GitHub token found (set GITHUB_TOKEN or {}). \
+                 The CV download on /me stays hidden.",
+                github_secret_file
+            );
+        }
+
         info!(
-            "Configuration loaded: bind={} base_url={} trust_proxy_headers={} recaptcha_disabled={}",
+            "Configuration loaded: bind={} base_url={} trust_proxy_headers={} recaptcha_disabled={} cv_download={}",
             config.bind_addr,
             config.base_url,
             config.trust_proxy_headers,
-            config.recaptcha.disabled
+            config.recaptcha.disabled,
+            config.resume.enabled()
         );
 
         config
@@ -180,6 +238,19 @@ fn parse_bool(raw: &str) -> Option<bool> {
 fn read_secret_file(path: &str, key: &str) -> Option<String> {
     match fs::read_to_string(path) {
         Ok(contents) => value_from_env_file(&contents, key),
+        Err(e) => {
+            warn!("Could not read {}: {}", path, e);
+            None
+        }
+    }
+}
+
+/// Same, for a secret the site can run without. A missing file is the normal
+/// case in development, so it is not worth a warning; anything else is.
+fn read_optional_secret_file(path: &str, key: &str) -> Option<String> {
+    match fs::read_to_string(path) {
+        Ok(contents) => value_from_env_file(&contents, key),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
         Err(e) => {
             warn!("Could not read {}: {}", path, e);
             None
@@ -259,6 +330,13 @@ mod tests {
                 secret: "secret".to_string(),
                 min_score: 0.6,
                 disabled: false,
+            },
+            resume: ResumeConfig {
+                repo: "owner/repo".to_string(),
+                token: String::new(),
+                asset_es: "cv-es.pdf".to_string(),
+                asset_en: "cv-en.pdf".to_string(),
+                cache_ttl: Duration::from_secs(3600),
             },
             contact_rate_limit: Duration::from_secs(300),
             max_message_chars: 5000,
