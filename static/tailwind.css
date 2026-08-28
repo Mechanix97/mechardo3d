@@ -303,9 +303,9 @@
    repeated on each one. */
 .surface {
     background: #ffffff;
-    border: 1px solid #f3f4f6;
+    border: 1px solid #e2e8f0;
     border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 20px -12px rgba(15, 23, 42, 0.18);
 }
 
 .surface:where(.dark, .dark *) {
@@ -318,11 +318,12 @@
    the gradient on this page, so repeating it on every H2 would flatten the
    hierarchy - and solid text holds its contrast at this size. */
 .section-title {
-    font-size: 1.875rem;
+    font-size: 2rem;
     line-height: 2.25rem;
     font-weight: 700;
-    color: #111827;
-    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
 }
 
 .section-title:where(.dark, .dark *) {
@@ -340,7 +341,7 @@
 }
 
 .section-intro {
-    color: #4b5563;
+    color: #374151;
     margin-bottom: 2rem;
     max-width: 42rem;
 }
@@ -365,9 +366,9 @@
     border-radius: 9999px;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #374151;
+    color: #334155;
     background: #ffffff;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #cbd5e1;
     transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
 }
 
@@ -411,7 +412,7 @@
     width: 2px;
     border-radius: 9999px;
     background: linear-gradient(180deg, #2563eb, #7c3aed);
-    opacity: 0.3;
+    opacity: 0.55;
 }
 
 .timeline-item {
@@ -425,7 +426,7 @@
     width: 0.875rem;
     height: 0.875rem;
     border-radius: 9999px;
-    background: #cbd5e1;
+    background: #94a3b8;
     box-shadow: 0 0 0 4px #f3f4f6;
 }
 
@@ -459,6 +460,37 @@
     background-image: linear-gradient(135deg, #2563eb, #6d28d9);
 }
 
+/* Bullet list for the responsibilities under a role. A small gradient square
+   instead of the "→" that used to sit in the markup: the arrow pointed at
+   nothing and repeated on every line. */
+.marker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.marker-list li {
+    position: relative;
+    padding-left: 1.125rem;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.marker-list li:where(.dark, .dark *) {
+    color: #d1d5db;
+}
+
+.marker-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
 /* Tag: the small pill used for a technology or a skill. Not a link. */
 .tag {
     display: inline-flex;
@@ -467,9 +499,9 @@
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #1d4ed8;
-    background: rgba(37, 99, 235, 0.08);
-    border: 1px solid rgba(37, 99, 235, 0.16);
+    color: #1e40af;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
 }
 
 .tag:where(.dark, .dark *) {
@@ -487,8 +519,8 @@
     overflow: hidden;
     border-radius: 0.75rem;
     background: #ffffff;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 20px -12px rgba(15, 23, 42, 0.18);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 

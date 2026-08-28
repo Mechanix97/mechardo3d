@@ -2,27 +2,32 @@
 {% block content %}
 <div class="container mx-auto px-4 pb-16 max-w-5xl">
 
-    <!-- Hero -->
-    <header class="aura py-12 sm:py-16">
-        <span aria-hidden="true" class="aura-blob aura-blob-a"></span>
-        <span aria-hidden="true" class="aura-blob aura-blob-b"></span>
-
-        <p class="eyebrow mb-6"><span class="eyebrow-dot" aria-hidden="true"></span>{{ t.about.availability }}</p>
-
-        <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-3">
+    {# No aura blobs here: on a page this dense the blurred gradient washed the
+       whole header out. The hero carries its weight through type instead. #}
+    {# Name in near-black rather than the brand gradient: on a CV the gradient
+       read as decoration competing with the content. The gradient stays as an
+       accent on the section rules, the badges and the tags. #}
+    <header class="pt-12 sm:pt-16 pb-10 mb-10 border-b border-gray-200 dark:border-gray-700">
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-white mb-3">
             {{ t.about.name }}
         </h1>
-        <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-200 font-light mb-5">{{ t.about.role }}</p>
+        <p class="text-xl md:text-2xl font-medium text-blue-700 dark:text-blue-300 mb-4">{{ t.about.role }}</p>
 
-        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed mb-6">{{ t.about.summary }}</p>
-
-        <p class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-8">
-            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {{ t.about.location }}
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-600 dark:text-gray-400 mb-6">
+            <span class="inline-flex items-center gap-1.5">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {{ t.about.location }}
+            </span>
+            <span aria-hidden="true" class="text-gray-300 dark:text-gray-600">·</span>
+            <span class="inline-flex items-center gap-1.5 font-medium text-blue-700 dark:text-blue-300">
+                <span class="eyebrow-dot" aria-hidden="true"></span>{{ t.about.availability }}
+            </span>
         </p>
+
+        <p class="text-lg text-gray-700 dark:text-gray-300 max-w-2xl leading-relaxed mb-7">{{ t.about.summary }}</p>
 
         <div class="flex flex-wrap items-center gap-3">
             {% if cv_url %}
@@ -46,16 +51,13 @@
                 {{ t.about.linkedin }}
             </a>
         </div>
-
-        {% if cv_url %}
-        <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">{{ t.about.cv_hint }}</p>
-        {% endif %}
     </header>
 
     <!-- In-page navigation -->
-    <nav class="page-nav mb-16" aria-label="{{ t.about.jump_to }}">
+    <nav class="page-nav mb-14" aria-label="{{ t.about.jump_to }}">
         <a href="#experience" class="page-nav-link">{{ t.about.nav_experience }}</a>
         <a href="#projects" class="page-nav-link">{{ t.about.nav_projects }}</a>
+        <a href="#education" class="page-nav-link">{{ t.about.education_section }}</a>
         <a href="#skills" class="page-nav-link">{{ t.about.nav_skills }}</a>
         <a href="#contact" class="page-nav-link">{{ t.about.contact_section }}</a>
     </nav>
@@ -71,19 +73,16 @@
                 <div class="surface p-6 sm:p-7">
                     <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-1">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ job.role }}</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ job.period }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">{{ job.period }}</p>
                     </div>
                     <p class="mb-4 flex flex-wrap items-center gap-2">
                         <a href="{{ job.company_url }}" target="_blank" rel="noopener"
-                            class="text-blue-700 dark:text-blue-300 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{ job.company }}</a>
+                            class="text-blue-700 dark:text-blue-300 font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{ job.company }}</a>
                         {% if job.current %}<span class="badge-current">{{ t.about.experience_current }}</span>{% endif %}
                     </p>
-                    <ul class="space-y-3">
+                    <ul class="marker-list">
                         {% for item in job.items %}
-                        <li class="flex gap-3 text-gray-700 dark:text-gray-300">
-                            <span class="text-blue-600 dark:text-blue-400 mt-1 shrink-0" aria-hidden="true">→</span>
-                            <span><strong class="font-semibold text-gray-900 dark:text-gray-100">{{ item.label }}:</strong> {{ item.text }}</span>
-                        </li>
+                        <li><strong class="font-semibold text-gray-900 dark:text-gray-100">{{ item.label }}.</strong> {{ item.text }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -95,7 +94,6 @@
     <!-- Projects -->
     <section id="projects" class="mb-20 scroll-mt-24">
         <h2 class="section-title">{{ t.about.projects_section }}</h2>
-        <p class="section-intro">{{ t.about.projects_intro }}</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {% for project in t.about.projects %}
@@ -104,7 +102,7 @@
                     loading="lazy" decoding="async" class="project-card-image">
                 <div class="p-6 flex flex-col grow">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ project.name }}</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4 grow">{{ project.description }}</p>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 grow">{{ project.description }}</p>
                     <ul class="flex flex-wrap gap-2 mb-4">
                         {% for tech in project.tech %}
                         <li class="tag">{{ tech }}</li>
@@ -121,18 +119,39 @@
             {% endfor %}
         </div>
 
-        <p class="mt-8 text-center">
+        <p class="mt-8">
             <a href="https://github.com/Mechanix97?tab=repositories" target="_blank" rel="noopener"
-                class="text-blue-700 dark:text-blue-300 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{ t.about.projects_more }}</a>
+                class="text-blue-700 dark:text-blue-300 font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{ t.about.projects_more }}</a>
         </p>
+    </section>
+
+    <!-- Education -->
+    <section id="education" class="mb-20 scroll-mt-24">
+        <h2 class="section-title">{{ t.about.education_section }}</h2>
+
+        <div class="surface p-6 sm:p-8 border-l-4 border-blue-600 dark:border-blue-400">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-1">
+                <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ t.about.education_title }}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">{{ t.about.education_period }}</p>
+            </div>
+            <p class="mb-2">
+                <a href="https://www.fi.uba.ar/" target="_blank" rel="noopener"
+                    class="text-blue-700 dark:text-blue-300 font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{ t.about.education_school }}</a>
+            </p>
+            <p class="text-gray-700 dark:text-gray-300 mb-5">{{ t.about.education_orientation }}</p>
+
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-5">
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-1">{{ t.about.education_thesis_label }}</p>
+                <p class="text-gray-700 dark:text-gray-300">{{ t.about.education_thesis }}</p>
+            </div>
+        </div>
     </section>
 
     <!-- Skills -->
     <section id="skills" class="mb-20 scroll-mt-24">
         <h2 class="section-title">{{ t.about.skills_section }}</h2>
-        <p class="section-intro">{{ t.about.skills_intro }}</p>
 
-        <dl class="surface divide-y divide-gray-100 dark:divide-gray-700/60">
+        <dl class="surface divide-y divide-gray-200 dark:divide-gray-700">
             {% for group in t.about.skills %}
             <div class="p-6 sm:flex sm:items-start sm:gap-6">
                 <dt class="sm:w-56 sm:shrink-0 font-semibold text-gray-900 dark:text-white mb-3 sm:mb-0">{{ group.group }}</dt>
@@ -148,35 +167,6 @@
         </dl>
     </section>
 
-    <!-- Education -->
-    <section id="education" class="mb-20 scroll-mt-24">
-        <h2 class="section-title">{{ t.about.education_section }}</h2>
-
-        <div class="surface p-6 sm:p-8 border-l-4 border-blue-600 dark:border-blue-400">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-1">
-                <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ t.about.education_title }}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ t.about.education_period }}</p>
-            </div>
-            <p class="mb-2 flex flex-wrap items-center gap-2">
-                <a href="https://www.fi.uba.ar/" target="_blank" rel="noopener"
-                    class="text-blue-700 dark:text-blue-300 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{ t.about.education_school }}</a>
-                <span class="badge-current">{{ t.about.education_status }}</span>
-            </p>
-            <p class="text-gray-600 dark:text-gray-300 mb-5">{{ t.about.education_orientation }}</p>
-
-            <dl class="space-y-4 border-t border-gray-100 dark:border-gray-700/60 pt-5">
-                <div>
-                    <dt class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">{{ t.about.education_thesis_label }}</dt>
-                    <dd class="text-gray-700 dark:text-gray-300">{{ t.about.education_thesis }}</dd>
-                </div>
-                <div>
-                    <dt class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">{{ t.about.education_extra_label }}</dt>
-                    <dd class="text-gray-700 dark:text-gray-300">{{ t.about.education_extra }}</dd>
-                </div>
-            </dl>
-        </div>
-    </section>
-
     <!-- Contact -->
     <section id="contact" class="scroll-mt-24">
         <h2 class="section-title">{{ t.about.contact_section }}</h2>
@@ -189,7 +179,7 @@
                 </svg>
                 <span class="min-w-0">
                     <span class="block font-semibold text-gray-900 dark:text-gray-100">{{ t.about.email }}</span>
-                    <span class="block text-sm text-gray-500 dark:text-gray-400 truncate">{{ t.about.email_handle }}</span>
+                    <span class="block text-sm text-gray-600 dark:text-gray-400 truncate">{{ t.about.email_handle }}</span>
                 </span>
             </a>
             <a href="https://github.com/Mechanix97" target="_blank" rel="noopener" class="chip">
@@ -198,7 +188,7 @@
                 </svg>
                 <span class="min-w-0">
                     <span class="block font-semibold text-gray-900 dark:text-gray-100">{{ t.about.github }}</span>
-                    <span class="block text-sm text-gray-500 dark:text-gray-400 truncate">{{ t.about.github_handle }}</span>
+                    <span class="block text-sm text-gray-600 dark:text-gray-400 truncate">{{ t.about.github_handle }}</span>
                 </span>
             </a>
             <a href="https://linkedin.com/in/lucasalexisrack" target="_blank" rel="noopener" class="chip">
@@ -207,7 +197,7 @@
                 </svg>
                 <span class="min-w-0">
                     <span class="block font-semibold text-gray-900 dark:text-gray-100">{{ t.about.linkedin }}</span>
-                    <span class="block text-sm text-gray-500 dark:text-gray-400 truncate">{{ t.about.linkedin_handle }}</span>
+                    <span class="block text-sm text-gray-600 dark:text-gray-400 truncate">{{ t.about.linkedin_handle }}</span>
                 </span>
             </a>
         </div>

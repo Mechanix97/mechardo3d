@@ -11,7 +11,6 @@
     "nav_projects": "Proyectos",
     "nav_skills": "Tecnologías",
     "cv_download": "Descargar CV",
-    "cv_hint": "PDF, siempre la última versión",
     "contact_section": "Dónde encontrarme",
     "contact_intro": "La forma más rápida de llegarme es por correo. También respondo por LinkedIn.",
     "github": "GitHub",
@@ -24,12 +23,9 @@
     "education_title": "Ingeniería en Electrónica",
     "education_school": "Universidad de Buenos Aires · FIUBA",
     "education_period": "2015 — 2026",
-    "education_status": "Carrera finalizada",
     "education_orientation": "Orientación en Sistemas Digitales y Computadoras",
     "education_thesis_label": "Trabajo profesional",
     "education_thesis": "Medición de consumo de agua potable con tecnología IoT: firmware de bajo consumo, PCB con módulo celular y un head-end system distribuido escrito en Rust.",
-    "education_extra_label": "Idiomas",
-    "education_extra": "Prueba de Suficiencia en Idioma Inglés N1 (UBA), aprobada en agosto de 2025.",
     "experience_section": "Experiencia",
     "experience_current": "Actual",
     "experience": [
@@ -132,35 +128,73 @@
       }
     ],
     "skills_section": "Tecnologías",
-    "skills_intro": "Lo que uso a diario, y lo que uso cuando el proyecto lo pide.",
     "skills": [
       {
         "group": "Lenguajes",
-        "items": ["Python", "Rust", "SQL / PL-SQL", "C / C++", "Solidity", "Java"]
+        "items": [
+          "Python",
+          "Rust",
+          "SQL / PL-SQL",
+          "C / C++",
+          "Solidity",
+          "Java"
+        ]
       },
       {
         "group": "AI y machine learning",
-        "items": ["LLMs", "RAG", "Bases vectoriales", "Inferencia self-hosted", "Hugging Face", "APIs de OpenAI y Anthropic", "NLP"]
+        "items": [
+          "LLMs",
+          "RAG",
+          "Bases vectoriales",
+          "Inferencia self-hosted",
+          "Hugging Face",
+          "APIs de OpenAI y Anthropic",
+          "NLP"
+        ]
       },
       {
         "group": "Datos",
-        "items": ["Oracle", "SAP HANA", "ETL y pipelines", "Optimización de queries", "PostgreSQL"]
+        "items": [
+          "Oracle",
+          "SAP HANA",
+          "ETL y pipelines",
+          "Optimización de queries",
+          "PostgreSQL"
+        ]
       },
       {
         "group": "Infraestructura",
-        "items": ["Docker", "CI/CD", "Linux", "Git", "APIs REST", "Prometheus y Grafana"]
+        "items": [
+          "Docker",
+          "CI/CD",
+          "Linux",
+          "Git",
+          "APIs REST",
+          "Prometheus y Grafana"
+        ]
       },
       {
         "group": "Sistemas embebidos y hardware",
-        "items": ["STM32", "ESP32", "ARM Cortex-M", "KiCad", "MQTT", "Diseño de PCB"]
+        "items": [
+          "STM32",
+          "ESP32",
+          "ARM Cortex-M",
+          "KiCad",
+          "MQTT",
+          "Diseño de PCB"
+        ]
       },
       {
         "group": "Blockchain",
-        "items": ["Ethereum", "Smart contracts", "Protocolos P2P", "Clientes L1 y L2"]
+        "items": [
+          "Ethereum",
+          "Smart contracts",
+          "Protocolos P2P",
+          "Clientes L1 y L2"
+        ]
       }
     ],
     "projects_section": "Proyectos",
-    "projects_intro": "Una selección de lo que construí, entre software distribuido, electrónica y hardware propio.",
     "projects_cta": "Ver el repositorio",
     "projects_cta_video": "Ver el video",
     "projects_more": "Ver los 23 repositorios en GitHub",
@@ -168,7 +202,14 @@
       {
         "name": "Head-End System IoT",
         "description": "Sistema head-end distribuido para telemedición de agua potable, escrito en Rust. Clúster con detección de fallos SWIM, delegación de dispositivos entre nodos, scheduler propio, persistencia y observabilidad con Prometheus y Grafana. Es el software del trabajo profesional, junto al firmware de bajo consumo y a la PCB con módulo celular.",
-        "tech": ["Rust", "Tokio", "Clustering", "PostgreSQL", "Grafana", "Docker"],
+        "tech": [
+          "Rust",
+          "Tokio",
+          "Clustering",
+          "PostgreSQL",
+          "Grafana",
+          "Docker"
+        ],
         "url": "https://github.com/Mechanix97/Head-end-system-TPP",
         "image": "/static/images/projects/head-end-system.webp",
         "image_alt": "Render 3D de la placa del medidor, con el módulo celular y el microcontrolador",
@@ -177,7 +218,13 @@
       {
         "name": "DS2000",
         "description": "Botonera USB para Discord, de punta a punta: aplicación de escritorio en Rust con Tauri, firmware en C++ sobre el microcontrolador y PCB propia diseñada en KiCad. Silenciar, ensordecer y desconectarse con un botón físico, con LEDs RGB que reflejan el estado.",
-        "tech": ["Rust", "Tauri", "C++", "KiCad", "USB HID"],
+        "tech": [
+          "Rust",
+          "Tauri",
+          "C++",
+          "KiCad",
+          "USB HID"
+        ],
         "url": "https://github.com/Mechanix97/DS-2000",
         "image": "/static/images/DS2000/renders/frente.webp",
         "image_alt": "Vista frontal de la botonera DS2000",
@@ -186,7 +233,14 @@
       {
         "name": "mechardo3d.xyz",
         "description": "Este mismo sitio: servidor en Rust con Axum, plantillas Tera y Tailwind, sin JavaScript de framework. Bilingüe con detección de idioma, sitemap generado desde el routing, formulario de contacto con rate limiting y despliegue en Docker detrás de Caddy.",
-        "tech": ["Rust", "Axum", "Tera", "Tailwind", "Docker", "Caddy"],
+        "tech": [
+          "Rust",
+          "Axum",
+          "Tera",
+          "Tailwind",
+          "Docker",
+          "Caddy"
+        ],
         "url": "https://github.com/Mechanix97/mechardo3d",
         "image": "/static/images/projects/mechardo3d.webp",
         "image_alt": "Página principal de mechardo3d.xyz",
@@ -195,16 +249,28 @@
       {
         "name": "Alarma IoT con MQTT",
         "description": "Alarma domiciliaria conectada: un ESP32 con ESPHome vigila los sensores de movimiento, apertura y timbre, publica los eventos en un broker MQTT y un puente escrito en Rust los reenvía a Telegram. Avisos en tiempo real sobre hardware que ya estaba instalado.",
-        "tech": ["Rust", "ESP32", "ESPHome", "MQTT", "Telegram"],
+        "tech": [
+          "Rust",
+          "ESP32",
+          "ESPHome",
+          "MQTT",
+          "Telegram"
+        ],
         "url": "https://github.com/Mechanix97/mqtt-IoT-alarm",
-        "image": "/static/images/blog/alarma-iot/thumbnail.webp",
+        "image": "/static/images/projects/alarma-iot.webp",
         "image_alt": "Interior del gabinete de la alarma, con el ESP32 y los relés",
         "cta": "repo"
       },
       {
         "name": "Ordenador de a bordo",
         "description": "Computadora de a bordo para motocicleta sobre ARM Cortex-M3, con dos pantallas OLED, GPS y conectividad Bluetooth. Sistema embebido diseñado para leer, procesar y mostrar telemetría del vehículo en marcha.",
-        "tech": ["C", "ARM Cortex-M3", "OLED", "GPS", "Bluetooth"],
+        "tech": [
+          "C",
+          "ARM Cortex-M3",
+          "OLED",
+          "GPS",
+          "Bluetooth"
+        ],
         "url": "https://www.youtube.com/watch?v=SR3X2kFW1ZU",
         "image": "/static/images/projects/ordenador-de-abordo.webp",
         "image_alt": "Ordenador de a bordo montado en el tablero de una motocicleta",
@@ -213,7 +279,12 @@
       {
         "name": "Cuadrúpedo Wilson",
         "description": "Robot cuadrúpedo sobre Arduino programado íntegramente en Assembler AVR. Control de la marcha y de los servos escrito a mano, sin bibliotecas de por medio: un ejercicio de programación de bajo nivel y de control de hardware.",
-        "tech": ["AVR Assembly", "Arduino", "Servos", "Robótica"],
+        "tech": [
+          "AVR Assembly",
+          "Arduino",
+          "Servos",
+          "Robótica"
+        ],
         "url": "https://github.com/Mechanix97/Cuadrupedo-Wilson-Laboratorio-de-Microprocesadores-8607-FIUBA",
         "image": "/static/images/projects/cuadrupedo-wilson.webp",
         "image_alt": "Robot cuadrúpedo Wilson armado sobre una mesa de trabajo",
@@ -222,7 +293,13 @@
       {
         "name": "Portal",
         "description": "Juego multijugador en línea inspirado en Portal, escrito en C++ con SDL y Qt. Arquitectura cliente-servidor sobre sockets y threads, con editor de niveles propio y simulación de física en tiempo real.",
-        "tech": ["C++", "SDL", "Qt", "Sockets", "Multijugador"],
+        "tech": [
+          "C++",
+          "SDL",
+          "Qt",
+          "Sockets",
+          "Multijugador"
+        ],
         "url": "https://github.com/Mechanix97/Portal-Taller-de-Programacion-9508-FIUBA",
         "image": "/static/images/projects/portal.webp",
         "image_alt": "Captura de una partida del juego Portal",
@@ -231,7 +308,12 @@
       {
         "name": "Al-Go-Oh!",
         "description": "Juego de cartas basado en Yu-Gi-Oh!, escrito en Java con interfaz en JavaFX. Un ejercicio grande de diseño orientado a objetos: el reglamento del juego modelado con patrones de diseño y cubierto con tests.",
-        "tech": ["Java", "JavaFX", "POO", "Patrones de diseño"],
+        "tech": [
+          "Java",
+          "JavaFX",
+          "POO",
+          "Patrones de diseño"
+        ],
         "url": "https://github.com/Mechanix97/al-go-oh-algoritmos-y-programacion-iii-9502-FIUBA",
         "image": "/static/images/projects/al-go-oh.webp",
         "image_alt": "Tablero del juego de cartas Al-Go-Oh!",
