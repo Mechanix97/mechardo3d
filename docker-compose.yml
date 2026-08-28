@@ -49,8 +49,9 @@ services:
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=postgres
+    # POSTGRES_PASSWORD lives in the secrets file, not in this repo.
+    env_file:
+      - ./secrets/plausible-db.env
     networks:
       - proxy
 
@@ -81,10 +82,11 @@ services:
     depends_on:
       - plausible_db
       - plausible_clickhouse
+    # DATABASE_URL carries the database password, so it is set in
+    # secrets/plausible.env alongside the rest of Plausible's configuration.
     env_file:
       - ./secrets/plausible.env
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@plausible_db:5432/plausible
       - CLICKHOUSE_DATABASE_URL=http://plausible_clickhouse:8123/plausible_events_db
     logging:
       driver: "json-file"

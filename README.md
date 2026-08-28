@@ -58,6 +58,41 @@ default, so `cargo run` works with nothing set.
 | `TEMPLATES_DIR` | `templates` | Tera templates and blog bodies |
 | `TRANSLATIONS_DIR` | `translations` | Translation modules |
 
+### Secrets
+
+`secrets/` is not tracked. The production stack reads these files, which have to
+exist on the server before `docker compose up`:
+
+| File | Holds | Used by |
+| --- | --- | --- |
+| `secrets/recaptcha.env` | `RECAPTCHA_SECRET_KEY` | Contact form verification |
+| `secrets/github.env` | `GITHUB_TOKEN` | The CV download on `/me` |
+| `secrets/plausible-db.env` | `POSTGRES_PASSWORD` | Plausible's Postgres |
+| `secrets/plausible.env` | `DATABASE_URL` plus Plausible's own settings | Plausible |
+| `secrets/mail.env` | `SENDER_EMAIL`, `SENDER_PASSWORD` | `tools/send_email.py` |
+
+`DATABASE_URL` embeds the same password, so the two Plausible files have to
+agree:
+
+```
+# secrets/plausible-db.env
+POSTGRES_PASSWORD=<password>
+
+# secrets/plausible.env
+DATABASE_URL=postgres://postgres:<password>@plausible_db:5432/plausible
+```
+
+Changing `POSTGRES_PASSWORD` on its own does **not** change the password of a
+database that already exists: Postgres only reads that variable when it
+initialises an empty data directory, and `db-data` is a persistent volume. To
+rotate the password without dropping the analytics history, change it in the
+running database first, then update both files:
+
+```sh
+docker compose exec plausible_db \
+  psql -U postgres -c "ALTER USER postgres WITH PASSWORD '<new password>';"
+```
+
 ## Routes
 
 | Route | Notes |
