@@ -5,6 +5,30 @@ with a blog, a contact form and the DS2000 product pages. Built with Rust,
 [Axum](https://github.com/tokio-rs/axum) and [Tera](https://keats.github.io/tera/),
 served behind Caddy in production.
 
+[![The site's home page](static/images/projects/mechardo3d.webp)](https://mechardo3d.xyz)
+
+## Worth a look
+
+- **The sitemap cannot drift.** `sitemap.xml` and `robots.txt` are generated
+  from the routing table and the blog data rather than maintained by hand
+  ([`src/sitemap.rs`](src/sitemap.rs)).
+- **Language negotiation.** The cookie wins; otherwise `Accept-Language` is
+  parsed with its q-values. A prefix that is not a supported language is
+  redirected to the visitor's language instead of being rendered as the default
+  one ([`src/language_detection.rs`](src/language_detection.rs)).
+- **Translations are modular and kept in sync.** Every
+  `translations/{lang}/*.json` is merged at startup, and a test walks both trees
+  by key and by array index, so a list that grew in one language only fails the
+  build ([`src/translations.rs`](src/translations.rs)).
+- **Static files are not served by a directory server.** Request paths are
+  resolved one segment at a time so they cannot escape the static directory,
+  with `ETag`/`If-None-Match` on top ([`src/static_files.rs`](src/static_files.rs)).
+- **The CV is never a stale copy.** `/{lang}/cv` streams the latest release
+  asset of a private repository, cached in memory, so no PDF lives in this repo
+  ([`src/data/resume.rs`](src/data/resume.rs)).
+- **A template failure is a 500 page, not a panic**, and the error text never
+  reaches the client ([`src/pages.rs`](src/pages.rs)).
+
 ## Running it
 
 ```bash
