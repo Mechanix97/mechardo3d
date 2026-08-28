@@ -76,6 +76,10 @@ default, so `cargo run` works with nothing set.
 | `RESUME_ASSET_ES` | `Lucas_Rack_Software_Engineer_CV.pdf` | Release asset served to Spanish visitors |
 | `RESUME_ASSET_EN` | `Lucas_Rack_Software_Engineer_Resume.pdf` | Release asset served to English visitors |
 | `RESUME_CACHE_SECS` | `3600` | How long a downloaded PDF is reused before GitHub is asked again |
+| `REPORT_REPO` | `Mechanix97/Informe-Trabajo-Practico-Profesional` | Repository publishing the capstone report releases |
+| `REPORT_ASSET` | `main.pdf` | Release asset for the report, the same in both languages |
+| `REPORT_DOWNLOAD_NAME` | `Lucas_Rack_TPP_Medicion_IoT.pdf` | Name the browser saves the report under |
+| `REPORT_CACHE_SECS` | `21600` | How long the report PDF is reused before GitHub is asked again |
 | `MAX_MESSAGE_CHARS` | `5000` | Longest accepted contact message |
 | `DATA_DIR` | `data` | Blog posts and stored messages |
 | `STATIC_DIR` | `static` | Served under `/static` |
@@ -90,7 +94,7 @@ exist on the server before `docker compose up`:
 | File | Holds | Used by |
 | --- | --- | --- |
 | `secrets/recaptcha.env` | `RECAPTCHA_SECRET_KEY` | Contact form verification |
-| `secrets/github.env` | `GITHUB_TOKEN` | The CV download on `/me` |
+| `secrets/github.env` | `GITHUB_TOKEN` | The CV download on `/me` and the report download on the blog |
 | `secrets/plausible-db.env` | `POSTGRES_PASSWORD` | Plausible's Postgres |
 | `secrets/plausible.env` | `DATABASE_URL` plus Plausible's own settings | Plausible |
 | `secrets/mail.env` | `SENDER_EMAIL`, `SENDER_PASSWORD` | `tools/send_email.py` |
@@ -125,6 +129,7 @@ docker compose exec plausible_db \
 | `/{lang}` | Home (`es`, `en`) |
 | `/{lang}/me`, `/{lang}/blog`, `/{lang}/blog/{id}` | Pages |
 | `/{lang}/cv` | The resume PDF, proxied from the latest release of `RESUME_REPO` |
+| `/{lang}/tpp` | The capstone report PDF, proxied from the latest release of `REPORT_REPO` |
 | `/{lang}/contact` | `GET` renders the form, `POST` accepts it |
 | `/{lang}/contact_success` | Confirmation |
 | `/{lang}/ds2000`, `/{lang}/ds2000/terms-of-service`, `/{lang}/ds2000/privacy-policy` | Product |

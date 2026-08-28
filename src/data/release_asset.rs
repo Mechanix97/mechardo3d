@@ -7,15 +7,15 @@ use reqwest::header::{ACCEPT, AUTHORIZATION, USER_AGENT};
 use serde::Deserialize;
 use tracing::{info, warn};
 
-use crate::config::ResumeConfig;
+use crate::config::ReleaseAssetConfig;
 
 const GITHUB_API: &str = "https://api.github.com";
 const GITHUB_API_VERSION: &str = "2022-11-28";
 /// GitHub rejects API calls without one.
 const AGENT: &str = "mechardo3d-site";
-/// A resume that grows past this is a sign something else came back - an HTML
+/// A PDF that grows past this is a sign something else came back - an HTML
 /// error page, the wrong asset - and is not worth holding in memory.
-const MAX_PDF_BYTES: usize = 8 * 1024 * 1024;
+const MAX_PDF_BYTES: usize = 32 * 1024 * 1024;
 
 /// The PDF of one release asset, and when it was downloaded.
 #[derive(Clone)]
@@ -24,13 +24,14 @@ struct CachedPdf {
     fetched_at: Instant,
 }
 
-/// Serves the resume PDFs published as releases of a private repository.
+/// Serves a PDF published as a release asset of a (possibly private)
+/// repository.
 ///
 /// The repository stays private: the token never leaves the server, and
 /// visitors only ever see the bytes of the asset. Downloads are cached for
 /// `cache_ttl` so a burst of visitors is one call to GitHub, not one each.
-pub struct ResumeStore {
-    config: ResumeConfig,
+pub struct ReleaseAssetStore {
+    config: ReleaseAssetConfig,
     http: Client,
     /// Keyed by asset file name.
     cache: Mutex<HashMap<String, CachedPdf>>,
@@ -50,8 +51,8 @@ struct ReleaseAsset {
     id: u64,
 }
 
-impl ResumeStore {
-    pub fn new(config: ResumeConfig, http: Client) -> Self {
+impl ReleaseAssetStore {
+    pub fn new(config: ReleaseAssetConfig, http: Client) -> Self {
         Self {
             config,
             http,
@@ -61,6 +62,15 @@ impl ResumeStore {
 
     pub fn enabled(&self) -> bool {
         self.config.enabled()
+    }
+
+    /// Name the browser should save the file under. Falls back to the asset's
+    /// own name, which is what the resume wants and `main.pdf` plainly is not.
+    pub fn download_name(&self, lang: crate::language::Language) -> &str {
+        self.config
+            .download_name
+            .as_deref()
+            .unwrap_or_else(|| self.asset_name(lang))
     }
 
     /// Asset name for a language, as configured.
@@ -193,17 +203,24 @@ mod tests {
     use crate::language::Language;
     use std::time::Duration;
 
-    fn store(token: &str) -> ResumeStore {
-        ResumeStore::new(
-            ResumeConfig {
+    fn store(token: &str) -> ReleaseAssetStore {
+        ReleaseAssetStore::new(
+            ReleaseAssetConfig {
                 repo: "owner/repo".to_string(),
                 token: token.to_string(),
                 asset_es: "cv-es.pdf".to_string(),
                 asset_en: "cv-en.pdf".to_string(),
+                download_name: None,
                 cache_ttl: Duration::from_secs(60),
             },
             Client::new(),
         )
+    }
+
+    #[test]
+    fn falls_back_to_the_asset_name_for_the_download() {
+        let store = store("token");
+        assert_eq!(store.download_name(Language::Spanish), "cv-es.pdf");
     }
 
     #[test]

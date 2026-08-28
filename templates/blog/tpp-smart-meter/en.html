@@ -1,0 +1,290 @@
+<section class="surface p-6 sm:p-8 mb-12">
+
+    <p class="text-lg text-gray-700 dark:text-gray-200 mb-6">
+        In the Buenos Aires metropolitan area, <strong>40.6 %</strong> of the drinking water that gets delivered is
+        never accounted for. Not all of it leaks away — the point is that nobody knows where it goes. And only
+        <strong>19 %</strong> of dwellings have a connected meter, so most users are billed a flat rate computed
+        from the property's characteristics rather than from what they actually consume. Without metering there is
+        no way to spot a leak inside a home, no way to manage demand, and no way to tell how much of that 40 % is
+        network loss and how much is waste.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        That is the problem we took on for our capstone project in Electronics Engineering at FIUBA: design, build
+        and validate a complete water telemetering system, from the device that goes inside the meter box to the
+        server that receives the data. <strong>I defend it on 7 September</strong>, and I wanted to write down what
+        we built and, more to the point, what broke along the way.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        This was a two-person project. I took the <strong>central server</strong> and the <strong>circuit
+        board</strong>;
+        <a href="https://github.com/PuyGonzalo" target="_blank" rel="noopener"
+            class="text-blue-700 dark:text-blue-300 hover:underline">Gonzalo Puy</a>
+        took the <strong>firmware</strong>, which I also worked on. We wrote the report together.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">What we built</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The system has four pieces. A <strong>battery-powered IoT device</strong> that sits inside the household
+        meter box and connects to the flowmeter's pulse emitter, where each pulse stands for a fixed number of
+        litres. A <strong>firmware</strong> that counts those pulses and wakes once a day to report. A
+        <strong>custom PCB</strong> carrying the microcontroller, the cellular module and its antenna. And a
+        <strong>central server</strong>, the head-end system, that receives the readings, persists them and makes
+        them available to the utility.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/contexto-instalacion.webp"
+        alt="Diagram of the installation context: the water meter with pulse output and the IoT device inside the household box, talking to the head-end server over the cellular network"
+        width="1400" height="764" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The constraint that shapes every other decision is that <strong>the meter box has no mains power</strong>.
+        The device runs on a battery and has to last more than eight years untouched, because sending a crew to
+        swap cells house by house wrecks the economics of the whole thing. Everything else — the choice of
+        microcontroller, of modem, the design of the protocol — follows from that.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Eight years on one battery</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The device spends nearly its whole life asleep. An <strong>STM32L031K6</strong>, a Cortex-M0+ with 32 KB of
+        flash, stays in Stop mode counting pulses through an interrupt, and the <strong>Quectel BG95-M3</strong>
+        cellular module is fully powered down. Once a day the real-time clock wakes it, the modem comes up,
+        attaches to the network, sends the report, and everything goes back to sleep.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        We characterised the consumption with a <strong>Nordic Power Profiler Kit II</strong>, measuring the
+        microcontroller and modem domains separately. The numbers for a full cycle:
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/consumo-sesion.webp"
+        alt="Modem current trace over a full session: 97.53 mA average, 411.72 mA peak and 1.43 C of charge across 14.70 seconds"
+        width="1400" height="664" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <ul class="marker-list mb-6">
+        <li><strong>MCU sleep floor:</strong> 2.94 µA average, barely above a bare STM32L031.</li>
+        <li><strong>Real product floor:</strong> ~15.9 µA once the powered-down modem's leakage is added. The floor
+            is dominated by the cellular module, not by the microcontroller.</li>
+        <li><strong>One session:</strong> about 15 seconds and 0.41 mAh. The modem takes almost all of it: 97.5 mA
+            on average with 411.72 mA peaks during transmission, against 2.93 mA for the MCU.</li>
+        <li><strong>Annual consumption:</strong> around 0.3 Ah, split roughly evenly between the sessions
+            themselves and the leakage of the powered-down modem.</li>
+    </ul>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Against a <strong>17 Ah</strong> lithium thionyl chloride cell, 0.3 Ah a year clears the eight-year target
+        with a wide margin. The interesting result is what becomes the limiting factor:
+        <strong>no longer the device's consumption but the battery's own self-discharge</strong>. Once a design
+        reaches that point, squeezing the firmware further stops buying you anything.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Why a subset of IEC 62056 rather than full DLMS</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Standard smart metering systems speak DLMS/COSEM, the IEC 62056 family. The full stack is large: on a
+        device with 32 KB of flash and 8 KB of RAM it simply did not fit, and forcing it would have eaten the
+        memory budget the rest of the system needed.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The decision was to keep the standard's <strong>semantics</strong> without its stack: COSEM objects and
+        OBIS addressing, carried over a minimal binary protocol of our own. One of our devices will not
+        interoperate with a commercial DLMS concentrator, but the data it produces and the way you ask for it are
+        conceptually the same, so moving to the full stack later is a change of transport rather than a redesign.
+        A periodic session is seven messages: <code>HANDSHAKE</code>, <code>READ</code>, <code>WRITE</code> and a
+        closing <code>ACK</code>, with their responses.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">The server: why cluster a prototype</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The head-end system is written in <strong>Rust</strong>. The fair question is why a thesis prototype needs
+        clustering at all, and the answer is in the battery paragraph above: if the server goes down or saturates,
+        devices never complete their session, sit waiting, and retry. Every retry turns the radio back on.
+        <strong>A server availability problem is paid for in battery across the entire fleet</strong> — and that
+        battery cannot be topped up without sending a crew.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/arquitectura-hes.webp"
+        alt="Head-end system architecture: the backdoor receives messages and assigns a bucket to the scheduler, both persist through the persistence layer and report to the monitoring system"
+        width="997" height="836" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6 sm:max-w-lg sm:mx-auto">
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Nodes discover each other through gossip and watch each other with <strong>SWIM failure detection</strong>;
+        when a node drops, its devices are delegated to another. The scheduler spreads the fleet across
+        <strong>48 hourly buckets</strong> and assigns each new device to the least loaded one, so sessions spread
+        through the day instead of piling up. Persistence is PostgreSQL, and the whole system publishes metrics to
+        Prometheus with Grafana dashboards on top.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        To validate it we ran <strong>three nodes</strong> — one on the development server and two on a local
+        workstation, joined over a private network — against a single database, and threw
+        <strong>80 simulated devices</strong> at them in three waves. In test mode the scheduler books sessions
+        five minutes out instead of at the daily bucket hour, so you can watch many complete cycles in a short
+        window.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/grafana-nodos.webp"
+        alt="Grafana panel showing how devices are distributed across the cluster nodes"
+        width="1084" height="373" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">What did not work</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        This is the part of the project I got the most out of, and the part that shows up in no architecture
+        diagram.
+    </p>
+
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">The real cellular network would not allow the design</h3>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The protocol was designed as a <em>pull</em>: the server opens the connection towards the device during its
+        wake window. It is the right model, because it leaves the server in charge of when each meter talks. It
+        assumes exactly one thing — that the device is reachable at a stable address.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        With a commercial SIM on a public APN, it is not. The carrier hands out <strong>dynamic IPv6
+        addresses</strong> that change between activations, so the address a device announces at registration is
+        already stale by its next window. And the traffic crosses a <strong>carrier-grade NAT</strong>: a
+        connection opened from the server finds no translation entry and is dropped before it ever reaches the
+        device. The design was sound; the network just would not have it.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/cgnat.webp"
+        alt="Topology comparison: on a public APN the server's direct pull is blocked by the CGNAT and the device starts the session instead; with a private APN and a fixed IP the direct pull works"
+        width="1400" height="764" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The way out was to <strong>temporarily invert who starts the session</strong>. The device already keeps an
+        outbound socket open towards the server, and that socket does cross the CGNAT, leaving a pinhole the server
+        can answer through. We added one message, <code>SESSION_START_REQUEST</code>, whose only job is to tell the
+        server to fire the session over that socket. The rest of the protocol and the firmware's entire state
+        machine are reused untouched.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        What mattered most to me was that it <strong>left no debt behind</strong>. All of that logic is
+        compile-time conditional, behind a flag in the firmware and a feature in the server: build without them and
+        the original model comes back, intact. The production fix is not a software one but a commercial one — a
+        private APN with a fixed IP per device and a private interconnection with the carrier. That is the lesson:
+        <strong>in an IoT system, network provisioning is an architectural decision, and you negotiate it at the
+        start of the project rather than once the prototype is already running</strong>.
+    </p>
+
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">The 32 KB that were not enough</h3>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The STM32L031K6 was picked for its consumption, and for the meter's normal operation the choice was a good
+        one: application logic, modem state machines and the protocol all fit comfortably. The limit showed up with
+        two features the protocol already had a place for. <strong>Over-the-air updates</strong> need two firmware
+        images resident at once plus a bootloader to validate and switch them, which does not fit in a single 32 KB
+        bank. <strong>Message authentication</strong> competes for that same memory, on a core with no crypto
+        acceleration.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        There was no elegant solution here — there was an accepted, documented trade-off. Both features were left
+        pending, with their slot reserved in the protocol (the <code>EXECUTE</code> operation and the MAC field)
+        and a concrete path forward: a second hardware revision on an STM32L4, which the measured autonomy margin
+        can absorb without putting the eight years at risk. The expensive lesson:
+        <strong>size a microcontroller's memory for the functionality of the product's whole life, not for the
+        first version's</strong>.
+    </p>
+
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">A server bottleneck is paid for in battery</h3>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The first implementation of the message receiver was sequential: take one datagram, process it end to end —
+        validation, database write, response — and only then go back to listening. It was fine for functional
+        testing and plainly inadequate for a burst: a mass rollout, or every device retrying together after an
+        outage.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        While the loop is busy writing to PostgreSQL, incoming UDP datagrams pile up in the socket buffer until it
+        overflows, and the operating system drops them <strong>with no notification</strong>. Every lost message is
+        a device that exhausts its wait window, retries, and powers the radio up again. That is where it gets
+        interesting: in a battery-powered system, <strong>a concurrency decision on the server translates into
+        years of service life in the field</strong>.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        The receiver was redesigned as a concurrent dispatcher on Tokio: the main loop only receives and decodes,
+        handing each message to an independent task. A semaphore with a configurable cap provides the backpressure
+        that keeps a burst from exhausting memory or database connections. Validated against waves of concurrent
+        registrations, with no messages lost.
+    </p>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">The board</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        I designed the PCB in KiCad: microcontroller, cellular module with its impedance matching and antenna,
+        power from the battery with the reservoir supercapacitor that absorbs the 411 mA transmission peaks, and
+        the ground planes. It has to fit inside the household box, be sealed against water, and meet
+        electromagnetic compatibility requirements.
+    </p>
+
+    <img src="/static/images/blog/tpp-smart-meter/pcb-render.webp"
+        alt="3D render of the meter board, showing the cellular module, the microcontroller and the connection terminal"
+        width="1400" height="787" loading="lazy" decoding="async" class="w-full h-auto rounded-lg mb-6">
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">What is still open</h2>
+
+    <ul class="marker-list mb-6">
+        <li><strong>A pilot with production provisioning:</strong> a private APN with fixed IPs and a carrier
+            interconnection, to validate the original pull model in the field and drop the interim mechanism.</li>
+        <li><strong>The second hardware revision</strong> on a microcontroller with more memory, which unlocks
+            over-the-air updates and message authentication.</li>
+        <li><strong>Alternative access technologies:</strong> NB-IoT as the primary where CAT-M1 coverage is poor,
+            and a LoRaWAN variant if the utility would rather run its own gateways.</li>
+    </ul>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">The code</h2>
+
+    <ul class="marker-list mb-6">
+        <li><a href="https://github.com/Mechanix97/Head-end-system-TPP" target="_blank" rel="noopener"
+                class="text-blue-700 dark:text-blue-300 hover:underline font-semibold">Head-end-system-TPP</a> —
+            the central server in Rust: clustering, scheduler, persistence and monitoring.</li>
+        <li><a href="https://github.com/PuyGonzalo/Smart-Meter-Firmware-TPP" target="_blank" rel="noopener"
+                class="text-blue-700 dark:text-blue-300 hover:underline font-semibold">Smart-Meter-Firmware-TPP</a> —
+            the device firmware, in C, by Gonzalo Puy.</li>
+        <li><a href="https://github.com/Mechanix97/TPP-PCB" target="_blank" rel="noopener"
+                class="text-blue-700 dark:text-blue-300 hover:underline font-semibold">TPP-PCB</a> —
+            the KiCad project: schematics, layout and verification.</li>
+    </ul>
+
+    <div class="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/25 p-6 mb-6">
+        <p class="text-gray-800 dark:text-gray-100 mb-4">
+            The full report covers all of this at a depth a post cannot: the comparison of LPWAN technologies, the
+            theoretical energy budget, the protocol designed message by message, the board design, and the
+            economic feasibility analysis. It is written in Spanish.
+        </p>
+        <a href="/en/tpp" class="btn-primary">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+            </svg>
+            Download the report
+        </a>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">PDF, about 14 MB</p>
+    </div>
+
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-4">Closing</h2>
+
+    <p class="text-gray-700 dark:text-gray-300 mb-6">
+        What I take away is not any one of the pieces but having had to make them work together: low-power
+        electronics, radio frequency, embedded firmware, protocol design, distributed systems and economic
+        assessment. They are disciplines a degree exercises separately, and this project let you skip none of them.
+        The three problems above all came from the same root — a decision taken in one of those layers surfacing,
+        many months later, as a symptom in another.
+    </p>
+
+    <p class="text-gray-700 dark:text-gray-300">
+        The defence is on 7 September 2026.
+    </p>
+
+</section>

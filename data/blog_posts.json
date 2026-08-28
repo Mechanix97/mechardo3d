@@ -12,5 +12,19 @@
         "thumbnail": "/static/images/blog/alarma-iot/thumbnail.webp",
         "route": "iot-alarm",
         "date": "18-08-2025"
+    },
+    {
+        "id": "5",
+        "title": {
+            "es": "Telemedición de agua: de la PCB al clúster",
+            "en": "Water telemetering: from the PCB to the cluster"
+        },
+        "summary": {
+            "es": "Nuestro trabajo profesional de Ingeniería Electrónica: un sistema completo de medición inteligente de agua, con ocho años de autonomía, un servidor en Rust y tres problemas que no estaban en el plan.",
+            "en": "Our Electronics Engineering capstone: a complete smart water metering system, with eight years of battery life, a server in Rust and three problems that were not in the plan."
+        },
+        "thumbnail": "/static/images/blog/tpp-smart-meter/thumbnail.webp",
+        "route": "tpp-smart-meter",
+        "date": "28-08-2026"
     }
 ]
