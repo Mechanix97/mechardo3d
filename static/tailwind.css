@@ -563,6 +563,24 @@
     background: #374151;
 }
 
+/* Featured project: from the tablet breakpoint up it turns side by side and
+   the image fills the left column at whatever height the text needs, instead
+   of keeping the 16:9 box the smaller cards use. */
+@media (min-width: 768px) {
+    .project-card-featured {
+        flex-direction: row;
+    }
+
+    .project-card-featured .project-card-image {
+        width: 44%;
+        flex-shrink: 0;
+        height: auto;
+        aspect-ratio: auto;
+        align-self: stretch;
+        object-fit: cover;
+    }
+}
+
 .project-card-cta {
     display: inline-flex;
     align-items: center;

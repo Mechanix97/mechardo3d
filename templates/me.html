@@ -96,13 +96,20 @@
         <h2 class="section-title">{{ t.about.projects_section }}</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {# A project marked `featured` takes the full width of the grid and
+               lays out side by side, so the strongest piece of work does not
+               compete on equal footing with a course assignment. #}
             {% for project in t.about.projects %}
-            <a href="{{ project.url }}" target="_blank" rel="noopener" class="project-card">
+            <a href="{{ project.url }}" target="_blank" rel="noopener"
+                class="project-card{% if project.featured %} project-card-featured md:col-span-2{% endif %}">
                 <img src="{{ project.image }}" alt="{{ project.image_alt }}" width="800" height="450"
                     loading="lazy" decoding="async" class="project-card-image">
-                <div class="p-6 flex flex-col grow">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ project.name }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4 grow">{{ project.description }}</p>
+                <div class="p-6 {% if project.featured %}sm:p-8 {% endif %}flex flex-col grow">
+                    {% if project.featured %}
+                    <p class="mb-3"><span class="badge-current">{{ t.about.education_thesis_label }}</span></p>
+                    {% endif %}
+                    <h3 class="{% if project.featured %}text-2xl{% else %}text-xl{% endif %} font-semibold text-gray-900 dark:text-white mb-2">{{ project.name }}</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 grow{% if project.featured %} text-lg leading-relaxed{% endif %}">{{ project.description }}</p>
                     <ul class="flex flex-wrap gap-2 mb-4">
                         {% for tech in project.tech %}
                         <li class="tag">{{ tech }}</li>
