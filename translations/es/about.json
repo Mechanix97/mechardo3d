@@ -257,7 +257,7 @@
           "Telegram"
         ],
         "url": "https://github.com/Mechanix97/mqtt-IoT-alarm",
-        "image": "/static/images/blog/alarma-iot/thumbnail.webp",
+        "image": "/static/images/projects/alarma-iot.webp",
         "image_alt": "Interior del gabinete de la alarma, con el ESP32 y los relés",
         "cta": "repo"
       },
