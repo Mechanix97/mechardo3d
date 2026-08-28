@@ -9,6 +9,9 @@ use crate::language::Language;
 use crate::responses::HtmlWithLang;
 use crate::state::AppState;
 
+const SITE_NAME: &str = "Mechardo Labs";
+const DEFAULT_OG_IMAGE: &str = "static/images/og-image.png";
+
 /// Everything the shared `<head>` needs for one page.
 #[derive(Debug, Clone, Default)]
 pub struct PageMeta {
@@ -16,6 +19,13 @@ pub struct PageMeta {
     pub description: String,
     pub keywords: String,
     pub og_type: String,
+    /// Social card title. `None` uses the page title plus the site name, which
+    /// is what every page wants except the profile, where the person's own
+    /// name should lead.
+    pub og_title: Option<String>,
+    /// Social card image, as a path under the static directory. `None` falls
+    /// back to the site-wide card.
+    pub og_image: Option<String>,
     /// Path after the language prefix, without a leading slash (`ds2000`).
     pub canonical_path: String,
     pub schema: Option<Value>,
@@ -28,6 +38,8 @@ impl PageMeta {
             description: description.into(),
             keywords: String::new(),
             og_type: "website".to_string(),
+            og_title: None,
+            og_image: None,
             canonical_path: String::new(),
             schema: None,
         }
@@ -50,6 +62,18 @@ impl PageMeta {
 
     pub fn og_type(mut self, og_type: impl Into<String>) -> Self {
         self.og_type = og_type.into();
+        self
+    }
+
+    /// Replace the whole social card title, site name included.
+    pub fn og_title(mut self, og_title: impl Into<String>) -> Self {
+        self.og_title = Some(og_title.into());
+        self
+    }
+
+    /// Static path of the social card image (`images/og-me.png`).
+    pub fn og_image(mut self, og_image: impl Into<String>) -> Self {
+        self.og_image = Some(og_image.into());
         self
     }
 
@@ -111,8 +135,21 @@ pub fn base_context(state: &AppState, lang: Language, meta: &PageMeta) -> Contex
     context.insert("title", &meta.title);
     context.insert("meta_description", &meta.description);
     context.insert("meta_keywords", &meta.keywords);
-    context.insert("og_title", &meta.title);
+    let og_title = match &meta.og_title {
+        Some(title) => title.clone(),
+        None => format!("{} | {}", meta.title, SITE_NAME),
+    };
+    context.insert("og_title", &og_title);
     context.insert("og_description", &meta.description);
+    context.insert(
+        "og_image",
+        &state.config.url(
+            meta.og_image
+                .as_deref()
+                .unwrap_or(DEFAULT_OG_IMAGE)
+                .trim_start_matches('/'),
+        ),
+    );
     context.insert("og_type", &meta.og_type);
     context.insert("og_locale", lang.og_locale());
     context.insert("canonical_path", path);
