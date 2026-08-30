@@ -76,7 +76,7 @@
     <script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+<body class="page-shell bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
     <a href="#main-content"
         class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg">{{
@@ -104,7 +104,7 @@
             </ul>
         </div>
     </nav>
-    <main id="main-content" class="w-auto mx-auto">
+    <main id="main-content" class="grow w-auto mx-auto">
         {% block content %}
         {% endblock %}
     </main>

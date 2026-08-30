@@ -293,6 +293,20 @@
     background: linear-gradient(90deg, #93c5fd, #c4b5fd);
 }
 
+/* Page shell: pins the footer to the bottom of the viewport on pages whose
+   content is shorter than the screen, instead of leaving the page background
+   showing underneath it. The <main> inside takes the slack.
+
+   Both heights are declared on purpose: 100dvh follows the mobile browser's
+   collapsing toolbar, and the 100vh before it is what older engines fall back
+   to rather than ignoring the rule outright. */
+.page-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
 /* Footer: a subtle seam line on top of the existing gradient. */
 .site-footer {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
