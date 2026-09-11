@@ -22,27 +22,10 @@ services:
       start_period: 5s
     networks:
       - proxy
+      - edge
     volumes:
       - ./data:/usr/local/bin/data
       - ./secrets:/usr/local/bin/secrets
-
-  caddy:
-    build:
-      context: .
-      dockerfile: Dockerfile.caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - mechardo3d
-      - plausible
-    networks:
-      - proxy
 
   plausible_db:
     image: postgres:15
@@ -95,13 +78,16 @@ services:
         max-file: "3"
     networks:
       - proxy
+      - edge
 
 networks:
+  # Interna del stack: solo Plausible y sus bases.
   proxy:
+  # Compartida con el proxy de borde, que vive en docker-runners/caddy.
+  edge:
+    external: true
 
 volumes:
-  caddy_data:
-  caddy_config:
   data:
   db-data:
   event-data:
