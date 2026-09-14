@@ -85,8 +85,9 @@ try:
 except FileNotFoundError as e:
     if str(e).startswith("[Errno 2] No such file or directory:") and 'mail.env' in str(e):
         print(f"Error: The file ../secrets/mail.env was not found.")
-    else:
-        print(f"Error: The file {file_path} was not found.")
+    # No messages.json means nobody wrote to the contact form since the last
+    # run. That is the normal state, so stay quiet: this runs every minute
+    # from cron and an error line here would only grow the log forever.
 except ValueError as ve:
     print(f"Error: {str(ve)}")
 except Exception as e:
