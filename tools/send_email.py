@@ -32,7 +32,7 @@ try:
     # Set up the SMTP server
     try:
         server = smtplib.SMTP(smtp_server, smtp_port)
-        server.set_debuglevel(1)  # Enable debug output for troubleshooting
+        server.set_debuglevel(0)  # Set to 1 to dump the SMTP dialogue when debugging
         server.starttls(context=ssl.create_default_context())  # Enable TLS with secure context
         server.login(sender_email, sender_password)
     except smtplib.SMTPAuthenticationError as auth_err:
