@@ -26,17 +26,14 @@ stop-image:
 	@docker stop mechardo3d
 	@docker remove mechardo3d
 
-build-image-prod:
-	@docker build --no-cache -t mechardo3d-mechardo3d:latest .
-	
 run-prod:
 	@docker compose up -d
 
+deploy-prod:
+	@docker compose up -d --build --wait mechardo3d
+
 stop-prod:
-	@docker stop mechardo3d-caddy-1
-	@docker remove mechardo3d-caddy-1
-	@docker stop mechardo3d-mechardo3d-1
-	@docker remove mechardo3d-mechardo3d-1
+	@docker compose stop mechardo3d
 
 watch-css:
 	@npm run watch:css
