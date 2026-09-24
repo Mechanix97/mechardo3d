@@ -2,6 +2,9 @@
 
 REPO_DIR="/home/lucas/MECHARDO/mechardo3d"
 LOG_FILE="$REPO_DIR/log/update_containers.log"
+# Last commit that reached prod. Compared against HEAD after the pull, so a
+# deploy that failed is retried on the next run instead of being forgotten.
+DEPLOYED_HASH_FILE="$REPO_DIR/log/deployed_hash"
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 
@@ -26,12 +29,6 @@ cd "$REPO_DIR" || {
     exit 1
 }
 
-PREV_HASH=$(git rev-parse HEAD 2>/dev/null) || {
-    log "ERROR: cannot get initial commit hash"
-    exit 1
-}
-log "Hash before pull: $PREV_HASH"
-
 log "Doing git pull"
 git pull origin master >> "$LOG_FILE" 2>&1
 [ $? -eq 0 ] || {
@@ -41,52 +38,29 @@ git pull origin master >> "$LOG_FILE" 2>&1
 log "Git pull successful"
 
 CURRENT_HASH=$(git rev-parse HEAD 2>/dev/null) || {
-    log "ERROR: cannot get final commit hash"
+    log "ERROR: cannot get commit hash"
     exit 1
 }
-log "Hash after pull: $CURRENT_HASH"
+DEPLOYED_HASH=$(cat "$DEPLOYED_HASH_FILE" 2>/dev/null)
+log "HEAD: $CURRENT_HASH, deployed: ${DEPLOYED_HASH:-none}"
 
-if [ "$PREV_HASH" != "$CURRENT_HASH" ]; then
-    log "Changes detected, update required"
-    
-    log "Building new image"
-    make build-image-prod >> "$LOG_FILE" 2>&1
-    [ $? -eq 0 ] || {
-        log "ERROR building image"
-        exit 1
-    }
-    log "Image built successfully"
-
-    log "Stopping containers"
-    make stop-prod >> "$LOG_FILE" 2>&1
-    [ $? -eq 0 ] || {
-        log "ERROR stopping containers"
-        exit 1
-    }
-    log "Containers stopped successfully"
- 
-    log "Starting containers"
-    make run-prod >> "$LOG_FILE" 2>&1
-    [ $? -eq 0 ] || {
-        log "ERROR starting containers"
-        exit 1
-    }
-    log "Containers started successfully"
+if [ "$CURRENT_HASH" = "$DEPLOYED_HASH" ] && docker compose ps -q mechardo3d | grep -q .; then
+    log "Already deployed and running, no action needed"
     exit 0
-else
-    log "No changes detected, checking container status"
 fi
 
-if ! docker compose ps -q mechardo3d | grep -q .; then
-    log "Container mechardo3d is not running, starting it"
-    make run-prod >> "$LOG_FILE" 2>&1
-    [ $? -eq 0 ] || {
-        log "ERROR starting container"
-        exit 1
-    }
-    log "Container started successfully"
-else
-    log "Container mechardo3d is already running, no action needed"
-fi
+# Builds the image and recreates the container only if the image changed;
+# waits for the healthcheck, so a container that never gets healthy counts as
+# a failed deploy.
+log "Deploying $CURRENT_HASH"
+make deploy-prod >> "$LOG_FILE" 2>&1
+[ $? -eq 0 ] || {
+    log "ERROR deploying, will retry on next run"
+    exit 1
+}
 
-log "Script execution finished"
+echo "$CURRENT_HASH" > "$DEPLOYED_HASH_FILE" || {
+    log "ERROR: cannot write $DEPLOYED_HASH_FILE"
+    exit 1
+}
+log "Deployed $CURRENT_HASH successfully"

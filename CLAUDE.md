@@ -23,8 +23,11 @@ This is a Rust-based web application built with the Axum framework. It serves as
 - `make build-image` - Build Docker image locally
 - `make run-image` - Build and run Docker container locally (port 3000)
 - `make stop-image` - Stop and remove local Docker container
-- `make run-prod` - Run production stack with docker-compose (includes Caddy reverse proxy)
-- `make stop-prod` - Stop production containers
+- `make run-prod` - Run the production stack with docker-compose (the app and Plausible; Caddy
+  lives in the server infra repo)
+- `make deploy-prod` - Rebuild the app and recreate its container only if the image changed,
+  waiting for the healthcheck (what `tools/update_containers.sh` runs)
+- `make stop-prod` - Stop the app container
 
 ## Configuration
 
