@@ -63,10 +63,41 @@ async fn main() {
         listener,
         router(state).into_make_service_with_connect_info::<SocketAddr>(),
     )
+    .with_graceful_shutdown(shutdown_signal())
     .await
     {
         error!("Server stopped: {}", e);
         std::process::exit(1);
+    }
+
+    info!("Server shut down gracefully");
+}
+
+/// Resolves once the process receives Ctrl+C or, on Unix, SIGTERM - the signal
+/// `docker stop` / a compose recreate sends before escalating to SIGKILL. Letting
+/// `axum::serve` drain in-flight requests on either signal avoids that escalation
+/// and the abrupt connection drops that come with it.
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+            .expect("failed to install SIGTERM handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => info!("Received Ctrl+C, shutting down"),
+        _ = terminate => info!("Received SIGTERM, shutting down"),
     }
 }
 
