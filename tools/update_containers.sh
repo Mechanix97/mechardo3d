@@ -5,6 +5,7 @@ LOG_FILE="$REPO_DIR/log/update_containers.log"
 # Last commit that reached prod. Compared against HEAD after the pull, so a
 # deploy that failed is retried on the next run instead of being forgotten.
 DEPLOYED_HASH_FILE="$REPO_DIR/log/deployed_hash"
+LOCK_FILE="$REPO_DIR/log/update_containers.lock"
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
 
@@ -15,6 +16,14 @@ log() {
 touch "$LOG_FILE" || {
     echo "ERROR: cannot create log file: $LOG_FILE" >&2
     exit 1
+}
+
+# A cold build takes longer than the 5-minute cron interval; without the lock
+# the next run sees nothing deployed yet and starts a second build in parallel.
+exec 9>"$LOCK_FILE"
+flock -n 9 || {
+    log "Another run is still in progress, skipping"
+    exit 0
 }
 
 log "Starting script execution"
