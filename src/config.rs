@@ -92,6 +92,11 @@ pub struct RecaptchaConfig {
     pub min_score: f32,
     /// Skips verification entirely. Only meant for local development.
     pub disabled: bool,
+    /// Hostname a verification response must report (`RECAPTCHA_EXPECTED_HOSTNAME`,
+    /// defaults to `BASE_URL`'s host). Without this check, a token solved on a
+    /// different site that reuses the same site key would verify anyway.
+    /// Override it (e.g. to `localhost`) to test with a real secret locally.
+    pub expected_hostname: String,
 }
 
 impl AppConfig {
@@ -111,6 +116,11 @@ impl AppConfig {
         let base_url = env_string("BASE_URL", DEFAULT_BASE_URL)
             .trim_end_matches('/')
             .to_string();
+
+        let recaptcha_expected_hostname = env::var("RECAPTCHA_EXPECTED_HOSTNAME")
+            .ok()
+            .filter(|v| !v.trim().is_empty())
+            .unwrap_or_else(|| host_from_url(&base_url));
 
         let secret_file = env_string("RECAPTCHA_SECRET_FILE", DEFAULT_SECRET_FILE);
         let secret = env::var("RECAPTCHA_SECRET_KEY")
@@ -154,6 +164,7 @@ impl AppConfig {
                 secret,
                 min_score: env_parse("RECAPTCHA_MIN_SCORE", 0.6_f32),
                 disabled,
+                expected_hostname: recaptcha_expected_hostname,
             },
             resume: ReleaseAssetConfig {
                 repo: env_string("RESUME_REPO", DEFAULT_RESUME_REPO),
@@ -245,6 +256,18 @@ fn env_bool(key: &str, default: bool) -> bool {
     }
 }
 
+/// Host from a URL like `https://example.com` or `http://localhost:3000`,
+/// without the scheme or port.
+fn host_from_url(url: &str) -> String {
+    url.splitn(2, "://")
+        .last()
+        .unwrap_or(url)
+        .split(['/', ':'])
+        .next()
+        .unwrap_or("")
+        .to_string()
+}
+
 fn parse_bool(raw: &str) -> Option<bool> {
     match raw.trim().to_ascii_lowercase().as_str() {
         "1" | "true" | "yes" | "on" => Some(true),
@@ -325,6 +348,13 @@ mod tests {
     }
 
     #[test]
+    fn extracts_the_host_from_a_url() {
+        assert_eq!(host_from_url("https://mechardo3d.xyz"), "mechardo3d.xyz");
+        assert_eq!(host_from_url("http://localhost:3000"), "localhost");
+        assert_eq!(host_from_url("https://example.com/path"), "example.com");
+    }
+
+    #[test]
     fn builds_absolute_urls() {
         let config = AppConfig {
             base_url: "https://example.com".to_string(),
@@ -348,6 +378,7 @@ mod tests {
                 secret: "secret".to_string(),
                 min_score: 0.6,
                 disabled: false,
+                expected_hostname: "example.com".to_string(),
             },
             resume: ReleaseAssetConfig {
                 repo: "owner/repo".to_string(),

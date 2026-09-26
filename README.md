@@ -68,6 +68,7 @@ default, so `cargo run` works with nothing set.
 | `RECAPTCHA_SECRET_KEY` | from `secrets/recaptcha.env` | Secret used to verify submissions |
 | `RECAPTCHA_SECRET_FILE` | `secrets/recaptcha.env` | Fallback file for the secret |
 | `RECAPTCHA_MIN_SCORE` | `0.6` | Minimum score accepted from reCAPTCHA v3 |
+| `RECAPTCHA_EXPECTED_HOSTNAME` | `BASE_URL`'s host | Hostname a verification response must report; set to `localhost` to test with a real secret locally |
 | `RECAPTCHA_DISABLED` | `false` | Skips verification - local development only |
 | `CONTACT_RATE_LIMIT_SECS` | `300` | Minimum delay between submissions from one client |
 | `GITHUB_TOKEN` | from `secrets/github.env` | Read-only token for the resume repository. Unset hides the CV download |

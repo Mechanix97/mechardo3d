@@ -18,6 +18,10 @@ use crate::state::AppState;
 const MAX_NAME_CHARS: usize = 100;
 const MAX_EMAIL_CHARS: usize = 254;
 const RECAPTCHA_VERIFY_URL: &str = "https://www.google.com/recaptcha/api/siteverify";
+/// The action name `static/js/contact.js` executes the widget with
+/// (`grecaptcha.execute(key, { action: 'submit' })`). A token solved for any
+/// other action shouldn't verify here.
+const RECAPTCHA_ACTION: &str = "submit";
 
 #[derive(Deserialize, Serialize)]
 pub struct ContactForm {
@@ -31,8 +35,17 @@ pub struct ContactForm {
 #[derive(Deserialize)]
 struct RecaptchaResponse {
     success: bool,
-    /// Absent for reCAPTCHA v2 and for error responses.
+    /// Absent for reCAPTCHA v2 and for error responses. Required here: a
+    /// missing score (`success: true` included) usually means the secret key
+    /// isn't actually a v3 key, which would otherwise silently accept every
+    /// submission regardless of `min_score`.
     score: Option<f32>,
+    /// The action the widget was executed with (v3). Absent on failure.
+    #[serde(default)]
+    action: Option<String>,
+    /// The hostname the token was solved on. Absent on failure.
+    #[serde(default)]
+    hostname: Option<String>,
     #[serde(rename = "error-codes", default)]
     error_codes: Vec<String>,
 }
@@ -283,16 +296,67 @@ async fn verify_recaptcha(
         recaptcha_error(state, lang, StatusCode::INTERNAL_SERVER_ERROR)
     })?;
 
-    let score = verification.score.unwrap_or(config.min_score);
-    if !verification.success || score < config.min_score {
-        info!(
-            "reCAPTCHA rejected {} (success={}, score={}, errors={:?})",
-            ip, verification.success, score, verification.error_codes
-        );
-        return Err(recaptcha_error(state, lang, StatusCode::FORBIDDEN));
+    match recaptcha_rejection(&verification, config.min_score, &config.expected_hostname) {
+        None => Ok(()),
+        // A missing score means the secret isn't a v3 key, not that a
+        // visitor did anything wrong - that's a deploy-time misconfiguration,
+        // not a rejected submission.
+        Some("no_score") => {
+            error!(
+                "reCAPTCHA response for {} had no score - is RECAPTCHA_SECRET_KEY a v3 key?",
+                ip
+            );
+            Err(recaptcha_error(
+                state,
+                lang,
+                StatusCode::INTERNAL_SERVER_ERROR,
+            ))
+        }
+        Some(reason) => {
+            info!(
+                "reCAPTCHA rejected {} ({}): success={}, score={:?}, action={:?}, hostname={:?}, errors={:?}",
+                ip,
+                reason,
+                verification.success,
+                verification.score,
+                verification.action,
+                verification.hostname,
+                verification.error_codes
+            );
+            Err(recaptcha_error(state, lang, StatusCode::FORBIDDEN))
+        }
     }
+}
 
-    Ok(())
+/// Reason to reject a parsed reCAPTCHA verification response, or `None` when
+/// it should be accepted. Checking `action` and `hostname` (not just
+/// `success`/`score`) stops a token solved for a different action, or on a
+/// different site that reuses this site key, from passing anyway. See #55.
+fn recaptcha_rejection(
+    response: &RecaptchaResponse,
+    min_score: f32,
+    expected_hostname: &str,
+) -> Option<&'static str> {
+    if !response.success {
+        return Some("not_success");
+    }
+    let Some(score) = response.score else {
+        return Some("no_score");
+    };
+    if score < min_score {
+        return Some("low_score");
+    }
+    if response.action.as_deref() != Some(RECAPTCHA_ACTION) {
+        return Some("wrong_action");
+    }
+    if !response
+        .hostname
+        .as_deref()
+        .is_some_and(|hostname| hostname.eq_ignore_ascii_case(expected_hostname))
+    {
+        return Some("wrong_hostname");
+    }
+    None
 }
 
 fn recaptcha_error(state: &AppState, lang: Language, status: StatusCode) -> ContactError {
@@ -384,5 +448,77 @@ mod tests {
         assert!(!parsed.success);
         assert!(parsed.score.is_none());
         assert_eq!(parsed.error_codes, vec!["timeout-or-duplicate"]);
+    }
+
+    fn recaptcha_response(
+        success: bool,
+        score: Option<f32>,
+        action: &str,
+        hostname: &str,
+    ) -> RecaptchaResponse {
+        RecaptchaResponse {
+            success,
+            score,
+            action: Some(action.to_string()),
+            hostname: Some(hostname.to_string()),
+            error_codes: Vec::new(),
+        }
+    }
+
+    #[test]
+    fn accepts_a_matching_response() {
+        let response = recaptcha_response(true, Some(0.9), "submit", "mechardo3d.xyz");
+        assert_eq!(recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"), None);
+    }
+
+    #[test]
+    fn accepts_a_hostname_regardless_of_case() {
+        let response = recaptcha_response(true, Some(0.9), "submit", "Mechardo3D.xyz");
+        assert_eq!(recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"), None);
+    }
+
+    #[test]
+    fn rejects_a_missing_score_as_a_configuration_error() {
+        let response = recaptcha_response(true, None, "submit", "mechardo3d.xyz");
+        assert_eq!(
+            recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"),
+            Some("no_score")
+        );
+    }
+
+    #[test]
+    fn rejects_a_score_below_the_threshold() {
+        let response = recaptcha_response(true, Some(0.3), "submit", "mechardo3d.xyz");
+        assert_eq!(
+            recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"),
+            Some("low_score")
+        );
+    }
+
+    #[test]
+    fn rejects_a_token_solved_for_another_action() {
+        let response = recaptcha_response(true, Some(0.9), "login", "mechardo3d.xyz");
+        assert_eq!(
+            recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"),
+            Some("wrong_action")
+        );
+    }
+
+    #[test]
+    fn rejects_a_token_solved_on_another_hostname() {
+        let response = recaptcha_response(true, Some(0.9), "submit", "attacker.example");
+        assert_eq!(
+            recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"),
+            Some("wrong_hostname")
+        );
+    }
+
+    #[test]
+    fn rejects_an_unsuccessful_response_before_anything_else() {
+        let response = recaptcha_response(false, None, "submit", "mechardo3d.xyz");
+        assert_eq!(
+            recaptcha_rejection(&response, 0.5, "mechardo3d.xyz"),
+            Some("not_success")
+        );
     }
 }
