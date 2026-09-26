@@ -61,7 +61,7 @@ default, so `cargo run` works with nothing set.
 | `BASE_URL` | `https://mechardo3d.xyz` | Public origin used for canonical URLs, JSON-LD and the sitemap |
 | `RUST_LOG` | `info` | Log level (`trace`/`debug`/`info`/`warn`/`error`, `target=level` accepted) |
 | `COOKIE_SECURE` | `false` | Marks the language cookie `Secure` (on in production) |
-| `TRUST_PROXY_HEADERS` | `true` | Read the client IP from `X-Forwarded-For` / `X-Real-IP` |
+| `TRUST_PROXY_HEADERS` | `false` | Read the client IP from `X-Forwarded-For` (rightmost, parsed as an IP); turn on only behind a proxy that sets it, e.g. Caddy in production |
 | `HSTS_ENABLED` | `true` | Send `Strict-Transport-Security` |
 | `CONTENT_SECURITY_POLICY` | unset | Sent verbatim as the CSP header when set |
 | `RECAPTCHA_SITE_KEY` | public site key | Site key handed to the contact page |

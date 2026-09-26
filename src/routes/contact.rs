@@ -4,10 +4,10 @@ use axum::http::{HeaderMap, HeaderValue, StatusCode, header};
 use axum::response::{IntoResponse, Json, Redirect, Response};
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use std::net::SocketAddr;
+use std::net::{IpAddr, SocketAddr};
 use tracing::{error, info, warn};
 
-use crate::client_ip::client_ip;
+use crate::client_ip::{client_ip, rate_limit_key};
 use crate::data::messages::ContactMessage;
 use crate::extract::Lang;
 use crate::json_ld;
@@ -134,9 +134,13 @@ pub async fn contact_submit(
     Form(form): Form<ContactForm>,
 ) -> Result<Redirect, ContactError> {
     let ip = client_ip(&headers, addr, state.config.trust_proxy_headers);
+    let key = rate_limit_key(ip);
     let now = Utc::now();
 
-    if let Some(retry_after) = state.contact_rate_limit.retry_after(&ip, now) {
+    // Reserve the slot up front, before validation or reCAPTCHA verification,
+    // so concurrent or repeated attempts from the same client - successful or
+    // not - can't slip past the limit while it's still being decided.
+    if let Err(retry_after) = state.contact_rate_limit.try_acquire(&key, now) {
         info!("Rate limit hit for {}", ip);
         return Err(
             ContactError::new(&state, lang, StatusCode::TOO_MANY_REQUESTS, "rate_limit")
@@ -149,7 +153,7 @@ pub async fn contact_submit(
         ContactError::new(&state, lang, StatusCode::BAD_REQUEST, key)
     })?;
 
-    verify_recaptcha(&state, lang, &form.g_recaptcha_response, &ip).await?;
+    verify_recaptcha(&state, lang, &form.g_recaptcha_response, ip).await?;
 
     let stored = ContactMessage {
         name: message.name,
@@ -168,7 +172,6 @@ pub async fn contact_submit(
         ));
     }
 
-    state.contact_rate_limit.record(&ip, now);
     info!("Stored contact message from {}", ip);
 
     Ok(Redirect::to(&format!("/{}/contact_success", lang.as_str())))
@@ -230,7 +233,7 @@ async fn verify_recaptcha(
     state: &AppState,
     lang: Language,
     token: &str,
-    ip: &str,
+    ip: IpAddr,
 ) -> Result<(), ContactError> {
     let config = &state.config.recaptcha;
 
@@ -256,13 +259,14 @@ async fn verify_recaptcha(
         return Err(recaptcha_error(state, lang, StatusCode::FORBIDDEN));
     }
 
+    let ip_string = ip.to_string();
     let response = state
         .http
         .post(RECAPTCHA_VERIFY_URL)
         .form(&[
             ("secret", config.secret.as_str()),
             ("response", token),
-            ("remoteip", ip),
+            ("remoteip", ip_string.as_str()),
         ])
         .send()
         .await
