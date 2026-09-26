@@ -34,10 +34,13 @@ pub struct AppConfig {
     pub base_url: String,
     /// Whether the language cookie is flagged `Secure` (`COOKIE_SECURE`).
     pub cookie_secure: bool,
-    /// Whether `X-Forwarded-For` / `X-Real-IP` may be trusted (`TRUST_PROXY_HEADERS`).
+    /// Whether `X-Forwarded-For` may be trusted (`TRUST_PROXY_HEADERS`).
     ///
-    /// The app always runs behind Caddy in production, where the socket address
-    /// is the proxy's and not the visitor's.
+    /// The app runs behind Caddy in production, where the socket address is
+    /// the proxy's and not the visitor's, so `docker-compose.yml` turns this
+    /// on there. Defaults to `false`: trusting a client-controlled header when
+    /// nothing sits in front of the app to set it truthfully would let anyone
+    /// spoof their address and dodge the contact form's rate limit.
     pub trust_proxy_headers: bool,
     /// Optional `Content-Security-Policy` header value (`CONTENT_SECURITY_POLICY`).
     pub content_security_policy: Option<String>,
@@ -144,7 +147,7 @@ impl AppConfig {
             bind_addr,
             base_url,
             cookie_secure: env_bool("COOKIE_SECURE", false),
-            trust_proxy_headers: env_bool("TRUST_PROXY_HEADERS", true),
+            trust_proxy_headers: env_bool("TRUST_PROXY_HEADERS", false),
             content_security_policy: env::var("CONTENT_SECURITY_POLICY")
                 .ok()
                 .filter(|v| !v.trim().is_empty()),
