@@ -3,6 +3,7 @@ use axum::extract::Path;
 use axum::response::Response;
 use rand::rng;
 use rand::seq::IteratorRandom;
+use serde_json::json;
 use tracing::{error, warn};
 
 use crate::extract::Lang;
@@ -84,12 +85,27 @@ pub async fn blog_post(
         &description,
         &format!("{}/{}", lang.as_str(), canonical_path),
     );
+    let breadcrumbs = json_ld::breadcrumbs(
+        &state.config,
+        lang,
+        &[
+            (
+                state.translations.text_or(lang, "page_titles.home", "Home"),
+                "",
+            ),
+            (
+                state.translations.text_or(lang, "page_titles.blog", "Blog"),
+                "blog",
+            ),
+            (view.title.as_str(), canonical_path.as_str()),
+        ],
+    );
 
     let meta = page_meta(&state, lang, "blog_post")
         .title(view.title.as_str())
         .og_type("article")
         .path(canonical_path.as_str())
-        .schema(schema);
+        .schema(json!([schema, breadcrumbs]));
     let meta = if description.is_empty() {
         meta
     } else {
