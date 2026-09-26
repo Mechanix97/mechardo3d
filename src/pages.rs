@@ -17,7 +17,6 @@ const DEFAULT_OG_IMAGE: &str = "static/images/og-image.png";
 pub struct PageMeta {
     pub title: String,
     pub description: String,
-    pub keywords: String,
     pub og_type: String,
     /// Social card title. `None` uses the page title plus the site name, which
     /// is what every page wants except the profile, where the person's own
@@ -33,6 +32,9 @@ pub struct PageMeta {
     /// `"noindex, follow"` instead so it stays out of search results without
     /// blocking the crawl of links on it.
     pub robots: String,
+    /// Set when `title` already leads with the site name (the home page's
+    /// tagline), so the `<title>` tag doesn't repeat it.
+    pub full_title: bool,
     pub schema: Option<Value>,
 }
 
@@ -41,12 +43,12 @@ impl PageMeta {
         Self {
             title: title.into(),
             description: description.into(),
-            keywords: String::new(),
             og_type: "website".to_string(),
             og_title: None,
             og_image: None,
             canonical_path: String::new(),
             robots: "index, follow".to_string(),
+            full_title: false,
             schema: None,
         }
     }
@@ -61,8 +63,11 @@ impl PageMeta {
         self
     }
 
-    pub fn keywords(mut self, keywords: impl Into<String>) -> Self {
-        self.keywords = keywords.into();
+    /// Mark `title` as already including the site name, so `base_context`
+    /// renders it verbatim in `<title>` instead of appending `| Mechardo Labs`
+    /// again.
+    pub fn full_title(mut self) -> Self {
+        self.full_title = true;
         self
     }
 
@@ -99,8 +104,8 @@ impl PageMeta {
     }
 }
 
-/// Title, description and keywords for a page, read from the translations so
-/// that every language gets its own copy instead of sharing English text.
+/// Title and description for a page, read from the translations so that
+/// every language gets its own copy instead of sharing English text.
 pub fn page_meta(state: &AppState, lang: Language, page: &str) -> PageMeta {
     let title = state
         .translations
@@ -110,12 +115,8 @@ pub fn page_meta(state: &AppState, lang: Language, page: &str) -> PageMeta {
         .translations
         .text_or(lang, &format!("meta.{}.description", page), "")
         .to_string();
-    let keywords = state
-        .translations
-        .text_or(lang, &format!("meta.{}.keywords", page), "")
-        .to_string();
 
-    PageMeta::new(title, description).keywords(keywords)
+    PageMeta::new(title, description)
 }
 
 #[derive(Serialize)]
@@ -143,9 +144,13 @@ pub fn base_context(state: &AppState, lang: Language, meta: &PageMeta) -> Contex
     context.insert("lang", lang.as_str());
     context.insert("locale", lang.locale());
     context.insert("t", state.translations.for_lang(lang));
-    context.insert("title", &meta.title);
+    let html_title = if meta.full_title {
+        meta.title.clone()
+    } else {
+        format!("{} | {}", meta.title, SITE_NAME)
+    };
+    context.insert("title", &html_title);
     context.insert("meta_description", &meta.description);
-    context.insert("meta_keywords", &meta.keywords);
     let og_title = match &meta.og_title {
         Some(title) => title.clone(),
         None => format!("{} | {}", meta.title, SITE_NAME),
@@ -330,6 +335,7 @@ mod tests {
         assert_eq!(meta.og_type, "website");
         assert_eq!(meta.canonical_path, "blog");
         assert_eq!(meta.robots, "index, follow");
+        assert!(!meta.full_title);
         assert!(meta.schema.is_none());
     }
 
@@ -337,5 +343,11 @@ mod tests {
     fn robots_can_be_overridden_to_noindex() {
         let meta = PageMeta::new("Title", "Description").robots("noindex, follow");
         assert_eq!(meta.robots, "noindex, follow");
+    }
+
+    #[test]
+    fn full_title_can_be_marked() {
+        let meta = PageMeta::new("Mechardo Labs: ...", "Description").full_title();
+        assert!(meta.full_title);
     }
 }

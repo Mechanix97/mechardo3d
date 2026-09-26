@@ -172,7 +172,7 @@ no download button
 Every template receives:
 - `lang`, `locale` - Current language
 - `t` - Translations for the current language (access via `t.key_name`)
-- `title`, `meta_description`, `meta_keywords`, `og_*`, `robots`
+- `title`, `meta_description`, `og_*`, `robots`
 - `base_url`, `canonical_url`, `canonical_path`, `alternates`, `x_default_url`
 - `json_ld_schema` when the page provides one
 - Route-specific data (e.g. blog posts, contact form fields)
@@ -180,8 +180,8 @@ Every template receives:
 ### Translation System
 - Add translations to `translations/{lang}/[module].json`; new files are picked up automatically
 - Page copy lives under its own top-level key; SEO copy lives in `meta.json`
-  (`meta.<page>.description`, `meta.<page>.keywords`), page titles in `common.json` under
-  `page_titles`
+  (`meta.<page>.description` - there's no `keywords`, Google has ignored that tag since 2009), page
+  titles in `common.json` under `page_titles`
 - Use `{{ t.key_name }}` in templates and `state.translations.text_or(lang, "a.b", default)` in Rust
 - Keys must exist in both languages - a test enforces that
 

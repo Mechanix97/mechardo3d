@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} | Mechardo Labs</title>
+    <title>{{ title | default(value='Mechardo Labs') }}</title>
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="{{ meta_description | default(value='Mechardo Labs - Software Engineer | Rust, Blockchain, Electronics') }}">
-    <meta name="keywords" content="{{ meta_keywords | default(value='software engineer, rust, blockchain, discord, electronics') }}">
     <meta name="author" content="Lucas Rack">
     <meta name="robots" content="{{ robots | default(value='index, follow') }}">
     <link rel="canonical" href="{{ canonical_url | default(value=base_url) }}">
