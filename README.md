@@ -87,6 +87,18 @@ default, so `cargo run` works with nothing set.
 | `TEMPLATES_DIR` | `templates` | Tera templates and blog bodies |
 | `TRANSLATIONS_DIR` | `translations` | Translation modules |
 
+### Container user
+
+The app container runs as an unprivileged user (`app`, uid `10001`), not root.
+`./data` and `./secrets` are bind-mounted from the host
+(`docker-compose.yml`), so their ownership isn't fixed by the image - the host
+directories must be readable/writable by uid `10001` before `docker compose
+up`:
+
+```bash
+sudo chown -R 10001 ./data ./secrets
+```
+
 ### Secrets
 
 `secrets/` is not tracked. The production stack reads these files, which have to
