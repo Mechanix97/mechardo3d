@@ -108,7 +108,9 @@ pub async fn contact(Lang(lang): Lang, Extension(state): Extension<AppState>) ->
 
 /// `GET /{lang}/contact_success`
 pub async fn contact_success(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
-    let meta = page_meta(&state, lang, "message_sent").path("contact_success");
+    let meta = page_meta(&state, lang, "message_sent")
+        .path("contact_success")
+        .robots("noindex, follow");
     let schema = json_ld::webpage_schema(
         &state.config,
         lang,
