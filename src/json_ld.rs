@@ -92,41 +92,64 @@ pub fn organization_schema(config: &AppConfig, lang: Language) -> Value {
     })
 }
 
-/// JSON-LD for the DS2000 product page.
-pub fn product_schema(config: &AppConfig, lang: Language) -> Value {
-    let description = match lang {
-        Language::Spanish => "Botonera USB para Discord con 3 botones programables y 2 LEDs RGB",
-        Language::English => "USB Discord Button Box with 3 programmable buttons and 2 RGB LEDs",
-    };
-    let buttons = match lang {
-        Language::Spanish => {
-            "3 botones programables para mutear/desmutear, ensordecer/desensordecer, desconectar"
-        }
-        Language::English => "3 programmable buttons for mute/unmute, deafen/undeafen, disconnect",
-    };
-    let leds = match lang {
-        Language::Spanish => "2 LEDs RGB configurables",
-        Language::English => "2 configurable RGB LEDs",
-    };
-    let platforms = match lang {
-        Language::Spanish => "Compatible con Windows, macOS y Linux",
-        Language::English => "Compatible with Windows, macOS and Linux",
-    };
+/// Real product renders, used instead of the site's generic social card so
+/// the DS2000 page's structured data shows an actual photo of the device.
+const DS2000_IMAGES: [&str; 3] = [
+    "static/images/DS2000/renders/frente.webp",
+    "static/images/DS2000/renders/trasero.webp",
+    "static/images/DS2000/renders/superior.webp",
+];
+
+/// JSON-LD for the DS2000 project page.
+///
+/// It's a `WebPage`, not a `Product`: the DS2000 isn't for sale (it may end up
+/// open source instead), so it has no price or availability to declare, and
+/// marking it up as `Product` without an `offers`/`review`/`aggregateRating`
+/// is exactly what Search Console flags as invalid. See #67.
+pub fn ds2000_schema(config: &AppConfig, lang: Language, title: &str, description: &str) -> Value {
+    let images: Vec<String> = DS2000_IMAGES.iter().map(|path| config.url(path)).collect();
 
     json!({
         "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "DS2000",
+        "@type": "WebPage",
+        "name": title,
         "description": description,
         "url": config.url(&format!("{}/ds2000", lang.as_str())),
-        "image": config.url("static/images/og-image.png"),
-        "brand": {
-            "@type": "Brand",
-            "name": "Mechardo Labs"
-        },
-        "features": [buttons, leds, "USB Plug-and-Play", platforms],
+        "image": images,
         "inLanguage": lang.locale()
     })
+}
+
+/// JSON-LD `BreadcrumbList`. `crumbs` are `(name, path)` pairs, root first;
+/// `path` is the URL path after the language prefix (empty for the home
+/// page).
+pub fn breadcrumbs(config: &AppConfig, lang: Language, crumbs: &[(&str, &str)]) -> Value {
+    let items: Vec<Value> = crumbs
+        .iter()
+        .enumerate()
+        .map(|(index, (name, path))| {
+            json!({
+                "@type": "ListItem",
+                "position": index + 1,
+                "name": name,
+                "item": crumb_url(config, lang, path)
+            })
+        })
+        .collect();
+
+    json!({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": items
+    })
+}
+
+fn crumb_url(config: &AppConfig, lang: Language, path: &str) -> String {
+    if path.is_empty() {
+        config.url(lang.as_str())
+    } else {
+        config.url(&format!("{}/{}", lang.as_str(), path))
+    }
 }
 
 /// JSON-LD for a single blog post.
@@ -246,6 +269,51 @@ mod tests {
             "es/blog/4",
         );
         assert!(without_image.get("image").is_none());
+    }
+
+    #[test]
+    fn ds2000_is_a_webpage_not_a_product() {
+        // It isn't for sale (it may end up open source instead), so it has no
+        // offers/review/aggregateRating - marking it up as `Product` without
+        // those is exactly what Search Console flags as invalid. See #67.
+        let config = config();
+        let schema = ds2000_schema(&config, Language::Spanish, "DS2000", "Description");
+        assert_eq!(schema["@type"], json!("WebPage"));
+        assert_eq!(schema.get("offers"), None);
+        assert_eq!(
+            schema["image"],
+            json!([
+                config.url("static/images/DS2000/renders/frente.webp"),
+                config.url("static/images/DS2000/renders/trasero.webp"),
+                config.url("static/images/DS2000/renders/superior.webp"),
+            ])
+        );
+    }
+
+    #[test]
+    fn breadcrumbs_number_items_from_one_and_resolve_their_urls() {
+        let config = config();
+        let schema = breadcrumbs(
+            &config,
+            Language::Spanish,
+            &[
+                ("Inicio", ""),
+                ("DS2000", "ds2000"),
+                ("Privacidad", "ds2000/privacy-policy"),
+            ],
+        );
+
+        assert_eq!(schema["@type"], json!("BreadcrumbList"));
+        let items = schema["itemListElement"].as_array().expect("array");
+        assert_eq!(items.len(), 3);
+        assert_eq!(items[0]["position"], json!(1));
+        assert_eq!(items[0]["name"], json!("Inicio"));
+        assert_eq!(items[0]["item"], json!(config.url("es")));
+        assert_eq!(items[2]["position"], json!(3));
+        assert_eq!(
+            items[2]["item"],
+            json!(config.url("es/ds2000/privacy-policy"))
+        );
     }
 
     fn post() -> BlogPostView {
