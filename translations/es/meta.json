@@ -1,44 +1,34 @@
 {
   "meta": {
     "home": {
-      "description": "Mechardo Labs: ingeniería de software y electrónica. Rust, blockchain y hardware a medida. Portfolio, proyectos y blog.",
-      "keywords": "ingeniero de software, rust, blockchain, electrónica, portfolio, mechardo labs"
+      "description": "Mechardo Labs: ingeniería de software y electrónica. Rust, blockchain y hardware a medida. Portfolio, proyectos y blog."
     },
     "about": {
-      "description": "Lucas Rack: ingeniero de software en aplicaciones de AI/LLM, sistemas distribuidos en Rust y electrónica propia. Experiencia, proyectos y CV.",
-      "keywords": "lucas rack, ingeniero de software, ai engineer, rag, llm, rust, sistemas distribuidos, embebidos, portfolio, cv"
+      "description": "Lucas Rack: ingeniero de software en aplicaciones de AI/LLM, sistemas distribuidos en Rust y electrónica propia. Experiencia, proyectos y CV."
     },
     "blog": {
-      "description": "Blog de Mechardo Labs: artículos sobre Rust, blockchain, electrónica y desarrollo de software.",
-      "keywords": "blog, rust, blockchain, tutoriales, desarrollo de software"
+      "description": "Blog de Mechardo Labs: artículos sobre Rust, blockchain, electrónica y desarrollo de software."
     },
     "blog_post": {
-      "description": "Artículo del blog de Mechardo Labs sobre Rust, blockchain, electrónica y desarrollo de software.",
-      "keywords": "blog, rust, blockchain, tutoriales, desarrollo de software"
+      "description": "Artículo del blog de Mechardo Labs sobre Rust, blockchain, electrónica y desarrollo de software."
     },
     "contact": {
-      "description": "Escribinos a Mechardo Labs por email, GitHub, LinkedIn o Discord.",
-      "keywords": "contacto, mechardo labs, lucas rack"
+      "description": "Escribinos a Mechardo Labs por email, GitHub, LinkedIn o Discord."
     },
     "message_sent": {
-      "description": "Recibimos tu mensaje. Te respondemos a la brevedad.",
-      "keywords": "contacto, mechardo labs"
+      "description": "Recibimos tu mensaje. Te respondemos a la brevedad."
     },
     "ds2000": {
-      "description": "DS2000: botonera USB para Discord con 3 botones programables y LEDs RGB. Muteá, ensordecé y desconectate con un clic.",
-      "keywords": "botonera discord, mutear discord, botonera usb, streaming, ds2000"
+      "description": "DS2000: botonera USB para Discord con 3 botones programables y LEDs RGB. Muteá, ensordecé y desconectate con un clic."
     },
     "terms_of_service": {
-      "description": "Términos del servicio del DS2000, la botonera USB para Discord de Mechardo Labs.",
-      "keywords": "ds2000, términos del servicio, mechardo labs"
+      "description": "Términos del servicio del DS2000, la botonera USB para Discord de Mechardo Labs."
     },
     "privacy_policy": {
-      "description": "Política de privacidad del DS2000, la botonera USB para Discord de Mechardo Labs.",
-      "keywords": "ds2000, política de privacidad, mechardo labs"
+      "description": "Política de privacidad del DS2000, la botonera USB para Discord de Mechardo Labs."
     },
     "not_found": {
-      "description": "La página que buscás no existe o cambió de dirección.",
-      "keywords": "mechardo labs"
+      "description": "La página que buscás no existe o cambió de dirección."
     }
   }
 }

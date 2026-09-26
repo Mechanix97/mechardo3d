@@ -1,44 +1,34 @@
 {
   "meta": {
     "home": {
-      "description": "Mechardo Labs: software and electronics engineering. Rust, blockchain and custom hardware. Portfolio, projects and blog.",
-      "keywords": "software engineer, rust, blockchain, electronics, portfolio, mechardo labs"
+      "description": "Mechardo Labs: software and electronics engineering. Rust, blockchain and custom hardware. Portfolio, projects and blog."
     },
     "about": {
-      "description": "Lucas Rack: software engineer working on AI/LLM applications, distributed systems in Rust and custom electronics. Experience, projects and CV.",
-      "keywords": "lucas rack, software engineer, ai engineer, rag, llm, rust, distributed systems, embedded, portfolio, cv"
+      "description": "Lucas Rack: software engineer working on AI/LLM applications, distributed systems in Rust and custom electronics. Experience, projects and CV."
     },
     "blog": {
-      "description": "Mechardo Labs blog: articles about Rust, blockchain, electronics and software development.",
-      "keywords": "blog, rust, blockchain, tutorials, software development"
+      "description": "Mechardo Labs blog: articles about Rust, blockchain, electronics and software development."
     },
     "blog_post": {
-      "description": "An article from the Mechardo Labs blog about Rust, blockchain, electronics and software development.",
-      "keywords": "blog, rust, blockchain, tutorials, software development"
+      "description": "An article from the Mechardo Labs blog about Rust, blockchain, electronics and software development."
     },
     "contact": {
-      "description": "Get in touch with Mechardo Labs by email, GitHub, LinkedIn or Discord.",
-      "keywords": "contact, mechardo labs, lucas rack"
+      "description": "Get in touch with Mechardo Labs by email, GitHub, LinkedIn or Discord."
     },
     "message_sent": {
-      "description": "We got your message and will get back to you shortly.",
-      "keywords": "contact, mechardo labs"
+      "description": "We got your message and will get back to you shortly."
     },
     "ds2000": {
-      "description": "DS2000: USB Discord button box with 3 programmable buttons and RGB LEDs. Mute, deafen and disconnect with one click.",
-      "keywords": "discord button, discord mute, usb button box, streaming gear, ds2000"
+      "description": "DS2000: USB Discord button box with 3 programmable buttons and RGB LEDs. Mute, deafen and disconnect with one click."
     },
     "terms_of_service": {
-      "description": "Terms of service for the DS2000, the USB Discord button box by Mechardo Labs.",
-      "keywords": "ds2000, terms of service, mechardo labs"
+      "description": "Terms of service for the DS2000, the USB Discord button box by Mechardo Labs."
     },
     "privacy_policy": {
-      "description": "Privacy policy for the DS2000, the USB Discord button box by Mechardo Labs.",
-      "keywords": "ds2000, privacy policy, mechardo labs"
+      "description": "Privacy policy for the DS2000, the USB Discord button box by Mechardo Labs."
     },
     "not_found": {
-      "description": "The page you are looking for does not exist or has moved.",
-      "keywords": "mechardo labs"
+      "description": "The page you are looking for does not exist or has moved."
     }
   }
 }

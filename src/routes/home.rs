@@ -27,8 +27,20 @@ pub async fn index(Lang(lang): Lang, Extension(state): Extension<AppState>) -> R
         .map(|post| BlogPostView::new(post, lang))
         .collect();
 
-    let meta =
-        page_meta(&state, lang, "home").schema(json_ld::organization_schema(&state.config, lang));
+    // The home page's <title> leads with the brand and its tagline instead of
+    // the generic "Inicio"/"Home" plus " | Mechardo Labs" every other page
+    // gets - it's the one result Google shows for the site itself, so a
+    // one-word title says nothing a visitor doesn't already know.
+    let home_title = state
+        .translations
+        .text_or(lang, "page_titles.home_full", "Mechardo Labs")
+        .to_string();
+
+    let meta = page_meta(&state, lang, "home")
+        .title(home_title.as_str())
+        .full_title()
+        .og_title(home_title)
+        .schema(json_ld::organization_schema(&state.config, lang));
 
     let mut context = pages::base_context(&state, lang, &meta);
     context.insert("posts", &recent);
