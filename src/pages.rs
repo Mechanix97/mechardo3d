@@ -28,6 +28,11 @@ pub struct PageMeta {
     pub og_image: Option<String>,
     /// Path after the language prefix, without a leading slash (`ds2000`).
     pub canonical_path: String,
+    /// `<meta name="robots">` content. Defaults to `"index, follow"`; a page
+    /// with no content of its own (a 404, a bare confirmation page) sets
+    /// `"noindex, follow"` instead so it stays out of search results without
+    /// blocking the crawl of links on it.
+    pub robots: String,
     pub schema: Option<Value>,
 }
 
@@ -41,6 +46,7 @@ impl PageMeta {
             og_title: None,
             og_image: None,
             canonical_path: String::new(),
+            robots: "index, follow".to_string(),
             schema: None,
         }
     }
@@ -79,6 +85,11 @@ impl PageMeta {
 
     pub fn path(mut self, canonical_path: impl Into<String>) -> Self {
         self.canonical_path = canonical_path.into();
+        self
+    }
+
+    pub fn robots(mut self, robots: impl Into<String>) -> Self {
+        self.robots = robots.into();
         self
     }
 
@@ -158,7 +169,7 @@ pub fn base_context(state: &AppState, lang: Language, meta: &PageMeta) -> Contex
         "x_default_url",
         &canonical_url(state, Language::default(), path),
     );
-    context.insert("robots", "index, follow");
+    context.insert("robots", &meta.robots);
     context.insert("base_url", &state.config.base_url);
     context.insert("alternates", &alternates);
 
@@ -215,9 +226,9 @@ pub fn not_found(state: &AppState, lang: Language) -> Response {
         state
             .translations
             .text_or(lang, "errors.not_found_message", "Page not found."),
-    );
-    let mut context = base_context(state, lang, &meta);
-    context.insert("robots", "noindex, follow");
+    )
+    .robots("noindex, follow");
+    let context = base_context(state, lang, &meta);
 
     match state.tera.render("404.html", &context) {
         Ok(html) => HtmlWithLang::new(html, lang)
@@ -318,6 +329,13 @@ mod tests {
         let meta = PageMeta::new("Title", "Description").path("blog");
         assert_eq!(meta.og_type, "website");
         assert_eq!(meta.canonical_path, "blog");
+        assert_eq!(meta.robots, "index, follow");
         assert!(meta.schema.is_none());
+    }
+
+    #[test]
+    fn robots_can_be_overridden_to_noindex() {
+        let meta = PageMeta::new("Title", "Description").robots("noindex, follow");
+        assert_eq!(meta.robots, "noindex, follow");
     }
 }
