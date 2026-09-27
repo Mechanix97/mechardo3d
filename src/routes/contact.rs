@@ -214,6 +214,18 @@ fn validate(
     if message.chars().count() > max_message_chars {
         return Err("message_too_long");
     }
+    // `name` ends up in the email Subject and `email` in Reply-To - a stray
+    // \r\n there could inject headers (CVE-2024-6923). `message` only ever
+    // reaches the body, so its own line breaks are fine.
+    if name.chars().any(|c| c.is_control()) || email.chars().any(|c| c.is_control()) {
+        return Err("invalid_characters");
+    }
+    if message
+        .chars()
+        .any(|c| c.is_control() && c != '\n' && c != '\r')
+    {
+        return Err("invalid_characters");
+    }
     if !is_plausible_email(email) {
         return Err("invalid_email");
     }
@@ -433,6 +445,45 @@ mod tests {
                 email
             );
         }
+    }
+
+    #[test]
+    fn rejects_control_characters_in_name_or_email() {
+        assert_eq!(
+            validate(
+                &form(
+                    "Lucas\r\nBcc: evil@example.com",
+                    "lucas@example.com",
+                    "hola"
+                ),
+                5000
+            )
+            .err(),
+            Some("invalid_characters")
+        );
+        assert_eq!(
+            validate(
+                &form("Lucas", "lucas@example.com\r\nBcc:evil@example.com", "hola"),
+                5000
+            )
+            .err(),
+            Some("invalid_characters")
+        );
+    }
+
+    #[test]
+    fn allows_line_breaks_in_message() {
+        let validated = validate(&form("Lucas", "lucas@example.com", "hola\r\nchau"), 5000)
+            .expect("newlines in the message body are fine");
+        assert_eq!(validated.message, "hola\r\nchau");
+    }
+
+    #[test]
+    fn rejects_other_control_characters_in_message() {
+        assert_eq!(
+            validate(&form("Lucas", "lucas@example.com", "hola\x07chau"), 5000).err(),
+            Some("invalid_characters")
+        );
     }
 
     #[test]

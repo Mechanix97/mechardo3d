@@ -51,6 +51,7 @@
     "contact_unknown": "Ocurrió un error desconocido. Probá de nuevo.",
     "contact_submit": "Error al enviar el formulario. Probá de nuevo.",
     "invalid_email": "Revisá la dirección de email.",
+    "invalid_characters": "El nombre o el email contienen caracteres no permitidos.",
     "too_long": "El nombre o el email son demasiado largos.",
     "message_too_long": "El mensaje es demasiado largo.",
     "not_found_title": "Página no encontrada",
