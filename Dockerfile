@@ -15,7 +15,7 @@ FROM node:20 AS tailwind
 
 WORKDIR /mechardo3d
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 COPY static/tailwind.css ./static/
 COPY templates ./templates
 # The JS builds class names too (language picker), so Tailwind has to scan it.
@@ -41,20 +41,22 @@ COPY translations ./translations
 COPY --from=tailwind /mechardo3d/static/style.css ./static/style.css
 RUN cargo build --release $BUILD_FLAGS
 
-FROM ubuntu:24.04
+FROM debian:bookworm-slim
 WORKDIR /usr/local/bin
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
-    iputils-ping \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd -r -u 10001 app
 
-COPY --from=builder /mechardo3d/data ./data
-COPY --from=builder /mechardo3d/target/release/mechardo3d .
-COPY --from=builder /mechardo3d/templates ./templates
-COPY --from=builder /mechardo3d/static ./static
-COPY --from=builder /mechardo3d/translations ./translations
+COPY --from=builder --chown=app:app /mechardo3d/data ./data
+COPY --from=builder --chown=app:app /mechardo3d/target/release/mechardo3d .
+COPY --from=builder --chown=app:app /mechardo3d/templates ./templates
+COPY --from=builder --chown=app:app /mechardo3d/static ./static
+COPY --from=builder --chown=app:app /mechardo3d/translations ./translations
+
+USER app
 
 EXPOSE 3000
 
