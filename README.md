@@ -74,8 +74,8 @@ default, so `cargo run` works with nothing set.
 | `GITHUB_TOKEN` | from `secrets/github.env` | Read-only token for the resume repository. Unset hides the CV download |
 | `GITHUB_SECRET_FILE` | `secrets/github.env` | Fallback file for the token |
 | `RESUME_REPO` | `Mechanix97/Resume` | `owner/name` of the repository publishing the resume releases |
-| `RESUME_ASSET_ES` | `Lucas_Rack_Software_Engineer_CV.pdf` | Release asset served to Spanish visitors |
-| `RESUME_ASSET_EN` | `Lucas_Rack_Software_Engineer_Resume.pdf` | Release asset served to English visitors |
+| `RESUME_ASSET_ES` | `Lucas_Rack_Electronics_Engineer_CV.pdf` | Release asset served to Spanish visitors |
+| `RESUME_ASSET_EN` | `Lucas_Rack_Electronics_Engineer_Resume.pdf` | Release asset served to English visitors |
 | `RESUME_CACHE_SECS` | `3600` | How long a downloaded PDF is reused before GitHub is asked again |
 | `REPORT_REPO` | `Mechanix97/Informe-Trabajo-Practico-Profesional` | Repository publishing the capstone report releases |
 | `REPORT_ASSET` | `main.pdf` | Release asset for the report, the same in both languages |
