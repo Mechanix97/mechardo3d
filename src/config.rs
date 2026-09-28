@@ -56,6 +56,14 @@ pub struct AppConfig {
     pub data_dir: PathBuf,
     pub static_dir: PathBuf,
     pub templates_dir: PathBuf,
+    /// Blog post bodies (`content/blog/{route}/{lang}.html`).
+    ///
+    /// Kept out of `templates_dir` on purpose: these files are never rendered
+    /// by Tera (`BlogStore` reads them as plain HTML), but `templates_dir` is
+    /// globbed wholesale at startup. A post body with a stray `{{` or `{%` -
+    /// entirely plausible in a code sample - used to make that glob fail,
+    /// refusing to start the whole site. See #90.
+    pub content_dir: PathBuf,
     pub translations_dir: PathBuf,
 }
 
@@ -190,6 +198,7 @@ impl AppConfig {
             data_dir: PathBuf::from(env_string("DATA_DIR", "data")),
             static_dir: PathBuf::from(env_string("STATIC_DIR", "static")),
             templates_dir: PathBuf::from(env_string("TEMPLATES_DIR", "templates")),
+            content_dir: PathBuf::from(env_string("CONTENT_DIR", "content")),
             translations_dir: PathBuf::from(env_string("TRANSLATIONS_DIR", "translations")),
         };
 
@@ -271,6 +280,7 @@ impl AppConfig {
             data_dir: PathBuf::from("data"),
             static_dir: PathBuf::from("static"),
             templates_dir: PathBuf::from("templates"),
+            content_dir: PathBuf::from("content"),
             translations_dir: PathBuf::from("translations"),
         }
     }

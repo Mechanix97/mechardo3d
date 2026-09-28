@@ -3,6 +3,7 @@
 /* Tailwind v4 is configured from CSS. These replace the old tailwind.config.js,
    which v4 ignored unless referenced explicitly with @config. */
 @source "../templates";
+@source "../content";
 @source "../static/js";
 
 /* The site is dark only. <html> always carries .dark, so the dark: variants

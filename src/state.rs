@@ -43,7 +43,7 @@ impl AppState {
         tera.register_filter("date_format", date_format::date_format);
 
         let translations = Translations::load(&config.translations_dir);
-        let blog = BlogStore::new(&config.data_dir, &config.templates_dir);
+        let blog = BlogStore::new(&config.data_dir, &config.content_dir);
         blog.warm();
 
         let messages = MessageStore::new(&config.data_dir);

@@ -84,7 +84,8 @@ default, so `cargo run` works with nothing set.
 | `MAX_MESSAGE_CHARS` | `5000` | Longest accepted contact message |
 | `DATA_DIR` | `data` | Blog posts and stored messages |
 | `STATIC_DIR` | `static` | Served under `/static` |
-| `TEMPLATES_DIR` | `templates` | Tera templates and blog bodies |
+| `TEMPLATES_DIR` | `templates` | Tera templates |
+| `CONTENT_DIR` | `content` | Blog post bodies (`content/blog/{route}/{lang}.html`) |
 | `TRANSLATIONS_DIR` | `translations` | Translation modules |
 
 ### Container user
@@ -172,7 +173,10 @@ src/
   data/              blog store (cached) and message store
   models/            blog post model and view
 translations/{lang}/*.json   loaded and merged automatically
-templates/           Tera templates, blog bodies under templates/blog/
+templates/           Tera templates
+content/             blog post bodies, content/blog/{route}/{lang}.html - not
+                     Tera templates, so a stray `{{`/`{%` in one can't stop
+                     the site from starting
 ```
 
 Contributor notes and conventions live in [CLAUDE.md](CLAUDE.md).
