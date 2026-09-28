@@ -150,9 +150,20 @@ pub async fn contact_submit(
     let key = rate_limit_key(ip);
     let now = Utc::now();
 
-    // Reserve the slot up front, before validation or reCAPTCHA verification,
-    // so concurrent or repeated attempts from the same client - successful or
-    // not - can't slip past the limit while it's still being decided.
+    // Validate first: it's local and touches neither reCAPTCHA nor storage,
+    // so running it before the slot is reserved can't be used to bypass the
+    // limit - there's nothing here a script can "retry" its way around. This
+    // also means a typo (a malformed email, a field left too long) doesn't
+    // cost the visitor their one submission for the window; only a request
+    // that actually reaches reCAPTCHA does. See #91.
+    let message = validate(&form, state.config.max_message_chars).map_err(|key| {
+        info!("Rejected contact submission from {}: {}", ip, key);
+        ContactError::new(&state, lang, StatusCode::BAD_REQUEST, key)
+    })?;
+
+    // Reserve the slot up front, before reCAPTCHA verification, so concurrent
+    // or repeated attempts from the same client - successful or not - can't
+    // slip past the limit while it's still being decided.
     if let Err(retry_after) = state.contact_rate_limit.try_acquire(&key, now) {
         info!("Rate limit hit for {}", ip);
         return Err(
@@ -160,11 +171,6 @@ pub async fn contact_submit(
                 .retry_after(retry_after),
         );
     }
-
-    let message = validate(&form, state.config.max_message_chars).map_err(|key| {
-        info!("Rejected contact submission from {}: {}", ip, key);
-        ContactError::new(&state, lang, StatusCode::BAD_REQUEST, key)
-    })?;
 
     verify_recaptcha(&state, lang, &form.g_recaptcha_response, ip).await?;
 
@@ -393,6 +399,60 @@ mod tests {
             message: message.to_string(),
             g_recaptcha_response: "token".to_string(),
         }
+    }
+
+    /// A rejected submission used to burn the same rate-limit slot a valid
+    /// one needs, since the slot was reserved before `validate()` ran: a
+    /// visitor who mistyped their email got locked out for
+    /// `CONTACT_RATE_LIMIT_SECS` just for fixing the typo. See #91.
+    #[tokio::test]
+    async fn an_invalid_submission_does_not_burn_the_rate_limit_slot() {
+        use crate::config::{AppConfig, RecaptchaConfig};
+
+        let dir = std::env::temp_dir().join(format!("mechardo-contact-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let config = AppConfig {
+            data_dir: dir.clone(),
+            recaptcha: RecaptchaConfig {
+                disabled: true,
+                ..AppConfig::for_tests().recaptcha
+            },
+            ..AppConfig::for_tests()
+        };
+        let state = AppState::build(config).expect("state should build");
+        let addr = SocketAddr::from(([203, 0, 113, 9], 12345));
+        let headers = HeaderMap::new();
+
+        // Left blank on purpose: `validate()` rejects it before anything
+        // touches the rate limiter.
+        let invalid = form("Lucas", "lucas@example.com", "");
+        let rejected = contact_submit(
+            Lang(Language::Spanish),
+            Extension(state.clone()),
+            ConnectInfo(addr),
+            headers.clone(),
+            Form(invalid),
+        )
+        .await;
+        assert!(rejected.is_err(), "an empty message should be rejected");
+
+        // Same client, right after, now with a valid message: must not be
+        // rate-limited by the rejected attempt above.
+        let valid = form("Lucas", "lucas@example.com", "hola");
+        let accepted = contact_submit(
+            Lang(Language::Spanish),
+            Extension(state),
+            ConnectInfo(addr),
+            headers,
+            Form(valid),
+        )
+        .await;
+        assert!(
+            accepted.is_ok(),
+            "a valid submission right after a rejected one should not be rate-limited"
+        );
+
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]

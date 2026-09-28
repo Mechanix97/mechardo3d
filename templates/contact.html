@@ -47,6 +47,7 @@
                             <label for="email" class="field-label">{{ t.contact.form.email }}</label>
                             <input type="email" id="email" name="email" value="{{ email | default(value='') }}" maxlength="254"
                                 autocomplete="email" inputmode="email" class="field h-13 px-4"
+                                pattern="[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}" title="{{ t.errors.invalid_email }}"
                                 placeholder="{{ t.contact.form.email_placeholder }}" required>
                         </div>
                     </div>
