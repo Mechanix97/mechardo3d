@@ -3,6 +3,16 @@
 
 <section class="wrap">
     <div class="ruler"><span>§ DS2000 — {{ t.labels.datasheet }}</span><span>Rev A</span></div>
+    <div class="logo3d mt-8 border border-line">
+        <span aria-hidden="true" class="logo3d-glow"></span>
+        <div class="logo3d-spin">
+            {% for i in range(end=12) %}
+            <img src="/static/images/DS2000/logo/ds2000-logo.webp" style="--i: {{ i }}"
+                {% if i == 11 %}alt="DS2000"{% else %}alt="" aria-hidden="true"{% endif %}
+                width="746" height="764" decoding="async" class="logo3d-layer">
+            {% endfor %}
+        </div>
+    </div>
     <div class="grid grid-cols-1 items-start gap-10 pt-8 pb-14 md:grid-cols-12 md:gap-12 md:pt-16 md:pb-24">
 
         <!-- Gallery -->

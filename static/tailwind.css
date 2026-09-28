@@ -1190,3 +1190,85 @@
         transform: none;
     }
 }
+
+/* Logo 3D: the flat DS2000 logo is stacked in thin layers along Z so the
+   spinning plate reads as a solid slab with an edge. The extra layers are
+   decorative copies (alt="", aria-hidden); the last one is the real image. */
+.logo3d {
+    position: relative;
+    isolation: isolate;
+    perspective: 900px;
+    height: 15rem;
+    overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+    .logo3d {
+        height: 20rem;
+    }
+}
+
+.logo3d-spin {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: logo3d-spin 10s linear infinite;
+}
+
+.logo3d-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.75rem;
+    transform: translateZ(calc(var(--i) * 3px - 16px));
+}
+
+.logo3d-glow {
+    position: absolute;
+    inset: 4% 26%;
+    z-index: -1;
+    border-radius: 9999px;
+    background: radial-gradient(circle, var(--color-lime), transparent 70%);
+    filter: blur(56px);
+    opacity: 0.4;
+    pointer-events: none;
+    animation: logo3d-pulse 4s ease-in-out infinite;
+}
+
+@keyframes logo3d-spin {
+    from {
+        transform: rotateX(-8deg) rotateY(0deg);
+    }
+
+    to {
+        transform: rotateX(-8deg) rotateY(360deg);
+    }
+}
+
+@keyframes logo3d-pulse {
+
+    0%,
+    100% {
+        opacity: 0.25;
+        transform: scale(0.95);
+    }
+
+    50% {
+        opacity: 0.55;
+        transform: scale(1.1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo3d-spin {
+        animation: none;
+        transform: rotateX(-8deg) rotateY(-25deg);
+    }
+
+    .logo3d-glow {
+        animation: none;
+    }
+}
