@@ -1190,3 +1190,54 @@
         transform: none;
     }
 }
+
+/* Logo 3D: the spinning DS2000 logo is a pre-rendered animated WebP (one
+   image, so the browser does no 3D work). Only a static glow and a cheap
+   transform-only float sit around it. */
+.logo3d {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 17rem;
+}
+
+@media (min-width: 48rem) {
+    .logo3d {
+        height: 24rem;
+    }
+}
+
+.logo3d-img {
+    height: 100%;
+    width: auto;
+    animation: logo3d-float 4s ease-in-out infinite;
+}
+
+.logo3d-glow {
+    position: absolute;
+    inset: 6% 24%;
+    z-index: -1;
+    border-radius: 9999px;
+    background: radial-gradient(closest-side, rgb(59 130 246 / 0.35), transparent);
+    pointer-events: none;
+}
+
+@keyframes logo3d-float {
+
+    0%,
+    100% {
+        transform: translateY(0.35rem);
+    }
+
+    50% {
+        transform: translateY(-0.5rem);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo3d-img {
+        animation: none;
+    }
+}
