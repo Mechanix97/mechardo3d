@@ -35,10 +35,10 @@ struct CachedContent {
 }
 
 impl BlogStore {
-    pub fn new(data_dir: &Path, templates_dir: &Path) -> Self {
+    pub fn new(data_dir: &Path, content_dir: &Path) -> Self {
         Self {
             posts_path: data_dir.join("blog_posts.json"),
-            content_dir: templates_dir.join("blog"),
+            content_dir: content_dir.join("blog"),
             posts: RwLock::new(None),
             content: RwLock::new(HashMap::new()),
         }
@@ -163,7 +163,7 @@ mod tests {
 
     #[test]
     fn loads_repository_posts_sorted_by_date() {
-        let store = BlogStore::new(Path::new("data"), Path::new("templates"));
+        let store = BlogStore::new(Path::new("data"), Path::new("content"));
         let posts = store.posts().expect("repository posts should parse");
         assert!(!posts.is_empty());
         for pair in posts.windows(2) {
@@ -173,7 +173,7 @@ mod tests {
 
     #[test]
     fn serves_posts_from_cache_on_repeated_reads() {
-        let store = BlogStore::new(Path::new("data"), Path::new("templates"));
+        let store = BlogStore::new(Path::new("data"), Path::new("content"));
         let first = store.posts().expect("posts");
         let second = store.posts().expect("posts");
         assert!(Arc::ptr_eq(&first, &second));
@@ -181,7 +181,7 @@ mod tests {
 
     #[test]
     fn reads_post_bodies_for_every_language() {
-        let store = BlogStore::new(Path::new("data"), Path::new("templates"));
+        let store = BlogStore::new(Path::new("data"), Path::new("content"));
         let posts = store.posts().expect("posts");
         for post in posts.iter() {
             let Some(route) = post.route.as_deref() else {
@@ -200,7 +200,42 @@ mod tests {
 
     #[test]
     fn rejects_traversal_routes_at_runtime() {
-        let store = BlogStore::new(Path::new("data"), Path::new("templates"));
+        let store = BlogStore::new(Path::new("data"), Path::new("content"));
         assert!(store.content("../../secrets", Language::Spanish).is_err());
+    }
+
+    /// Post bodies used to live under `templates/blog/`, so Tera globbed and
+    /// parsed them at startup along with every real template. A body
+    /// containing a stray `{{` or `{%` - entirely plausible in a code sample -
+    /// made that glob fail and refused to start the whole site. `content_dir`
+    /// is now a directory Tera never looks at, so a broken body can neither
+    /// stop the app from building nor stop `BlogStore` from serving it as the
+    /// plain text it is. See #90.
+    #[test]
+    fn a_broken_post_body_does_not_stop_tera_from_building() {
+        let dir = std::env::temp_dir().join(format!("mechardo-content-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&dir);
+        let templates_dir = dir.join("templates");
+        let content_dir = dir.join("content");
+        fs::create_dir_all(&templates_dir).expect("create templates dir");
+        fs::create_dir_all(content_dir.join("blog/broken")).expect("create content dir");
+        fs::write(templates_dir.join("index.html"), "<html></html>").expect("write template");
+
+        let broken_body = "Example: `{{ let x = 5; }}` and a lone `{% for`";
+        fs::write(content_dir.join("blog/broken/es.html"), broken_body).expect("write body");
+
+        let glob = format!("{}/**/*", templates_dir.display());
+        assert!(
+            tera::Tera::new(&glob).is_ok(),
+            "a broken post body must not stop Tera from building the real templates"
+        );
+
+        let store = BlogStore::new(&dir, &content_dir);
+        let content = store
+            .content("broken", Language::Spanish)
+            .expect("content should still be readable as plain text");
+        assert_eq!(content.as_str(), broken_body);
+
+        let _ = fs::remove_dir_all(&dir);
     }
 }

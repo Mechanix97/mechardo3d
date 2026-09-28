@@ -18,6 +18,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY static/tailwind.css ./static/
 COPY templates ./templates
+COPY content ./content
 # The JS toggles class names too (DS2000 gallery), so Tailwind has to scan it.
 COPY static/js ./static/js
 RUN npx tailwindcss -i static/tailwind.css -o static/style.css
@@ -35,6 +36,7 @@ ARG BUILD_FLAGS=""
 COPY src ./src
 COPY Cargo.toml Cargo.lock ./
 COPY templates ./templates
+COPY content ./content
 COPY data ./data
 COPY static ./static
 COPY translations ./translations
@@ -53,6 +55,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=builder --chown=app:app /mechardo3d/data ./data
 COPY --from=builder --chown=app:app /mechardo3d/target/release/mechardo3d .
 COPY --from=builder --chown=app:app /mechardo3d/templates ./templates
+COPY --from=builder --chown=app:app /mechardo3d/content ./content
 COPY --from=builder --chown=app:app /mechardo3d/static ./static
 COPY --from=builder --chown=app:app /mechardo3d/translations ./translations
 

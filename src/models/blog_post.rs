@@ -23,7 +23,7 @@ pub struct BlogPost {
     pub id: String,
     pub title: LocalizedText,
     pub summary: Option<LocalizedText>,
-    /// Directory under `templates/blog/` holding the post body, when the post
+    /// Directory under `content/blog/` holding the post body, when the post
     /// has one. Posts without a route fall back to their summary.
     pub route: Option<String>,
     pub thumbnail: Option<String>,

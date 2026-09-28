@@ -179,7 +179,7 @@ mod tests {
     }
 
     fn posts() -> Vec<BlogPost> {
-        let store = BlogStore::new(Path::new("data"), Path::new("templates"));
+        let store = BlogStore::new(Path::new("data"), Path::new("content"));
         store.posts().expect("posts").as_ref().clone()
     }
 

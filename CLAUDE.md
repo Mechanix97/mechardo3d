@@ -126,7 +126,9 @@ no download button
   `{% import "macros/cards.html" as cards %}` at the top of the page template
 - Date formatting uses the `date_format` filter for localized month names
 - One `<h1>` per page, rendered by the page template - blog post bodies under
-  `templates/blog/` are fragments and start at `<h2>`
+  `content/blog/` are fragments and start at `<h2>`. They are not Tera
+  templates (`BlogStore` reads them as plain HTML), so they stay out of
+  `templates/`, which is globbed wholesale at startup
 - Never nest a link inside another link; a card links from its title and its call to action,
   and its thumbnail link is `aria-hidden`
 - Page sections sit in `.wrap` (the shared gutter) and open with a `.ruler` strip:
@@ -207,7 +209,7 @@ Every template receives:
 - Structure: `{ "id": "...", "title": {"es": ..., "en": ...}, "summary": {...}, "route": "...",
   "thumbnail": "/static/...", "date": "DD-MM-YYYY" }`
 - Posts are sorted newest first when loaded; the home page shows the first three
-- A post with a `route` renders `templates/blog/{route}/{lang}.html`, falling back to the default
+- A post with a `route` renders `content/blog/{route}/{lang}.html`, falling back to the default
   language when a translation is missing
 - Content is cached and reloaded when the file changes, so editing a post during `cargo run` still
   shows up immediately
