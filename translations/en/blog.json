@@ -4,7 +4,8 @@
     "read_post": "Read the post",
     "by": "By",
     "summary_default": "Summary not available. Click to read more.",
-    "read_more": "Read more"
+    "read_more": "Read more",
+    "intro": "Electronics, IoT and software projects, told from the workbench."
   },
   "blog_post": {
     "featured_image": "Featured image of the post",

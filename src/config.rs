@@ -15,8 +15,8 @@ const DEFAULT_GITHUB_SECRET_FILE: &str = "secrets/github.env";
 const DEFAULT_RESUME_REPO: &str = "Mechanix97/Resume";
 /// Spanish visitors get the variant with a photo, the convention in much of
 /// Latin America; English visitors get the one without.
-const DEFAULT_RESUME_ASSET_ES: &str = "Lucas_Rack_Software_Engineer_CV.pdf";
-const DEFAULT_RESUME_ASSET_EN: &str = "Lucas_Rack_Software_Engineer_Resume.pdf";
+const DEFAULT_RESUME_ASSET_ES: &str = "Lucas_Rack_Electronics_Engineer_CV.pdf";
+const DEFAULT_RESUME_ASSET_EN: &str = "Lucas_Rack_Electronics_Engineer_Resume.pdf";
 const DEFAULT_REPORT_REPO: &str = "Mechanix97/Informe-Trabajo-Practico-Profesional";
 /// The report is one Spanish document, so both languages get the same asset.
 const DEFAULT_REPORT_ASSET: &str = "main.pdf";

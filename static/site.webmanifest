@@ -4,8 +4,8 @@
   "description": "Laboratorio de Electrónica y Software Engineering",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "background_color": "#0a0d0b",
+  "theme_color": "#0a0d0b",
   "icons": [
     {
       "src": "/static/images/favicon/icon-192.png",

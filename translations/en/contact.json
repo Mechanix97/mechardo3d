@@ -16,7 +16,11 @@
       "message_placeholder": "Write your message here",
       "submit": "Send Message",
       "sending": "Sending…"
-    }
+    },
+    "channels": "Direct channels",
+    "form_note": "Protected by reCAPTCHA.",
+    "email_label_short": "Email",
+    "reply_by_email": "Reply by email"
   },
   "contact_success": {
     "title": "Message Sent!",

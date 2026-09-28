@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mx-auto px-4 py-12 max-w-4xl text-center">
-    <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-6">{{ t.contact_success.title }}</h1>
-    <p class="text-lg text-gray-700 dark:text-gray-200 mb-8">{{ t.contact_success.message }}</p>
-    <a href="/{{ lang | default(value='es') }}/contact" class="btn-primary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        {{ t.contact_success.back }}
-    </a>
-</div>
+<section class="wrap">
+    <div class="ruler"><span>§ {{ t.nav.contact }}</span><span>OK</span></div>
+    <div class="flex flex-col items-start gap-5 py-16 md:py-28">
+        <p class="flex items-center gap-3 font-mono text-xs tracking-[0.1em] text-lime uppercase"><span class="led" aria-hidden="true"></span>200 OK</p>
+        <h1 class="text-[2.75rem] leading-[0.95] font-semibold tracking-[-0.04em] md:text-[5rem]">{{ t.contact_success.title }}</h1>
+        <p class="max-w-xl text-base leading-relaxed text-muted md:text-lg">{{ t.contact_success.message }}</p>
+        <a href="/{{ lang | default(value='es') }}/contact" class="btn-line mt-4">← {{ t.contact_success.back }}</a>
+    </div>
+</section>
 {% endblock %}

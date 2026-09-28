@@ -16,7 +16,11 @@
       "message_placeholder": "Escribí tu mensaje acá",
       "submit": "Enviar Mensaje",
       "sending": "Enviando…"
-    }
+    },
+    "channels": "Canales directos",
+    "form_note": "Protegido con reCAPTCHA.",
+    "email_label_short": "Correo",
+    "reply_by_email": "Respuesta por correo"
   },
   "contact_success": {
     "title": "¡Mensaje Enviado!",

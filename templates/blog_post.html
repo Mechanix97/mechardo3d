@@ -1,51 +1,70 @@
 {% extends "base.html" %}
 {% import "macros/cards.html" as cards %}
 {% block content %}
-<div class="container mx-auto px-4 py-12 max-w-4xl">
-    <!-- Imagen destacada -->
-    <img src="{{ post.thumbnail | default(value='/static/images/martin-fierro.avif') }}" alt=""
-        fetchpriority="high" decoding="async"
-        class="w-full h-64 md:h-96 object-cover rounded-lg shadow-md mb-8 transition-transform duration-300 hover:scale-[1.02]">
+<div class="progress" id="read-progress" aria-hidden="true"></div>
 
-    <!-- Título -->
-    <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-6 text-center leading-tight">{{
-        post.title }}</h1>
-
-    <!-- Metadatos -->
-    <div
-        class="flex flex-col sm:flex-row items-center justify-center gap-4 text-gray-600 dark:text-gray-300 text-sm mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg py-4 px-6">
-        <span>{{ t.blog_post.by }} Lucas Rack</span>
-        <span aria-hidden="true">|</span>
-        <time datetime="{{ post.date }}">{{ post.date | date_format(lang=lang) }}</time>
+<div class="wrap">
+    <div class="ruler">
+        <a href="/{{ lang }}/blog" class="flex min-h-11 items-center">← {{ t.blog_post.back_to_list }}</a>
+        <span class="hidden sm:inline">Blog</span>
     </div>
+</div>
 
-    <!-- Contenido -->
-    <div class="max-w-none text-gray-700 dark:text-gray-200 mb-12 leading-relaxed">
+<header class="wrap grid grid-cols-1 gap-8 pt-8 pb-7 md:grid-cols-12 md:pt-18 md:pb-14">
+    <div class="flex flex-col gap-4 md:col-span-8 md:col-start-3 md:gap-6">
+        <p class="meta text-[0.8125rem]"><time datetime="{{ post.date }}">{{ post.date | date_format(lang=lang) }}</time> · {{ t.blog_post.by }} Lucas Rack</p>
+        <h1 class="text-[2.25rem] leading-[1.08] font-semibold tracking-[-0.04em] md:text-[4rem] md:leading-[1.04]">{{ post.title }}</h1>
+        {% if post.summary %}
+        <p class="text-lg leading-normal text-fg-2 md:text-[1.3125rem]">{{ post.summary }}</p>
+        {% endif %}
+    </div>
+</header>
+
+<figure class="wrap flex flex-col gap-3">
+    <div class="frame p-2! md:p-3!">
+        <div class="aspect-[16/10] overflow-hidden md:aspect-[21/9]">
+            <img src="{{ post.thumbnail | default(value='/static/images/martin-fierro.avif') }}" alt=""
+                width="1200" height="675" fetchpriority="high" decoding="async" class="h-full w-full object-cover">
+        </div>
+    </div>
+    <figcaption class="caption">{{ t.labels.figure }} 1 — {{ post.title }}</figcaption>
+</figure>
+
+<div class="wrap grid grid-cols-1 gap-8 pt-8 pb-14 md:grid-cols-12 md:pt-20 md:pb-24">
+    {# Filled by post.js from the body's h2s; hidden when a post has none. #}
+    <aside class="md:col-span-3" data-toc hidden>
+        <details class="acc border border-line-strong px-4 md:hidden">
+            <summary class="min-h-12! font-mono text-[0.8125rem] tracking-[0.08em] text-fg-2 uppercase">
+                {{ t.labels.contents }}<span class="acc-plus text-base!" aria-hidden="true">+</span></summary>
+            <nav aria-label="{{ t.labels.contents }}" class="toc pb-4" data-toc-list></nav>
+        </details>
+        <nav aria-label="{{ t.labels.contents }}" class="sticky top-24 hidden md:block">
+            <p class="caption pb-3">{{ t.labels.contents }}</p>
+            <div class="toc" data-toc-list></div>
+        </nav>
+    </aside>
+
+    <article class="prose-dark md:col-span-7 md:col-start-4" data-post-body
+        data-copy="{{ t.labels.copy }}" data-copied="{{ t.labels.copied }}">
         {{ content | safe }}
-    </div>
+    </article>
+</div>
 
-    <!-- Botón Volver -->
-    <div class="text-center">
-        <a href="/{{ lang | default(value='es') }}/blog" class="btn-outline">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            {{ t.blog_post.view_more }}
-        </a>
-    </div>
-
-    <!-- Publicaciones relacionadas -->
-    {% if related_posts %}
-    <section class="mt-12" aria-labelledby="related-heading">
-        <h2 id="related-heading" class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-8 text-center">{{
-            t.blog_post.keep_reading }}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+{% if related_posts %}
+<section class="border-t border-line" aria-labelledby="related-heading">
+    <div class="wrap pb-14 md:pb-24">
+        <div class="ruler">
+            <h2 id="related-heading" class="font-normal">{{ t.blog_post.keep_reading }}</h2>
+            <a href="/{{ lang }}/blog">{{ t.blog_post.view_more }} →</a>
+        </div>
+        <div class="grid grid-cols-1 gap-5 pt-8 md:grid-cols-3 md:gap-6 md:pt-12">
             {% for related in related_posts %}
             {{ cards::post_card(post=related, lang=lang, t=t, level="h3") }}
             {% endfor %}
         </div>
-    </section>
-    {% endif %}
-</div>
+    </div>
+</section>
+{% endif %}
+
+<script src="/static/js/post.js" defer></script>
 {% endblock %}

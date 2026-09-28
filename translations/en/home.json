@@ -11,8 +11,12 @@
       "title": "Latest from the Blog",
       "read_more": "Read more"
     },
-    "social": {
-      "title": "Connect with Us"
-    }
+    "headline": "Discord to the next level.",
+    "view_specs": "View specs",
+    "about_title": "Software engineer, from firmware to cluster.",
+    "view_cv": "View datasheet (CV)",
+    "stack_language": "Language",
+    "stack_hardware": "Hardware",
+    "stack_other": "Other"
   }
 }

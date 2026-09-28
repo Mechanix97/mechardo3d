@@ -3,37 +3,32 @@
    `level` picks the heading level so the card fits the page outline:
    "h2" under a page title, "h3" under a section heading. #}
 {% macro post_card(post, lang, t, level) %}
-<article
-    class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700/60 hover:shadow-[0_20px_40px_-16px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_40px_-16px_rgba(167,139,250,0.3)] hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 transform hover:-translate-y-1">
+<article class="card">
     {# The thumbnail repeats the title link, so it is hidden from assistive tech
        instead of announcing the same destination twice. #}
-    <a href="/{{ lang }}/blog/{{ post.id }}" tabindex="-1" aria-hidden="true" class="block">
+    <a href="/{{ lang }}/blog/{{ post.id }}" tabindex="-1" aria-hidden="true" class="card-media">
         <img src="{{ post.thumbnail | default(value='/static/images/martin-fierro.avif') }}" alt=""
-            loading="lazy" decoding="async" class="w-full h-48 object-cover rounded-t-lg">
+            width="1200" height="675" loading="lazy" decoding="async">
     </a>
-    <div class="p-6">
+    <div class="flex grow flex-col gap-3 p-5 md:p-7">
+        <p class="meta"><time datetime="{{ post.date }}">{{ post.date | date_format(lang=lang) }}</time></p>
         {% if level == "h2" %}
-        <h2 class="text-2xl font-bold mb-2">
-            <a href="/{{ lang }}/blog/{{ post.id }}"
-                class="text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{
-                post.title }}</a>
+        <h2 class="card-title text-xl leading-snug font-semibold tracking-tight md:text-2xl">
+            <a href="/{{ lang }}/blog/{{ post.id }}">{{ post.title }}</a>
         </h2>
         {% else %}
-        <h3 class="text-2xl font-bold mb-2">
-            <a href="/{{ lang }}/blog/{{ post.id }}"
-                class="text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{
-                post.title }}</a>
+        <h3 class="card-title text-xl leading-snug font-semibold tracking-tight md:text-2xl">
+            <a href="/{{ lang }}/blog/{{ post.id }}">{{ post.title }}</a>
         </h3>
         {% endif %}
-        <div class="flex items-center gap-4 text-gray-600 dark:text-gray-300 text-sm mb-4">
-            <span>{{ t.blog.by }} Lucas Rack</span>
-            <span aria-hidden="true">|</span>
-            <time datetime="{{ post.date }}">{{ post.date | date_format(lang=lang) }}</time>
-        </div>
-        <p class="text-gray-700 dark:text-gray-200 mb-4 line-clamp-3">{{ post.summary |
+        <p class="text-[0.9375rem] leading-relaxed text-muted line-clamp-4">{{ post.summary |
             default(value=t.blog.summary_default) }}</p>
-        <a href="/{{ lang }}/blog/{{ post.id }}" class="btn-primary">{{
-            t.blog.read_more }}<span class="sr-only">: {{ post.title }}</span></a>
+        <a href="/{{ lang }}/blog/{{ post.id }}" class="link-arrow mt-auto min-h-11">{{ t.blog.read_more }}<span
+                class="sr-only">: {{ post.title }}</span>
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg></a>
     </div>
 </article>
 {% endmacro post_card %}

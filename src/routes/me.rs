@@ -32,6 +32,9 @@ pub async fn me(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Resp
     if state.resume.enabled() {
         context.insert("cv_url", &format!("/{}/cv", lang.as_str()));
     }
+    if state.report.enabled() {
+        context.insert("report_url", &format!("/{}/tpp", lang.as_str()));
+    }
 
     pages::render(&state, "me.html", &context, lang)
 }

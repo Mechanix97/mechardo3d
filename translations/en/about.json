@@ -2,8 +2,8 @@
   "about": {
     "title": "About",
     "name": "Lucas Rack",
-    "role": "Software Engineer · AI & Distributed Systems",
-    "summary": "Software engineer with 5+ years across AI/LLM applications, distributed systems and enterprise data platforms. Currently building retrieval-augmented generation and machine-learning automation over Lenovo's supply chain systems.",
+    "role": "Electronics Engineer · Software, AI & Distributed Systems",
+    "summary": "Electronics engineer with 5+ years of software experience across AI/LLM applications, distributed systems and enterprise data platforms. Currently building retrieval-augmented generation (RAG) and machine-learning automation over Lenovo's global supply chain systems. Proficient in Python, Rust, SQL and PL/SQL.",
     "location": "Buenos Aires, Argentina",
     "availability": "Open to projects",
     "jump_to": "Jump to section",
@@ -20,12 +20,11 @@
     "email": "Email",
     "email_handle": "lucas_rack@live.com.ar",
     "education_section": "Education",
-    "education_title": "Engineer's Degree in Electronics",
+    "education_title": "Electronics Engineering",
     "education_school": "Universidad de Buenos Aires · FIUBA",
-    "education_period": "2015 — 2026",
-    "education_orientation": "Major in Digital Systems and Computers",
+    "education_orientation": "Computers and Informatics orientation",
     "education_thesis_label": "Capstone project",
-    "education_thesis": "Drinking-water metering over IoT: low-power firmware, a custom PCB with a cellular module, and a distributed head-end system written in Rust.",
+    "education_thesis": "End-to-end system for remote reading of household water meters. A battery-powered STM32L0 device counts the flow meter's pulses and reports daily over LTE-M/NB-IoT to a multi-node Rust head-end server, through a custom low-power protocol based on IEC 62056. I designed the device PCB in KiCad and characterized its power consumption on the bench, projecting over 8 years of battery life.",
     "experience_section": "Experience",
     "experience_current": "Current",
     "experience": [
@@ -51,6 +50,19 @@
         ]
       },
       {
+        "role": "Teaching Assistant, Embedded Systems Workshop",
+        "company": "Universidad de Buenos Aires",
+        "company_url": "https://www.fi.uba.ar/",
+        "period": "Aug 2026 — present",
+        "current": true,
+        "items": [
+          {
+            "label": "Embedded systems teaching",
+            "text": "Guide students in designing, programming and debugging embedded C projects on STM32 (ARM Cortex-M), covering UART, SPI and I2C communication, interrupts, DMA, timers/PWM and ADC."
+          }
+        ]
+      },
+      {
         "role": "Systems Engineer",
         "company": "LambdaClass",
         "company_url": "https://lambdaclass.com/",
@@ -60,10 +72,6 @@
           {
             "label": "Rust development",
             "text": "Developed high-performance Rust applications for Ethereum Layer 1 and Layer 2 clients, improving transaction processing efficiency."
-          },
-          {
-            "label": "Solidity smart contracts",
-            "text": "Designed and implemented secure smart contracts in Solidity for decentralized applications."
           },
           {
             "label": "P2P protocols",
@@ -89,10 +97,6 @@
           {
             "label": "Python scripting",
             "text": "Wrote Python scripts for data processing and API integrations, improving interoperability between systems."
-          },
-          {
-            "label": "DevOps",
-            "text": "Managed CI/CD pipelines and containerized applications with Docker, ensuring reliable deployments and scalable infrastructure."
           }
         ]
       },
@@ -137,7 +141,8 @@
           "SQL / PL-SQL",
           "C / C++",
           "Solidity",
-          "Java"
+          "Java",
+          "MATLAB"
         ]
       },
       {
@@ -170,7 +175,8 @@
           "Linux",
           "Git",
           "REST APIs",
-          "Prometheus and Grafana"
+          "Prometheus and Grafana",
+          "Agile"
         ]
       },
       {
@@ -191,6 +197,13 @@
           "Smart contracts",
           "P2P protocols",
           "L1 and L2 clients"
+        ]
+      },
+      {
+        "group": "Spoken languages",
+        "items": [
+          "Spanish (native)",
+          "English (advanced)"
         ]
       }
     ],
@@ -327,6 +340,55 @@
         "cta": "repo",
         "featured": false
       }
-    ]
+    ],
+    "general_table": "General characteristics",
+    "state": "Status",
+    "location_label": "Location",
+    "experience_label": "Experience",
+    "education_label": "Education",
+    "education_short": "Electronics Eng. · FIUBA",
+    "featured": "Featured",
+    "more_projects": "More projects",
+    "part_desc": "Electronics engineer, software, AI and distributed systems",
+    "features_title": "Features",
+    "features": [
+      "5+ years in production software",
+      "LLM and RAG systems over enterprise data",
+      "Distributed backends in Rust",
+      "Embedded firmware and PCB design, from schematic to board",
+      "Bilingual operation: native Spanish, advanced English"
+    ],
+    "applications_title": "Applications",
+    "applications": [
+      "AI and LLM integration",
+      "High-availability backends",
+      "IoT and telemetry",
+      "Enterprise data platforms"
+    ],
+    "description_title": "Description",
+    "revision_table": "Revision history",
+    "col_rev": "Rev",
+    "col_period": "Period",
+    "col_role": "Role",
+    "col_changes": "Changes",
+    "skills_table": "Technical characteristics",
+    "col_parameter": "Parameter",
+    "col_value": "Value",
+    "figure_label": "Typical application",
+    "projects_table": "Other applications",
+    "col_no": "No.",
+    "col_project": "Project",
+    "col_tech": "Technologies",
+    "col_link": "Link",
+    "education_table": "Education",
+    "col_institution": "Institution",
+    "col_degree": "Degree",
+    "col_orientation": "Orientation",
+    "ordering_table": "Ordering information",
+    "col_channel": "Channel",
+    "col_address": "Address",
+    "page": "Page 1 of 1",
+    "education_thesis_title": "IoT smart water metering",
+    "education_report": "Read the report"
   }
 }

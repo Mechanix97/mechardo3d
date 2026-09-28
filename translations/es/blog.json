@@ -4,7 +4,8 @@
     "read_post": "Leer el post",
     "by": "Por",
     "summary_default": "Resumen no disponible. Haz clic para leer más.",
-    "read_more": "Leer más"
+    "read_more": "Leer más",
+    "intro": "Proyectos de electrónica, IoT y software, contados desde el banco de trabajo."
   },
   "blog_post": {
     "featured_image": "Imagen destacada del post",

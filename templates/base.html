@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ lang | default(value='es') }}" class="">
+{# Dark only: .dark stays on <html> so the dark: variants still used inside
+   blog post bodies and the legal pages resolve to their dark colours. #}
+<html lang="{{ lang | default(value='es') }}" class="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -42,23 +44,14 @@
     </script>
     {% endif %}
 
-    <link rel="stylesheet" href="/static/style.css?v=3">
-    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="preload" href="/static/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/static/fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/static/style.css?v=4">
+    <link rel="icon" href="/static/images/favicon/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="apple-touch-icon" href="/static/images/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/static/site.webmanifest">
-    <meta name="theme-color" content="#2563eb">
-    <script>
-        // Applied before first paint so the page does not flash the wrong theme.
-        // The language cookie is set by the server on every HTML response.
-        (function () {
-            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        })();
-    </script>
+    <meta name="theme-color" content="#0a0d0b">
     <style>
         .grecaptcha-badge {
             right: unset !important;
@@ -78,78 +71,109 @@
     <script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 </head>
 
-<body class="page-shell bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+{% set l = lang | default(value='es') %}
+{% set path = canonical_path | default(value='') %}
+<body class="page-shell">
 
     <a href="#main-content"
-        class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg">{{
+        class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[70] focus:px-4 focus:py-2 focus:bg-lime focus:text-ink">{{
         t.nav.skip_to_content }}</a>
 
-    <nav class="sticky top-0 z-40 bg-gray-900/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-white/10 px-4 py-3"
-        aria-label="{{ t.nav.main }}">
-        <div class="flex flex-wrap items-center justify-between gap-4 max-w-6xl mx-auto">
-            <a href="/{{ lang | default(value='es') }}" aria-label="{{ t.nav.home }}"
-                class="shrink-0 transition-transform duration-300 hover:scale-105">
-                <span class="logo-mark w-32 sm:w-36" aria-hidden="true"></span>
+    <header class="sticky top-0 z-40 border-b border-line bg-ink/90 backdrop-blur-md">
+        <div class="wrap flex h-16 items-center justify-between gap-6 md:h-[72px]">
+            <a href="/{{ l }}" aria-label="{{ t.nav.home }}" class="logo shrink-0">
+                <span class="logo-mark" aria-hidden="true">m</span>
+                <span class="logo-word" aria-hidden="true">mechardo<span>labs</span></span>
             </a>
-            <ul class="flex items-center gap-4 sm:gap-8">
-                <li><a href="/{{ lang | default(value='es') }}/ds2000" class="nav-link text-white font-bold"
-                        {% if canonical_path is starting_with("ds2000") %}aria-current="page"{% endif %}>DS2000</a>
-                </li>
-                <li><a href="/{{ lang | default(value='es') }}/me" class="nav-link text-white font-bold"
-                        {% if canonical_path is starting_with("me") %}aria-current="page"{% endif %}>{{ t.nav.about
-                        }}</a></li>
-                <li><a href="/{{ lang | default(value='es') }}/blog" class="nav-link text-white font-bold"
-                        {% if canonical_path is starting_with("blog") %}aria-current="page"{% endif %}>Blog</a></li>
-                <li><a href="/{{ lang | default(value='es') }}/contact" class="nav-link text-white font-bold"
-                        {% if canonical_path is starting_with("contact") %}aria-current="page"{% endif %}>{{
-                        t.nav.contact }}</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main id="main-content" class="grow w-auto mx-auto">
-        {% block content %}
-        {% endblock %}
-    </main>
-    <!-- Language Selector Dropdown -->
-    <div class="fixed bottom-20 right-4 z-50">
-        <div class="relative">
-            <button id="lang-dropdown-btn" type="button" aria-label="{{ t.nav.language }}" aria-haspopup="true"
-                aria-expanded="false" aria-controls="lang-dropdown-menu"
-                class="px-3 py-2 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white rounded-lg shadow-lg hover:shadow-[0_10px_25px_-6px_rgba(124,58,237,0.55)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 font-bold">
-                <span id="current-lang-flag">ES</span>
-            </button>
-            <div id="lang-dropdown-menu" role="menu" aria-labelledby="lang-dropdown-btn"
-                class="hidden absolute bottom-12 right-0 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden min-w-[140px] border border-gray-700">
-                <!-- Language options are populated by language-selector.js -->
+
+            <nav aria-label="{{ t.nav.main }}" class="hidden md:block">
+                <ul class="flex items-center gap-8">
+                    <li><a href="/{{ l }}/blog" class="nav-link" {% if path is starting_with("blog") %}aria-current="page"{% endif %}><span class="nav-index">[01]</span> Blog</a></li>
+                    <li><a href="/{{ l }}/ds2000" class="nav-link" {% if path is starting_with("ds2000") %}aria-current="page"{% endif %}><span class="nav-index">[02]</span> DS2000</a></li>
+                    <li><a href="/{{ l }}/me" class="nav-link" {% if path is starting_with("me") %}aria-current="page"{% endif %}><span class="nav-index">[03]</span> {{ t.nav.about }}</a></li>
+                    <li><a href="/{{ l }}/contact" class="nav-link" {% if path is starting_with("contact") %}aria-current="page"{% endif %}><span class="nav-index">[04]</span> {{ t.nav.contact }}</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                {# Plain links: the server sets the language cookie on the page it
+                   serves, so switching needs no script. #}
+                <div class="lang-switch hidden md:inline-flex" role="group" aria-label="{{ t.nav.language }}">
+                    {% for alternate in alternates %}
+                    <a href="/{{ alternate.lang }}{% if path %}/{{ path }}{% endif %}" hreflang="{{ alternate.lang }}" lang="{{ alternate.lang }}"
+                        {% if alternate.lang == l %}aria-current="true"{% endif %}>{{ alternate.lang | upper }}</a>
+                    {% endfor %}
+                </div>
+                <button type="button" id="menu-open" class="btn-line min-h-11 px-3.5 text-xs md:hidden"
+                    aria-haspopup="dialog" aria-expanded="false" aria-controls="site-menu">
+                    {{ t.nav.menu }}
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                        <path d="M4 8h16M4 16h16" />
+                    </svg>
+                </button>
             </div>
+        </div>
+    </header>
+
+    <div id="site-menu" class="menu-panel md:hidden" role="dialog" aria-modal="true" aria-label="{{ t.nav.main }}" hidden>
+        <div class="flex h-16 shrink-0 items-center justify-between border-b border-ink px-5 pr-2.5">
+            <span class="logo text-ink" aria-hidden="true">
+                <span class="logo-mark bg-ink text-lime">m</span>
+                <span class="logo-word">mechardo<span class="text-ink/60">labs</span></span>
+            </span>
+            <button type="button" id="menu-close" class="btn min-h-11 border border-ink px-3.5 text-xs">
+                {{ t.nav.menu_close }}
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+            </button>
+        </div>
+        <nav aria-label="{{ t.nav.main }}" class="px-5 pt-4">
+            <a href="/{{ l }}/blog" class="menu-item" {% if path is starting_with("blog") %}aria-current="page"{% endif %}>Blog <span class="font-mono text-xs font-normal tracking-normal">[01]</span></a>
+            <a href="/{{ l }}/ds2000" class="menu-item" {% if path is starting_with("ds2000") %}aria-current="page"{% endif %}>DS2000 <span class="font-mono text-xs font-normal tracking-normal">[02]</span></a>
+            <a href="/{{ l }}/me" class="menu-item" {% if path is starting_with("me") %}aria-current="page"{% endif %}>{{ t.nav.about }} <span class="font-mono text-xs font-normal tracking-normal">[03]</span></a>
+            <a href="/{{ l }}/contact" class="menu-item" {% if path is starting_with("contact") %}aria-current="page"{% endif %}>{{ t.nav.contact }} <span class="font-mono text-xs font-normal tracking-normal">[04]</span></a>
+        </nav>
+        <div class="mt-auto flex items-center justify-between border-t border-ink p-5 font-mono text-sm">
+            <div class="flex border border-ink" role="group" aria-label="{{ t.nav.language }}">
+                {% for alternate in alternates %}
+                <a href="/{{ alternate.lang }}{% if path %}/{{ path }}{% endif %}" hreflang="{{ alternate.lang }}" lang="{{ alternate.lang }}"
+                    class="flex min-h-11 items-center px-4 {% if alternate.lang == l %}bg-ink text-lime!{% endif %}"
+                    {% if alternate.lang == l %}aria-current="true"{% endif %}>{{ alternate.lang | upper }}</a>
+                {% endfor %}
+            </div>
+            <span>&copy; {{ now() | date(format="%Y") }}</span>
         </div>
     </div>
 
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" type="button" aria-pressed="false"
-        data-label-light="{{ t.nav.theme_light }}" data-label-dark="{{ t.nav.theme_dark }}"
-        class="fixed bottom-4 right-4 p-2 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white rounded-full shadow-lg hover:shadow-[0_10px_25px_-6px_rgba(124,58,237,0.55)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300">
-        <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path id="sun" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-            </path>
-            <path id="moon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-        </svg>
-    </button>
+    <main id="main-content" class="grow">
+        {% block content %}
+        {% endblock %}
+    </main>
 
-    <!-- Footer -->
-    <footer
-        class="site-footer text-center py-6 bg-gradient-to-r from-blue-600 to-violet-700 dark:from-blue-700 dark:to-violet-900 text-white">
-        <p class="text-lg">
-            &copy; 2025 Mechardo Labs. {{ t.footer.rights }}
-            <a href="/{{ lang | default(value='es') }}/contact" class="underline hover:text-blue-100 focus:outline-none focus:ring-2 focus:ring-white/70 rounded">{{ t.footer.contact }}</a>
-        </p>
+    <footer class="border-t border-line-strong font-mono text-xs text-muted">
+        <div class="wrap flex flex-col gap-4 border-b border-line py-5 md:flex-row md:items-center md:justify-between md:py-0 md:min-h-16">
+            <nav aria-label="{{ t.footer.social }}">
+                <ul class="grid grid-cols-2 gap-x-4 uppercase tracking-[0.06em] md:flex md:gap-7">
+                    <li><a href="https://www.instagram.com/mechardo3d/" target="_blank" rel="noopener noreferrer" class="muted-link flex min-h-11 items-center md:min-h-0" aria-label="{{ t.social.instagram.aria }}">Instagram ↗</a></li>
+                    <li><a href="https://discord.gg/VtbFAGJe86" target="_blank" rel="noopener noreferrer" class="muted-link flex min-h-11 items-center md:min-h-0" aria-label="{{ t.social.discord.aria }}">Discord ↗</a></li>
+                    <li><a href="https://x.com/MechardoLabs" target="_blank" rel="noopener noreferrer" class="muted-link flex min-h-11 items-center md:min-h-0" aria-label="{{ t.social.x.aria }}">X ↗</a></li>
+                    <li><a href="https://www.youtube.com/@MechardoLabs" target="_blank" rel="noopener noreferrer" class="muted-link flex min-h-11 items-center md:min-h-0" aria-label="{{ t.social.youtube.aria }}">YouTube ↗</a></li>
+                </ul>
+            </nav>
+            {% block footer_extra %}{% endblock %}
+            <span class="logo hidden md:inline-flex" aria-hidden="true">
+                <span class="logo-mark h-5 w-5 rounded-[5px] bg-line-strong text-xs text-muted">m</span>
+                <span class="logo-word text-sm text-muted">mechardolabs</span>
+            </span>
+        </div>
+        <div class="wrap flex min-h-14 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-4 md:py-0">
+            <p>&copy; {{ now() | date(format="%Y") }} Mechardo Labs. {{ t.footer.rights }}</p>
+            <a href="/{{ l }}/contact" class="muted-link">{{ t.footer.contact }} →</a>
+        </div>
     </footer>
 
-    <script src="/static/js/theme-toggle.js" defer></script>
-    <script src="/static/js/language-selector.js" defer></script>
+    <script src="/static/js/menu.js" defer></script>
 </body>
 
 </html>
