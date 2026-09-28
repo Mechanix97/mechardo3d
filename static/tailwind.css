@@ -544,6 +544,135 @@
         padding-bottom: 0.75rem;
     }
 
+    /* Full-grid datasheet table: every cell ruled, header row on a panel,
+       mono uppercase column heads. Used where a real datasheet would print a
+       table with columns (revision history, characteristics, ordering). */
+    .dtable {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--color-line-strong);
+        font-size: 0.9375rem;
+    }
+
+    .dtable caption {
+        caption-side: top;
+        text-align: left;
+        padding-bottom: 0.75rem;
+    }
+
+    .dtable th,
+    .dtable td {
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-line);
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .dtable thead th {
+        background: var(--color-panel);
+        border-bottom-color: var(--color-line-strong);
+        font-family: var(--font-mono);
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+        white-space: nowrap;
+    }
+
+    .dtable tbody th {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-fg-2);
+    }
+
+    .dtable td {
+        color: var(--color-fg-2);
+    }
+
+    /* On phones a .dtable-stack table drops its header row and stacks each
+       cell, labelled from its data-label. */
+    @media (max-width: 767px) {
+        .dtable-stack thead {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+        }
+
+        .dtable-stack tr {
+            display: block;
+            border-bottom: 1px solid var(--color-line-strong);
+        }
+
+        .dtable-stack th,
+        .dtable-stack td {
+            display: block;
+            border: 0;
+            padding: 0.5rem 1rem;
+        }
+
+        .dtable-stack tr> :first-child {
+            padding-top: 1rem;
+        }
+
+        .dtable-stack tr> :last-child {
+            padding-bottom: 1rem;
+        }
+
+        .dtable-stack td[data-label]::before {
+            content: attr(data-label);
+            display: block;
+            margin-bottom: 0.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.625rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-dim);
+        }
+    }
+
+    /* Datasheet front-page list: lime square bullets. */
+    .sq-list>li {
+        position: relative;
+        padding-left: 1.125rem;
+    }
+
+    .sq-list>li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.6em;
+        width: 0.3125rem;
+        height: 0.3125rem;
+        background: var(--color-lime);
+    }
+
+    /* Document header / footer band of a datasheet page: part number,
+       title and revision in three mono cells. */
+    .doc-band {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.25rem 1.5rem;
+        padding: 0.625rem 0;
+        border-block: 1px solid var(--color-line-strong);
+        font-family: var(--font-mono);
+        font-size: 0.6875rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+    }
+
+    .doc-band strong {
+        color: var(--color-fg);
+        font-weight: 500;
+    }
+
     /* Mono chip for a technology or a skill. Not a link. */
     .chip {
         display: inline-flex;

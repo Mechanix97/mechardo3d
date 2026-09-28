@@ -2,8 +2,8 @@
   "about": {
     "title": "Sobre mí",
     "name": "Lucas Rack",
-    "role": "Software Engineer · AI y Sistemas Distribuidos",
-    "summary": "Ingeniero de software con más de 5 años de experiencia entre aplicaciones de AI/LLM, sistemas distribuidos y plataformas de datos empresariales. Hoy construyo sistemas de RAG y automatización con machine learning sobre los sistemas de supply chain de Lenovo.",
+    "role": "Ingeniero Electrónico · Software, AI y Sistemas Distribuidos",
+    "summary": "Ingeniero electrónico con más de 5 años de experiencia en software entre aplicaciones de AI/LLM, sistemas distribuidos y plataformas de datos empresariales. Hoy construyo sistemas de RAG y automatización con machine learning sobre los sistemas globales de supply chain de Lenovo. Trabajo con Python, Rust, SQL y PL/SQL.",
     "location": "Buenos Aires, Argentina",
     "availability": "Abierto a proyectos",
     "jump_to": "Ir a la sección",
@@ -22,10 +22,9 @@
     "education_section": "Formación",
     "education_title": "Ingeniería en Electrónica",
     "education_school": "Universidad de Buenos Aires · FIUBA",
-    "education_period": "2015 — 2026",
-    "education_orientation": "Orientación en Sistemas Digitales y Computadoras",
+    "education_orientation": "Orientación en Computadoras e Informática",
     "education_thesis_label": "Trabajo profesional",
-    "education_thesis": "Medición de consumo de agua potable con tecnología IoT: firmware de bajo consumo, PCB con módulo celular y un head-end system distribuido escrito en Rust.",
+    "education_thesis": "Sistema de punta a punta para la lectura remota de medidores de agua domiciliarios. Un dispositivo STM32L0 a batería cuenta los pulsos del caudalímetro y reporta una vez por día por LTE-M/NB-IoT a un head-end server distribuido escrito en Rust, con un protocolo propio de bajo consumo basado en IEC 62056. Diseñé la PCB del dispositivo en KiCad y caractericé su consumo en el banco, proyectando más de 8 años de batería.",
     "experience_section": "Experiencia",
     "experience_current": "Actual",
     "experience": [
@@ -51,6 +50,19 @@
         ]
       },
       {
+        "role": "Ayudante, Taller de Sistemas Embebidos",
+        "company": "Universidad de Buenos Aires",
+        "company_url": "https://www.fi.uba.ar/",
+        "period": "Ago 2026 — presente",
+        "current": true,
+        "items": [
+          {
+            "label": "Docencia en sistemas embebidos",
+            "text": "Guío a los estudiantes en el diseño, la programación y la depuración de proyectos en C embebido sobre STM32 (ARM Cortex-M): comunicación UART, SPI e I2C, interrupciones, DMA, timers/PWM y ADC."
+          }
+        ]
+      },
+      {
         "role": "Systems Engineer",
         "company": "LambdaClass",
         "company_url": "https://lambdaclass.com/",
@@ -60,10 +72,6 @@
           {
             "label": "Desarrollo en Rust",
             "text": "Desarrollé aplicaciones de alto rendimiento en Rust para clientes de Ethereum Layer 1 y Layer 2, mejorando la eficiencia del procesamiento de transacciones."
-          },
-          {
-            "label": "Smart contracts en Solidity",
-            "text": "Diseñé e implementé contratos inteligentes seguros en Solidity para aplicaciones descentralizadas."
           },
           {
             "label": "Protocolos P2P",
@@ -89,10 +97,6 @@
           {
             "label": "Scripting en Python",
             "text": "Escribí scripts en Python para procesamiento de datos e integración de APIs, mejorando la interoperabilidad entre sistemas."
-          },
-          {
-            "label": "DevOps",
-            "text": "Administré pipelines de CI/CD y aplicaciones containerizadas con Docker, asegurando despliegues confiables e infraestructura escalable."
           }
         ]
       },
@@ -137,7 +141,8 @@
           "SQL / PL-SQL",
           "C / C++",
           "Solidity",
-          "Java"
+          "Java",
+          "MATLAB"
         ]
       },
       {
@@ -170,7 +175,8 @@
           "Linux",
           "Git",
           "APIs REST",
-          "Prometheus y Grafana"
+          "Prometheus y Grafana",
+          "Agile"
         ]
       },
       {
@@ -191,6 +197,13 @@
           "Smart contracts",
           "Protocolos P2P",
           "Clientes L1 y L2"
+        ]
+      },
+      {
+        "group": "Idiomas",
+        "items": [
+          "Español (nativo)",
+          "Inglés (avanzado)"
         ]
       }
     ],
@@ -335,6 +348,47 @@
     "education_label": "Formación",
     "education_short": "Ing. Electrónica · FIUBA",
     "featured": "Destacado",
-    "more_projects": "Más proyectos"
+    "more_projects": "Más proyectos",
+    "part_desc": "Ingeniero electrónico, software, AI y sistemas distribuidos",
+    "features_title": "Características",
+    "features": [
+      "Más de 5 años de software en producción",
+      "Sistemas de LLM y RAG sobre datos empresariales",
+      "Backends distribuidos en Rust",
+      "Firmware embebido y diseño de PCB, del esquemático a la placa",
+      "Operación bilingüe: español nativo, inglés avanzado"
+    ],
+    "applications_title": "Aplicaciones",
+    "applications": [
+      "Integración de AI y LLM",
+      "Backends de alta disponibilidad",
+      "IoT y telemetría",
+      "Plataformas de datos empresariales"
+    ],
+    "description_title": "Descripción",
+    "revision_table": "Historial de revisiones",
+    "col_rev": "Rev",
+    "col_period": "Período",
+    "col_role": "Puesto",
+    "col_changes": "Cambios",
+    "skills_table": "Características técnicas",
+    "col_parameter": "Parámetro",
+    "col_value": "Valor",
+    "figure_label": "Aplicación típica",
+    "projects_table": "Otras aplicaciones",
+    "col_no": "N.º",
+    "col_project": "Proyecto",
+    "col_tech": "Tecnologías",
+    "col_link": "Enlace",
+    "education_table": "Formación",
+    "col_institution": "Institución",
+    "col_degree": "Título",
+    "col_orientation": "Orientación",
+    "ordering_table": "Información de pedido",
+    "col_channel": "Canal",
+    "col_address": "Dirección",
+    "page": "Página 1 de 1",
+    "education_thesis_title": "Medición inteligente de agua con IoT",
+    "education_report": "Leer el informe"
   }
 }

@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{# The page reads as a component datasheet: a part number, a revision that
+   follows the number of jobs (Rev A is the first), numbered tables and figures. #}
+{% set part_no = "LR-01" %}
+{% set revs = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] %}
+{% set jobs = t.about.experience | length %}
+{% set current_rev_idx = jobs - 1 %}
+{% set current_rev = revs[current_rev_idx] %}
 
 <section class="wrap">
     <div class="ruler">
@@ -11,11 +18,18 @@
             <a href="#contact">{{ t.about.contact_section }}</a>
         </nav>
     </div>
-    <div class="grid grid-cols-1 gap-10 pt-8 pb-12 md:grid-cols-12 md:gap-12 md:pt-18 md:pb-24">
+
+    <p class="doc-band mt-6 md:mt-10">
+        <span><strong>{{ part_no }}</strong> · {{ t.labels.datasheet }}</span>
+        <span class="hidden sm:inline">Mechardo Labs</span>
+        <span>Rev {{ current_rev }}</span>
+    </p>
+
+    <div class="grid grid-cols-1 gap-10 pt-8 pb-10 md:grid-cols-12 md:gap-12 md:pt-14 md:pb-14">
         <div class="flex flex-col gap-5 md:col-span-7 md:gap-6">
-            <p class="eyebrow">{{ t.about.role }}</p>
+            <p class="eyebrow">{{ t.labels.part_no }} {{ part_no }} · {{ t.about.part_desc }}</p>
             <h1 class="text-[4rem] leading-[0.92] font-semibold tracking-[-0.05em] md:text-[7rem] md:leading-[0.9]">{{ t.about.name }}</h1>
-            <p class="max-w-2xl text-base leading-relaxed text-fg-2 md:text-[1.1875rem]">{{ t.about.summary }}</p>
+            <p class="font-mono text-sm text-fg-2 md:text-base">{{ t.about.role }}</p>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row sm:gap-0">
                 {% if cv_url %}
                 <a href="{{ cv_url }}" class="btn-lime">{{ t.about.cv_download }} <span aria-hidden="true">↓</span></a>
@@ -36,6 +50,26 @@
             </table>
         </div>
     </div>
+
+    {# Datasheet front page: features, applications and description side by side. #}
+    <div class="grid grid-cols-1 border-t border-line-strong md:grid-cols-12">
+        <div class="flex flex-col gap-4 border-b border-line py-7 md:col-span-5 md:border-r md:border-b-0 md:py-9 md:pr-8">
+            <h2 class="caption text-fg"><span class="text-lime">1</span>&nbsp; {{ t.about.features_title }}</h2>
+            <ul class="sq-list flex flex-col gap-2.5 text-[0.9375rem] leading-snug text-fg-2">
+                {% for feature in t.about.features %}<li>{{ feature }}</li>{% endfor %}
+            </ul>
+        </div>
+        <div class="flex flex-col gap-4 border-b border-line py-7 md:col-span-3 md:border-r md:border-b-0 md:px-8 md:py-9">
+            <h2 class="caption text-fg"><span class="text-lime">2</span>&nbsp; {{ t.about.applications_title }}</h2>
+            <ul class="sq-list flex flex-col gap-2.5 text-[0.9375rem] leading-snug text-fg-2">
+                {% for application in t.about.applications %}<li>{{ application }}</li>{% endfor %}
+            </ul>
+        </div>
+        <div class="flex flex-col gap-4 py-7 md:col-span-4 md:py-9 md:pl-8">
+            <h2 class="caption text-fg"><span class="text-lime">3</span>&nbsp; {{ t.about.description_title }}</h2>
+            <p class="text-[0.9375rem] leading-relaxed text-fg-2">{{ t.about.summary }}</p>
+        </div>
+    </div>
 </section>
 
 {# Section links stay reachable while scrolling on phones. #}
@@ -47,33 +81,43 @@
 </nav>
 
 <!-- §01 Experience -->
-<section id="experience" class="wrap scroll-mt-28 border-t border-line pb-14 md:scroll-mt-20 md:pb-24">
-    <div class="ruler"><span>§01 — {{ t.about.experience_section }}</span></div>
+<section id="experience" class="wrap scroll-mt-28 border-t border-line pb-14 md:mt-10 md:scroll-mt-20 md:pb-24">
+    <div class="ruler"><span>§01 — {{ t.about.experience_section }}</span><span>Rev {{ current_rev }}</span></div>
     <h2 class="mt-9 mb-6 text-[1.75rem] font-semibold tracking-tight md:mt-14 md:mb-8 md:text-[2.75rem]">{{ t.about.experience_section }}</h2>
-    <ol class="rows">
-        {% for job in t.about.experience %}
-        <li class="grid grid-cols-1 gap-3 border-b border-line py-6 md:grid-cols-12 md:gap-8 md:py-8">
-            <div class="flex flex-wrap items-center gap-3 font-mono text-[0.8125rem] text-muted md:col-span-3 md:flex-col md:items-start">
-                <span>{{ job.period }}</span>
-                {% if job.current %}<span class="badge">{{ t.about.experience_current }}</span>{% endif %}
-            </div>
-            <div class="flex flex-col gap-4 md:col-span-9">
-                <h3 class="text-xl font-semibold tracking-tight md:text-2xl">{{ job.role }}
-                    <span class="font-normal text-muted">@</span>
-                    <a href="{{ job.company_url }}" target="_blank" rel="noopener" class="{% if job.current %}text-lime{% endif %} hover:text-lime hover:underline">{{ job.company }}</a>
-                </h3>
-                <ul class="grid grid-cols-1 gap-4 text-[0.9375rem] leading-relaxed text-muted md:gap-6 {% if job.items | length >= 4 %}md:grid-cols-2 lg:grid-cols-4{% elif job.items | length == 3 %}md:grid-cols-3{% elif job.items | length == 2 %}md:grid-cols-2{% endif %}">
-                    {% for item in job.items %}
-                    <li class="flex flex-col gap-1.5">
-                        <span class="font-mono text-xs tracking-[0.06em] text-fg uppercase">{{ item.label }}</span>
-                        {{ item.text }}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </li>
-        {% endfor %}
-    </ol>
+    <table class="dtable dtable-stack">
+        <caption class="caption">{{ t.labels.table }} 2 — {{ t.about.revision_table }}</caption>
+        <thead>
+            <tr>
+                <th scope="col" class="w-16">{{ t.about.col_rev }}</th>
+                <th scope="col" class="w-44">{{ t.about.col_period }}</th>
+                <th scope="col" class="w-72">{{ t.about.col_role }}</th>
+                <th scope="col">{{ t.about.col_changes }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in t.about.experience %}
+            {% set rev_idx = jobs - loop.index %}
+            <tr>
+                <th scope="row" class="font-mono text-lg {% if job.current %}text-lime{% endif %}">{{ revs[rev_idx] }}</th>
+                <td data-label="{{ t.about.col_period }}" class="font-mono text-[0.8125rem] whitespace-nowrap">
+                    {{ job.period }}
+                    {% if job.current %}<span class="badge mt-2 flex w-fit">{{ t.about.experience_current }}</span>{% endif %}
+                </td>
+                <td data-label="{{ t.about.col_role }}">
+                    <h3 class="font-semibold text-fg md:text-[1.0625rem]">{{ job.role }}</h3>
+                    <a href="{{ job.company_url }}" target="_blank" rel="noopener" class="font-mono text-[0.8125rem] {% if job.current %}text-lime{% else %}text-muted{% endif %} hover:text-lime hover:underline">@ {{ job.company }}</a>
+                </td>
+                <td data-label="{{ t.about.col_changes }}">
+                    <ul class="flex flex-col gap-2.5 text-[0.9375rem] leading-relaxed">
+                        {% for item in job.items %}
+                        <li><span class="font-mono text-xs tracking-[0.04em] text-fg uppercase">{{ item.label }}.</span> {{ item.text }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </section>
 
 <!-- §02 Skills -->
@@ -82,20 +126,31 @@
         <div class="ruler"><span>§02 — {{ t.about.skills_section }}</span></div>
         <div class="grid grid-cols-1 gap-6 pt-9 md:grid-cols-12 md:gap-8 md:pt-14">
             <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:col-span-3 md:text-[2.75rem]">{{ t.about.skills_section }}</h2>
-            <dl class="rows bg-ink md:col-span-9">
-                {% for group in t.about.skills %}
-                <div class="flex flex-col gap-3 border-b border-line py-4 md:flex-row md:gap-6">
-                    <dt class="caption pt-1.5 md:w-56 md:shrink-0">{{ group.group }}</dt>
-                    <dd>
-                        <ul class="flex flex-wrap gap-2">
-                            {% for item in group.items %}
-                            <li class="chip {% if item == 'Rust' %}text-lime{% endif %}">{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </dd>
-                </div>
-                {% endfor %}
-            </dl>
+            <div class="md:col-span-9">
+                <table class="dtable bg-ink">
+                    <caption class="caption">{{ t.labels.table }} 3 — {{ t.about.skills_table }}</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="w-2/5 md:w-64">{{ t.about.col_parameter }}</th>
+                            <th scope="col">{{ t.about.col_value }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in t.about.skills %}
+                        <tr>
+                            <th scope="row">{{ group.group }}</th>
+                            <td>
+                                <ul class="flex flex-wrap gap-x-2 gap-y-1 font-mono text-[0.8125rem]">
+                                    {% for item in group.items %}
+                                    <li class="{% if item == 'Rust' %}text-lime{% endif %}">{{ item }}{% if not loop.last %}<span class="ml-2 text-dim" aria-hidden="true">·</span>{% endif %}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
@@ -106,76 +161,103 @@
         <a href="https://github.com/Mechanix97?tab=repositories" target="_blank" rel="noopener" class="hidden md:inline">{{ t.about.projects_more }} ↗</a></div>
     <h2 class="mt-9 mb-6 text-[1.75rem] font-semibold tracking-tight md:mt-14 md:mb-8 md:text-[2.75rem]">{{ t.about.projects_section }}</h2>
 
-    {# The first three projects get a card; the rest stay a compact list, so
-       the page does not turn into a wall of thumbnails. #}
-    <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+    {# The first three projects are figures; the rest stay a table, so the page
+       does not turn into a wall of thumbnails. #}
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
         {% for project in t.about.projects | slice(end=3) %}
-        <article class="card">
-            <a href="{{ project.url }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" class="card-media">
-                <img src="{{ project.image }}" alt="" width="800" height="450" loading="lazy" decoding="async">
-            </a>
-            <div class="flex grow flex-col gap-3 p-5 md:p-6">
-                {% if project.featured %}<p><span class="badge">{{ t.about.featured }}</span></p>{% endif %}
-                <h3 class="card-title text-xl font-semibold tracking-tight md:text-[1.375rem]">
-                    <a href="{{ project.url }}" target="_blank" rel="noopener">{{ project.name }}</a>
-                </h3>
-                <p class="text-[0.9375rem] leading-relaxed text-muted line-clamp-5">{{ project.description }}</p>
-                <ul class="flex flex-wrap gap-1.5">
-                    {% for tech in project.tech | slice(end=4) %}
-                    <li class="chip-fill">{{ tech }}</li>
-                    {% endfor %}
-                </ul>
-                <a href="{{ project.url }}" target="_blank" rel="noopener" class="link-arrow mt-auto min-h-11">
-                    {% if project.cta == "video" %}{{ t.about.projects_cta_video }}{% else %}{{ t.about.projects_cta }}{% endif %} ↗<span class="sr-only">: {{ project.name }}</span></a>
-            </div>
+        <article class="flex flex-col gap-4">
+            <figure class="flex flex-col gap-3">
+                <div class="frame">
+                    <a href="{{ project.url }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" class="frame-plate block aspect-video">
+                        <img src="{{ project.image }}" alt="" width="800" height="450" loading="lazy" decoding="async" class="h-full object-cover">
+                    </a>
+                </div>
+                <figcaption class="caption flex justify-between gap-4">
+                    <span>{{ t.labels.figure }} {{ loop.index }} — {{ t.about.figure_label }}</span>
+                    {% if project.featured %}<span class="text-lime">{{ t.about.featured }}</span>{% endif %}
+                </figcaption>
+            </figure>
+            <h3 class="card-title text-xl font-semibold tracking-tight md:text-[1.375rem]">
+                <a href="{{ project.url }}" target="_blank" rel="noopener">{{ project.name }}</a>
+            </h3>
+            <p class="text-[0.9375rem] leading-relaxed text-muted line-clamp-5">{{ project.description }}</p>
+            <p class="border-t border-line pt-3 font-mono text-xs text-fg-2">{{ project.tech | slice(end=4) | join(sep=" · ") }}</p>
+            <a href="{{ project.url }}" target="_blank" rel="noopener" class="link-arrow mt-auto min-h-11">
+                {% if project.cta == "video" %}{{ t.about.projects_cta_video }}{% else %}{{ t.about.projects_cta }}{% endif %} ↗<span class="sr-only">: {{ project.name }}</span></a>
         </article>
         {% endfor %}
     </div>
 
     {% if t.about.projects | length > 3 %}
-    <ul class="rows mt-8">
-        {% for project in t.about.projects | slice(start=3) %}
-        <li>
-            <a href="{{ project.url }}" target="_blank" rel="noopener" class="row-link py-4 md:grid md:grid-cols-12 md:gap-8">
-                <span class="font-semibold md:col-span-4 md:text-[1.0625rem]">{{ project.name }}</span>
-                <span class="hidden font-mono text-xs text-muted md:col-span-6 md:block">{{ project.tech | join(sep=" · ") }}</span>
-                <span class="shrink-0 font-mono text-xs text-lime uppercase md:col-span-2 md:text-right">{% if project.cta == "video" %}{{ t.about.projects_cta_video }}{% else %}{{ t.about.projects_cta }}{% endif %} ↗</span>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+    <table class="dtable mt-12">
+        <caption class="caption">{{ t.labels.table }} 4 — {{ t.about.projects_table }}</caption>
+        <thead>
+            <tr>
+                <th scope="col" class="w-14">{{ t.about.col_no }}</th>
+                <th scope="col">{{ t.about.col_project }}</th>
+                <th scope="col" class="hidden md:table-cell">{{ t.about.col_tech }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in t.about.projects | slice(start=3) %}
+            <tr>
+                <td class="font-mono text-[0.8125rem] text-muted">{{ loop.index + 3 }}</td>
+                <td><a href="{{ project.url }}" target="_blank" rel="noopener" class="font-semibold text-fg hover:text-lime">{{ project.name }} <span class="font-mono text-xs text-lime">↗</span><span class="sr-only">: {% if project.cta == "video" %}{{ t.about.projects_cta_video }}{% else %}{{ t.about.projects_cta }}{% endif %}</span></a></td>
+                <td class="hidden font-mono text-xs text-muted md:table-cell">{{ project.tech | join(sep=" · ") }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% endif %}
     <a href="https://github.com/Mechanix97?tab=repositories" target="_blank" rel="noopener" class="btn-line mt-6 w-full md:hidden">{{ t.about.projects_more }} ↗</a>
 </section>
 
 <!-- §04 Education · §05 Contact -->
-<section class="wrap border-t border-line pb-14 md:pb-24">
+<section class="wrap border-t border-line pb-10 md:pb-16">
     <div class="ruler"><span>§04 — {{ t.about.education_section }} · §05 — {{ t.about.contact_section }}</span></div>
     <div class="grid grid-cols-1 gap-12 pt-9 md:grid-cols-2 md:pt-14">
-        <div id="education" class="flex scroll-mt-28 flex-col gap-4">
+        <div id="education" class="flex scroll-mt-28 flex-col gap-6">
             <h2 class="text-[1.75rem] font-semibold tracking-tight md:text-[2rem]">{{ t.about.education_section }}</h2>
-            <div class="flex flex-col gap-3 border border-line-strong p-5 md:p-7">
-                <p class="flex flex-wrap justify-between gap-2 font-mono text-xs text-muted">
-                    <a href="https://www.fi.uba.ar/" target="_blank" rel="noopener" class="hover:text-lime">{{ t.about.education_school }}</a>
-                    <span>{{ t.about.education_period }}</span>
-                </p>
-                <h3 class="text-xl font-semibold md:text-2xl">{{ t.about.education_title }}</h3>
-                <p class="text-[0.9375rem] text-muted">{{ t.about.education_orientation }}</p>
-                <div class="mt-2 border-t border-line pt-4">
-                    <p class="eyebrow mb-1.5 text-[0.6875rem]">{{ t.about.education_thesis_label }}</p>
-                    <p class="text-[0.9375rem] leading-relaxed text-fg-2">{{ t.about.education_thesis }}</p>
-                </div>
-            </div>
+            <table class="spec">
+                <caption class="caption">{{ t.labels.table }} 5 — {{ t.about.education_table }}</caption>
+                <tbody>
+                    <tr><th scope="row">{{ t.about.col_degree }}</th><td class="font-semibold">{{ t.about.education_title }}</td></tr>
+                    <tr><th scope="row">{{ t.about.col_institution }}</th><td><a href="https://www.fi.uba.ar/" target="_blank" rel="noopener" class="hover:text-lime hover:underline">{{ t.about.education_school }}</a></td></tr>
+                    <tr><th scope="row">{{ t.about.col_orientation }}</th><td class="text-fg-2">{{ t.about.education_orientation }}</td></tr>
+                    <tr><th scope="row">{{ t.about.education_thesis_label }}</th>
+                        <td class="leading-relaxed text-fg-2"><div class="flex flex-col items-start gap-2">
+                            <span class="font-semibold text-fg">{{ t.about.education_thesis_title }}</span>
+                            {{ t.about.education_thesis }}
+                            {% if report_url %}<a href="{{ report_url }}" class="link-arrow">{{ t.about.education_report }} <span aria-hidden="true">↓</span></a>{% endif %}
+                        </div></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div id="contact" class="flex scroll-mt-28 flex-col gap-4">
+        <div id="contact" class="flex scroll-mt-28 flex-col gap-6">
             <h2 class="text-[1.75rem] font-semibold tracking-tight md:text-[2rem]">{{ t.about.contact_section }}</h2>
-            <p class="leading-relaxed text-muted">{{ t.about.contact_intro }}</p>
-            <ul class="rows font-mono text-[0.8125rem] md:text-sm">
-                <li><a href="mailto:{{ t.about.email_handle }}" class="row-link"><span class="text-muted uppercase">{{ t.about.email }}</span><span class="truncate text-lime">{{ t.about.email_handle }}</span></a></li>
-                <li><a href="https://linkedin.com/in/lucasalexisrack" target="_blank" rel="noopener" class="row-link"><span class="text-muted uppercase">{{ t.about.linkedin }}</span><span>{{ t.about.linkedin_handle }} ↗</span></a></li>
-                <li><a href="https://github.com/Mechanix97" target="_blank" rel="noopener" class="row-link"><span class="text-muted uppercase">{{ t.about.github }}</span><span>{{ t.about.github_handle }} ↗</span></a></li>
-            </ul>
+            <p class="-mt-2 leading-relaxed text-muted">{{ t.about.contact_intro }}</p>
+            <table class="dtable">
+                <caption class="caption">{{ t.labels.table }} 6 — {{ t.about.ordering_table }}</caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="w-28">{{ t.about.col_channel }}</th>
+                        <th scope="col">{{ t.about.col_address }}</th>
+                    </tr>
+                </thead>
+                <tbody class="font-mono text-[0.8125rem] md:text-sm">
+                    <tr><th scope="row">{{ t.about.email }}</th><td><a href="mailto:{{ t.about.email_handle }}" class="break-all text-lime hover:underline">{{ t.about.email_handle }}</a></td></tr>
+                    <tr><th scope="row">{{ t.about.linkedin }}</th><td><a href="https://linkedin.com/in/lucasalexisrack" target="_blank" rel="noopener" class="text-fg hover:text-lime">{{ t.about.linkedin_handle }} ↗</a></td></tr>
+                    <tr><th scope="row">{{ t.about.github }}</th><td><a href="https://github.com/Mechanix97" target="_blank" rel="noopener" class="text-fg hover:text-lime">{{ t.about.github_handle }} ↗</a></td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <p class="doc-band mt-14 md:mt-20">
+        <span><strong>{{ part_no }}</strong> · {{ t.labels.datasheet }} · Rev {{ current_rev }}</span>
+        <span class="hidden sm:inline">mechardo3d.xyz</span>
+        <span>{{ t.about.page }}</span>
+    </p>
 </section>
 {% endblock %}
