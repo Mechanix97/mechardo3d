@@ -39,7 +39,7 @@ cd "$REPO_DIR" || {
 }
 
 log "Doing git pull"
-git pull origin master >> "$LOG_FILE" 2>&1
+git pull --ff-only origin master >> "$LOG_FILE" 2>&1
 [ $? -eq 0 ] || {
     log "ERROR during git pull"
     exit 1
