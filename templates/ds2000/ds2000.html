@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-{% set buy_url = "https://www.mercadolibre.com.ar/p/DS2000" %}
 
 <section class="wrap">
     <div class="ruler"><span>§ DS2000 — {{ t.labels.datasheet }}</span><span>Rev A</span></div>
@@ -72,8 +71,7 @@
                 <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">{{ t.ds2000.specs.connection }}</dt><dd class="text-right">USB 2.0</dd></div>
             </dl>
             <div class="mt-2 flex flex-col gap-2.5">
-                <a href="{{ buy_url }}" target="_blank" rel="noopener noreferrer" class="btn-lime min-h-14 text-sm">{{ t.ds2000.buy }} <span aria-hidden="true">→</span></a>
-                <a href="#drivers" class="btn-line min-h-14 text-sm">{{ t.ds2000.drivers.title }} ↓</a>
+                <a href="#drivers" class="btn-lime min-h-14 text-sm">{{ t.ds2000.drivers.title }} <span aria-hidden="true">↓</span></a>
             </div>
             <p class="font-mono text-xs text-muted">Windows 10/11 · macOS 10.15+ · Linux</p>
         </div>
@@ -195,12 +193,6 @@
         </div>
     </div>
 </section>
-
-<!-- Buy bar, phones only: stays on screen while the page scrolls. -->
-<div class="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-line-strong bg-ink/95 px-5 py-3 backdrop-blur md:hidden">
-    <span class="flex flex-col"><span class="font-semibold">DS2000</span><span class="font-mono text-[0.6875rem] text-muted">{{ t.labels.usb_box }}</span></span>
-    <a href="{{ buy_url }}" target="_blank" rel="noopener noreferrer" class="btn-lime min-h-12">{{ t.ds2000.buy }} →</a>
-</div>
 
 <script src="/static/js/gallery.js" defer></script>
 {% endblock %}
