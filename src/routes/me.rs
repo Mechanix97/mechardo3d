@@ -24,7 +24,11 @@ pub async fn me(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Resp
         .og_title(social_title)
         .og_image("static/images/og-me.png")
         .path("me")
-        .schema(json_ld::person_schema(&state.config, lang));
+        .schema(json_ld::person_schema(
+            &state.config,
+            &state.translations,
+            lang,
+        ));
 
     let mut context = pages::base_context(&state, lang, &meta);
     // Absent when no GitHub token is configured, which is what hides the

@@ -3,6 +3,7 @@ use serde_json::{Value, json};
 use crate::config::AppConfig;
 use crate::language::Language;
 use crate::models::blog_post::BlogPostView;
+use crate::translations::Translations;
 
 const AUTHOR: &str = "Lucas Rack";
 const GITHUB_URL: &str = "https://github.com/Mechanix97";
@@ -10,39 +11,58 @@ const LINKEDIN_URL: &str = "https://linkedin.com/in/lucasalexisrack";
 
 /// JSON-LD for a Person (used on `/me`).
 ///
-/// The job title, employer and university mirror what the page itself renders,
-/// so a search result cannot describe a role the portfolio no longer claims.
-pub fn person_schema(config: &AppConfig, lang: Language) -> Value {
-    let job_title = match lang {
-        Language::Spanish => "Ingeniero de Software",
-        Language::English => "Software Engineer",
-    };
-    let description = match lang {
-        Language::Spanish => {
-            "Ingeniero de software especializado en aplicaciones de AI/LLM, \
-             sistemas distribuidos en Rust y electrónica"
-        }
-        Language::English => {
-            "Software engineer specialized in AI/LLM applications, distributed \
-             systems in Rust, and electronics"
-        }
-    };
-    let alumni_of = match lang {
-        Language::Spanish => "Universidad de Buenos Aires",
-        Language::English => "University of Buenos Aires",
-    };
+/// Job title, current employer, education, description and topics all come
+/// from `about.json` - the same content `/me` renders - instead of being
+/// duplicated here. They used to be hard-coded and drifted from the page:
+/// `jobTitle` kept saying "Software Engineer" after the page was updated to
+/// "Electronics Engineer ...". See #89.
+pub fn person_schema(config: &AppConfig, translations: &Translations, lang: Language) -> Value {
+    let about = translations.for_lang(lang).get("about");
+
+    let name = translations.text_or(lang, "about.name", AUTHOR);
+    let job_title = translations.text_or(lang, "about.role", "");
+    let description = translations.text_or(lang, "about.summary", "");
+    let alumni_of = translations.text_or(lang, "about.education_school", "");
+    let email = translations.text_or(lang, "about.email_handle", "");
+
+    // The person has more than one `current: true` entry (a day job and an
+    // ongoing teaching role) - the first one is the primary job, which is
+    // what `worksFor` should describe.
+    let current_job = about
+        .and_then(|about| about.get("experience"))
+        .and_then(Value::as_array)
+        .and_then(|entries| {
+            entries
+                .iter()
+                .find(|entry| entry.get("current").and_then(Value::as_bool) == Some(true))
+        });
+    let company = current_job
+        .and_then(|job| job.get("company"))
+        .and_then(Value::as_str)
+        .unwrap_or_default();
+    let company_url = current_job
+        .and_then(|job| job.get("company_url"))
+        .and_then(Value::as_str)
+        .unwrap_or_default();
+
+    let knows_about: Vec<&str> = about
+        .and_then(|about| about.get("schema"))
+        .and_then(|schema| schema.get("knows_about"))
+        .and_then(Value::as_array)
+        .map(|items| items.iter().filter_map(Value::as_str).collect())
+        .unwrap_or_default();
 
     json!({
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": AUTHOR,
+        "name": name,
         "url": config.url(&format!("{}/me", lang.as_str())),
         "sameAs": [GITHUB_URL, LINKEDIN_URL],
         "jobTitle": job_title,
         "worksFor": {
             "@type": "Organization",
-            "name": "Lenovo",
-            "url": "https://www.lenovo.com/"
+            "name": company,
+            "url": company_url
         },
         "alumniOf": {
             "@type": "CollegeOrUniversity",
@@ -54,20 +74,9 @@ pub fn person_schema(config: &AppConfig, lang: Language) -> Value {
             "addressLocality": "Buenos Aires",
             "addressCountry": "AR"
         },
-        "knowsAbout": [
-            "Artificial Intelligence",
-            "Large Language Models",
-            "Retrieval-Augmented Generation",
-            "Python",
-            "Rust",
-            "Distributed Systems",
-            "Ethereum",
-            "Smart Contracts",
-            "Embedded Systems",
-            "Electronics"
-        ],
+        "knowsAbout": knows_about,
         "knowsLanguage": ["es", "en"],
-        "email": "lucas_rack@live.com.ar",
+        "email": email,
         "description": description,
         "inLanguage": lang.locale()
     })
@@ -218,6 +227,56 @@ mod tests {
 
     fn config() -> AppConfig {
         AppConfig::for_tests()
+    }
+
+    fn translations() -> Translations {
+        Translations::load(std::path::Path::new("translations"))
+    }
+
+    #[test]
+    fn person_schema_is_sourced_from_about_json() {
+        let config = config();
+        let translations = translations();
+
+        for lang in Language::ALL {
+            let schema = person_schema(&config, &translations, lang);
+
+            // The bug this fixes: jobTitle used to be hard-coded and kept
+            // saying "Software Engineer" after /me was updated. See #89.
+            assert_eq!(
+                schema["jobTitle"],
+                json!(
+                    translations
+                        .text(lang, "about.role")
+                        .expect("about.role should exist")
+                )
+            );
+            assert_eq!(
+                schema["description"],
+                json!(
+                    translations
+                        .text(lang, "about.summary")
+                        .expect("about.summary should exist")
+                )
+            );
+            assert_eq!(
+                schema["email"],
+                json!(
+                    translations
+                        .text(lang, "about.email_handle")
+                        .expect("about.email_handle should exist")
+                )
+            );
+            // The person has more than one `current: true` entry; worksFor
+            // must be the primary job (Lenovo), not the teaching role.
+            assert_eq!(schema["worksFor"]["name"], json!("Lenovo"));
+            assert!(
+                !schema["knowsAbout"]
+                    .as_array()
+                    .expect("knowsAbout should be an array")
+                    .is_empty()
+            );
+        }
     }
 
     #[test]
