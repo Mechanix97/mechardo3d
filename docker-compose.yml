@@ -9,6 +9,9 @@ services:
       - "3000"
     env_file:
       - ./secrets/recaptcha.env
+      # The app runs as uid 10001 and cannot read secrets/ (0700, owned by
+      # the host user), so compose injects the token instead.
+      - ./secrets/github.env
     environment:
       - RUST_LOG=info
       - BASE_URL=https://mechardo3d.xyz
