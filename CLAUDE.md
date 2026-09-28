@@ -51,7 +51,7 @@ Never hard-code the public origin, a port, a key or a path in a handler - add it
 4. Unmatched paths either render a localized 404 (when they already carry a supported language) or
    are redirected to their localized equivalent - never both, so there are no redirect loops
 5. Language preference is stored in a cookie with 1-year expiration, set by the server on every HTML
-   response and also by the front-end when the visitor uses the picker
+   response (the ES/EN switch is plain links, so following one sets it)
 
 ### Shared State
 `src/state.rs` builds one `AppState` (an `Arc` handle) holding the configuration, the Tera engine,
@@ -129,6 +129,10 @@ no download button
   `templates/blog/` are fragments and start at `<h2>`
 - Never nest a link inside another link; a card links from its title and its call to action,
   and its thumbnail link is `aria-hidden`
+- Page sections sit in `.wrap` (the shared gutter) and open with a `.ruler` strip:
+  `§01 — <label>` on the left, an optional link or note on the right
+- The ES/EN switch is a pair of plain links built from `alternates` and `canonical_path`;
+  translatable copy for these labels lives under `labels` in `common.json`
 
 ### Styling
 - Tailwind CSS v4, configured from CSS: `@source` directives in `static/tailwind.css`
@@ -138,7 +142,20 @@ no download button
 - Build via `npm run build:css` or `make build-css`
 - Use v4 utility names (`shrink-0`, `bg-black/75`), not the v3 spellings
   (`flex-shrink-0`, `bg-opacity-75`) - those silently generate nothing
-- Text and buttons use `blue-600`/`blue-700`; white on `blue-500` is 3.68:1 and fails WCAG AA
+- Dark only ("datasheet" design): `<html>` always carries `.dark`, there is no theme toggle. The
+  `dark:` variants left inside blog post bodies and the DS2000 legal pages still resolve to dark colours
+- Colours and fonts are `@theme` tokens in `static/tailwind.css`: `ink`, `panel`, `card`, `line`,
+  `line-strong`, `fg`, `fg-2`, `muted`, `dim`, `lime`; `font-sans` (IBM Plex Sans), `font-mono`
+  (IBM Plex Mono), `font-display` (Sora, logo only). Use them (`bg-ink`, `text-muted`), not raw greys
+- Lime is the only accent. Text on a lime fill is always `ink`; `muted` is the lowest-contrast colour
+  allowed for text (7.6:1)
+- Fonts are self-hosted from `static/fonts/` (latin subset); do not add Google Fonts links
+- Components (`.ruler`, `.btn-lime`, `.btn-line`, `.card`, `.frame`, `.spec`, `.chip`, `.badge`,
+  `.row-link`, `.acc`, `.field`) live in `@layer components`, so a utility on the same element wins
+- Blog post bodies render inside `.prose-dark`, whose rules are unlayered on purpose: they override the
+  old utility classes inside the post fragments. New posts only need plain `h2`/`h3`/`p`/`ul`/`pre`
+- `static/js/post.js` builds the post's table of contents from its `h2`s, the reading progress bar and
+  the code block copy buttons; `menu.js` drives the phone menu; `gallery.js` the DS2000 gallery
 
 ### Images
 - Ship WebP; keep the source file out of `static/`

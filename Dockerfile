@@ -18,7 +18,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY static/tailwind.css ./static/
 COPY templates ./templates
-# The JS builds class names too (language picker), so Tailwind has to scan it.
+# The JS toggles class names too (DS2000 gallery), so Tailwind has to scan it.
 COPY static/js ./static/js
 RUN npx tailwindcss -i static/tailwind.css -o static/style.css
 

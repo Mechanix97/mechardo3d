@@ -327,6 +327,14 @@
         "cta": "repo",
         "featured": false
       }
-    ]
+    ],
+    "general_table": "General characteristics",
+    "state": "Status",
+    "location_label": "Location",
+    "experience_label": "Experience",
+    "education_label": "Education",
+    "education_short": "Electronics Eng. · FIUBA",
+    "featured": "Featured",
+    "more_projects": "More projects"
   }
 }

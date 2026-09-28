@@ -1,115 +1,92 @@
 {% extends "base.html" %}
 {% import "macros/cards.html" as cards %}
 {% block content %}
-<div class="container mx-auto px-4 py-8 max-w-5xl">
-    <!-- Hero Section with Main H1 -->
-    <section class="aura mb-16 text-center py-12 sm:py-16">
-        <span aria-hidden="true" class="aura-blob aura-blob-a"></span>
-        <span aria-hidden="true" class="aura-blob aura-blob-b"></span>
-        <h1 class="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-4">
-            {{ t.home.title | default(value='Mechardo Labs') }}
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light">
-            {{ t.home.subtitle | default(value='Software Engineer • Electronics • Blockchain') }}
-        </p>
-    </section>
 
-    <!-- DS2000 -->
-    <section class="mb-16">
-        <div
-            class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden flex flex-col border border-gray-100 dark:border-gray-700/60 transform hover:scale-[1.02] transition-all duration-500">
-            <img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}"
-                width="1536" height="1024" fetchpriority="high" decoding="async"
-                class="w-full h-auto object-contain sm:object-cover rounded-t-xl">
-            <div class="p-8">
-                <h2
-                    class="text-4xl font-extrabold font-mono mb-8 text-center bg-gradient-to-r from-blue-500 to-violet-600 dark:from-blue-400 dark:to-violet-400 text-transparent bg-clip-text">
-                    {{ t.home.ds2000.title }}
-                </h2>
-                <p class="text-lg text-gray-700 dark:text-gray-200 mb-6 text-center">
-                    {{ t.home.ds2000.description }}
-                </p>
-                <div class="text-center">
-                    <a href="/{{ lang | default(value='es') }}/ds2000" class="btn-primary text-lg">
-                        {{ t.home.ds2000.cta }}
-                    </a>
+<!-- §01 DS2000 -->
+<section class="wrap">
+    <div class="ruler"><span>§01 — {{ t.labels.featured_product }}</span><span>{{ t.labels.datasheet }}</span></div>
+    <div class="grid grid-cols-1 items-center gap-10 py-10 md:grid-cols-12 md:gap-8 md:py-18">
+        <div class="flex flex-col gap-5 md:col-span-5 md:gap-6">
+            <p class="eyebrow">{{ t.labels.part_no }} DS2000 · {{ t.labels.usb_box }}</p>
+            <h1 class="flex flex-col gap-2">
+                <span class="text-[4.75rem] leading-[0.9] font-semibold tracking-[-0.05em] md:text-[8rem]">DS2000</span>
+                <span class="text-[1.375rem] leading-tight font-medium text-fg-2 md:text-3xl">{{ t.home.headline }}</span>
+            </h1>
+            <p class="text-base leading-relaxed text-muted md:text-[1.0625rem]">{{ t.home.ds2000.description }}</p>
+            <div class="mt-2 flex flex-col gap-2.5 sm:flex-row sm:gap-0">
+                <a href="/{{ lang }}/ds2000" class="btn-lime">{{ t.home.ds2000.cta }} <span aria-hidden="true">→</span></a>
+                <a href="https://www.mercadolibre.com.ar/p/DS2000" target="_blank" rel="noopener noreferrer"
+                    class="btn-line sm:border-l-0">{{ t.labels.buy }}</a>
+            </div>
+        </div>
+
+        <figure class="flex flex-col gap-3 md:col-span-6 md:col-start-7">
+            <div class="frame">
+                <div class="frame-plate">
+                    <div class="relative">
+                        <img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}"
+                            width="1536" height="1024" fetchpriority="high" decoding="async">
+                        <span class="scan" aria-hidden="true"></span>
+                        {# Callouts sit on the render at fixed percentages; the
+                           render's framing never changes. #}
+                        <span aria-hidden="true" class="absolute hidden bg-ink px-1.5 py-0.5 font-mono text-[11px] text-fg md:block left-[24%] top-[10%]">K1 MUTE</span>
+                        <span aria-hidden="true" class="absolute hidden bg-ink px-1.5 py-0.5 font-mono text-[11px] text-fg md:block left-[44%] top-[14%]">K2 DEAF</span>
+                        <span aria-hidden="true" class="absolute hidden bg-ink px-1.5 py-0.5 font-mono text-[11px] text-fg md:block left-[64%] top-[19%]">K3 DISC</span>
+                        <span aria-hidden="true" class="absolute hidden bg-ink px-1.5 py-0.5 font-mono text-[11px] text-fg md:block left-[22%] top-[69%]">LED 1</span>
+                        <span aria-hidden="true" class="absolute hidden bg-ink px-1.5 py-0.5 font-mono text-[11px] text-fg md:block left-[50%] top-[80%]">LED 2</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+            <figcaption class="caption flex justify-between gap-4">
+                <span>{{ t.labels.figure }} 1 — DS2000, {{ t.labels.front_view | lower }}</span>
+                <span>{{ t.labels.render }}</span>
+            </figcaption>
+        </figure>
+    </div>
 
-    <!-- Entradas Recientes del Blog -->
-    <section class="mb-16">
-        <h2
-            class="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-500 to-violet-600 dark:from-blue-400 dark:to-violet-400 text-transparent bg-clip-text">
-            {{ t.home.blog.title }}
-        </h2>
+    <table class="spec mb-14 md:mb-24">
+        <caption class="caption">{{ t.labels.table }} 1 — {{ t.ds2000.specs.title }}</caption>
+        <tbody>
+            <tr><th scope="row">{{ t.ds2000.specs.connection }}</th><td>USB 2.0 · plug-and-play</td></tr>
+            <tr><th scope="row">{{ t.ds2000.specs.buttons }}</th><td>{{ t.ds2000.specs.buttons_desc }}</td></tr>
+            <tr><th scope="row">{{ t.ds2000.specs.indicators }}</th><td>{{ t.ds2000.specs.indicators_desc }}</td></tr>
+            <tr><th scope="row">{{ t.ds2000.specs.compatibility }}</th><td>Windows · macOS · Linux</td></tr>
+            <tr><th scope="row">{{ t.ds2000.specs.material }}</th><td>{{ t.ds2000.specs.material_desc }}</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- §02 Blog -->
+{% if posts %}
+<section class="dots border-t border-line">
+    <div class="wrap pb-14 md:pb-24">
+        <div class="ruler"><span>§02 — {{ t.labels.log }}</span><a href="/{{ lang }}/blog">{{ t.labels.see_all_posts }} →</a></div>
+        <h2 class="mt-9 mb-6 text-3xl font-semibold tracking-tight md:mt-14 md:mb-8 md:text-[2.75rem]">{{ t.home.blog.title }}</h2>
         {# The column count follows the number of posts, so a single entry reads
            as one deliberate card instead of a third of an empty row. #}
-        <div class="grid grid-cols-1 gap-6 {% if posts | length == 1 %}max-w-xl mx-auto{% elif posts | length == 2 %}md:grid-cols-2{% else %}md:grid-cols-3{% endif %}">
+        <div class="grid grid-cols-1 gap-5 md:gap-8 {% if posts | length == 1 %}max-w-2xl{% elif posts | length == 2 %}md:grid-cols-2{% else %}md:grid-cols-3{% endif %}">
             {% for post in posts %}
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700/60 hover:shadow-[0_20px_40px_-16px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_40px_-16px_rgba(167,139,250,0.3)] hover:-translate-y-1 transition-all duration-300">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-3">{{ post.title }}</h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{{ post.summary | truncate(length=150)
-                    }}
-                </p>
-                <a href="/{{ lang | default(value='es') }}/blog/{{ post.id }}"
-                    class="text-blue-700 dark:text-blue-300 hover:underline font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">{{
-                    t.home.blog.read_more }}<span class="sr-only">: {{ post.title }}</span></a>
-            </div>
+            {{ cards::post_card(post=post, lang=lang, t=t, level="h3") }}
             {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
+{% endif %}
 
-    <!-- Redes Sociales -->
-    <section class="mb-16 text-center">
-        <h2
-            class="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-blue-500 to-violet-600 dark:from-blue-400 dark:to-violet-400 text-transparent bg-clip-text">
-            {{ t.home.social.title }}
-        </h2>
-        <div class="flex justify-center gap-6 flex-wrap">
-            <!-- Instagram -->
-            <a href="https://www.instagram.com/mechardo3d/" target="_blank" rel="noopener noreferrer" aria-label="{{ t.social.instagram.aria }}"
-                class="chip">
-                <svg class="w-6 h-6 text-blue-700 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z" />
-                </svg>
-                <span class="text-lg font-semibold text-blue-700 dark:text-blue-300">Instagram</span>
-            </a>
-            <!-- Discord -->
-            <a href="https://discord.gg/VtbFAGJe86" target="_blank" rel="noopener noreferrer" aria-label="{{ t.social.discord.aria }}"
-                class="chip">
-                <svg class="w-6 h-6 text-blue-700 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.376-.444.753-.608 1.15a18.566 18.566 0 00-5.487 0c-.164-.398-.398-.775-.608-1.15a.074.074 0 00-.079-.037A19.789 19.789 0 003.683 4.37a.074.074 0 00-.032.027C.533 9.045-.319 13.579.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.074.074 0 00.081-.025c.454-.606.885-1.243 1.24-1.902a.074.074 0 00-.027-.098 13.087 13.087 0 01-1.872-.892.074.074 0 01-.008-.125c.126-.094.252-.192.378-.292a.074.074 0 01.078-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 01.078.01c.126.1.252.198.378.292a.074.074 0 01-.008.125 13.135 13.135 0 01-1.872.892.074.074 0 00-.027.098c.356.66.786 1.296 1.24 1.902a.074.074 0 00.081.025 19.884 19.884 0 006.002-3.03.074.074 0 00.032-.057c.5-5.177-.838-9.673-3.548-13.66a.074.074 0 00-.032-.027zM8.02 15.332c-1.183 0-2.157-1.085-2.157-2.419s.966-2.419 2.157-2.419c1.197 0 2.176 1.085 2.157 2.419 0 1.334-.96 2.419-2.157 2.419zm7.974 0c-1.183 0-2.157-1.085-2.157-2.419s.966-2.419 2.157-2.419c1.197 0 2.176 1.085 2.157 2.419 0 1.334-.96 2.419-2.157 2.419z" />
-                </svg>
-                <span class="text-lg font-semibold text-blue-700 dark:text-blue-300">Discord</span>
-            </a>
-            <!-- X -->
-            <a href="https://x.com/MechardoLabs" target="_blank" rel="noopener noreferrer" aria-label="{{ t.social.x.aria }}"
-                class="chip">
-                <svg class="w-6 h-6 text-blue-700 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                <span class="text-lg font-semibold text-blue-700 dark:text-blue-300">X</span>
-            </a>
-            <!-- YouTube -->
-            <a href="https://www.youtube.com/@MechardoLabs" target="_blank" rel="noopener noreferrer" aria-label="{{ t.social.youtube.aria }}"
-                class="chip">
-                <svg class="w-6 h-6 text-blue-700 dark:text-blue-300" fill="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-                </svg>
-                <span class="text-lg font-semibold text-blue-700 dark:text-blue-300">YouTube</span>
-            </a>
+<!-- §03 About -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    <div class="ruler"><span>§03 — {{ t.nav.about }}</span></div>
+    <div class="grid grid-cols-1 gap-8 pt-9 md:grid-cols-12 md:pt-14">
+        <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:col-span-7 md:text-[2.75rem]">
+            {{ t.about.name }}. {{ t.home.about_title }}</h2>
+        <div class="flex flex-col gap-5 font-mono text-[0.8125rem] md:col-span-4 md:col-start-9">
+            <dl class="rows">
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted uppercase">{{ t.home.stack_language }}</dt><dd>Rust</dd></div>
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted uppercase">{{ t.home.stack_hardware }}</dt><dd>PCB · ESP32 · IoT</dd></div>
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted uppercase">{{ t.home.stack_other }}</dt><dd>Blockchain</dd></div>
+            </dl>
+            <a href="/{{ lang }}/me" class="btn-line">{{ t.home.view_cv }} →</a>
         </div>
-    </section>
-</div>
+    </div>
+</section>
 {% endblock %}

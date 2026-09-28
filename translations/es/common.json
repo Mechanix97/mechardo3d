@@ -5,13 +5,14 @@
     "home": "Mechardo Labs, ir al inicio",
     "skip_to_content": "Saltar al contenido",
     "language": "Elegir idioma",
-    "theme_dark": "Activar modo oscuro",
-    "theme_light": "Activar modo claro",
-    "about": "Sobre mí"
+    "about": "Sobre mí",
+    "menu": "Menú",
+    "menu_close": "Cerrar"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
-    "contact": "Contactanos"
+    "contact": "Contactanos",
+    "social": "Redes sociales"
   },
   "page_titles": {
     "home": "Inicio",
@@ -58,5 +59,28 @@
     "not_found_message": "La página que buscás no existe o cambió de dirección.",
     "back_home": "Volver al inicio",
     "server_error_message": "Algo salió mal. Probá de nuevo en unos minutos."
+  },
+  "labels": {
+    "part_no": "Part no.",
+    "usb_box": "Botonera USB",
+    "datasheet": "Hoja de datos",
+    "featured_product": "Producto destacado",
+    "log": "Registro",
+    "figure": "Fig.",
+    "table": "Tabla",
+    "render": "Render 3D",
+    "available": "Disponible",
+    "latest": "Último",
+    "last_post": "Último post",
+    "entries": "entradas",
+    "see_all_posts": "Ver todos los posts",
+    "contents": "Índice",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "sections": "secciones",
+    "specs_short": "Especificaciones",
+    "front_view": "Vista frontal",
+    "download": "Descargar",
+    "buy": "Comprar"
   }
 }

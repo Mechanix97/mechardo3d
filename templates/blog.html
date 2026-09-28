@@ -1,13 +1,45 @@
 {% extends "base.html" %}
 {% import "macros/cards.html" as cards %}
 {% block content %}
-<div class="container mx-auto px-4 py-12 max-w-5xl">
-    <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent mb-10 text-center">{{ t.blog.title }}
-    </h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<section class="wrap">
+    <div class="ruler"><span>§ Blog — {{ t.labels.log }}</span><span>{{ posts | length }} {{ t.labels.entries }}</span></div>
+    <div class="flex flex-col gap-4 py-10 md:flex-row md:items-end md:justify-between md:gap-12 md:py-18">
+        <h1 class="text-[3.25rem] leading-[0.98] font-semibold tracking-[-0.045em] md:text-[5.5rem]">{{ t.blog.title }}</h1>
+        <p class="max-w-md text-base leading-relaxed text-muted md:text-[1.0625rem]">{{ t.blog.intro }}</p>
+    </div>
+</section>
+
+<section class="dots">
+    <div class="wrap flex flex-col gap-5 pb-14 md:gap-8 md:pb-24">
         {% for post in posts %}
-        {{ cards::post_card(post=post, lang=lang, t=t, level="h2") }}
+        {% if loop.first %}
+        {# The newest post leads as a wide card: image and text side by side
+           from the tablet breakpoint up. #}
+        <article class="card md:grid md:grid-cols-2">
+            <a href="/{{ lang }}/blog/{{ post.id }}" tabindex="-1" aria-hidden="true"
+                class="card-media md:aspect-auto md:min-h-[26rem] md:border-r md:border-b-0">
+                <img src="{{ post.thumbnail | default(value='/static/images/martin-fierro.avif') }}" alt=""
+                    width="1200" height="675" fetchpriority="high" decoding="async">
+            </a>
+            <div class="flex flex-col justify-center gap-4 p-5 md:p-12">
+                <p class="meta"><span class="text-lime">{{ t.labels.latest }}</span> · <time datetime="{{ post.date }}">{{ post.date | date_format(lang=lang) }}</time></p>
+                <h2 class="card-title text-2xl leading-tight font-semibold tracking-tight md:text-[2.375rem]">
+                    <a href="/{{ lang }}/blog/{{ post.id }}">{{ post.title }}</a>
+                </h2>
+                <p class="text-[0.9375rem] leading-relaxed text-muted md:text-[1.0625rem]">{{ post.summary | default(value=t.blog.summary_default) }}</p>
+                <a href="/{{ lang }}/blog/{{ post.id }}" class="link-arrow min-h-11">{{ t.blog.read_post }}<span class="sr-only">: {{ post.title }}</span>
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg></a>
+            </div>
+        </article>
+        {% if posts | length > 1 %}<div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">{% endif %}
+        {% else %}
+            {{ cards::post_card(post=post, lang=lang, t=t, level="h2") }}
+        {% endif %}
+        {% if loop.last and posts | length > 1 %}</div>{% endif %}
         {% endfor %}
     </div>
-</div>
+</section>
 {% endblock %}

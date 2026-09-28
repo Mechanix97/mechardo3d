@@ -11,8 +11,12 @@
       "title": "Lo Último del Blog",
       "read_more": "Leer más"
     },
-    "social": {
-      "title": "Conectá con Nosotros"
-    }
+    "headline": "Discord al siguiente nivel.",
+    "view_specs": "Ver especificaciones",
+    "about_title": "Ingeniero de software, del firmware al clúster.",
+    "view_cv": "Ver hoja de datos (CV)",
+    "stack_language": "Lenguaje",
+    "stack_hardware": "Hardware",
+    "stack_other": "Otros"
   }
 }

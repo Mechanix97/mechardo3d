@@ -1,214 +1,213 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mx-auto px-4 py-12 max-w-4xl">
-    <section class="aura mb-10 py-6">
-        <span aria-hidden="true" class="aura-blob aura-blob-a"></span>
-        <span aria-hidden="true" class="aura-blob aura-blob-b"></span>
-        <!-- Main H1 Title -->
-        <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent text-center">
-            {{ t.ds2000.title | default(value='DS2000 – Discord Button Box') }}
-        </h1>
-    </section>
+{% set buy_url = "https://www.mercadolibre.com.ar/p/DS2000" %}
 
-    <!-- DS2000 logo -->
-    <div
-        class="flex justify-center items-center w-full h-[12rem] md:h-[16rem] bg-[#13120E] rounded-lg shadow-xl overflow-hidden mb-12 border border-white/5 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-        <img src="/static/images/DS2000/logo/ds2000-logo.webp" alt="DS2000" width="746" height="764"
-            decoding="async" class="w-full h-full object-contain p-4" />
-    </div>
+<section class="wrap">
+    <div class="ruler"><span>§ DS2000 — {{ t.labels.datasheet }}</span><span>Rev A</span></div>
+    <div class="grid grid-cols-1 items-start gap-10 pt-8 pb-14 md:grid-cols-12 md:gap-12 md:pt-16 md:pb-24">
 
-    <!-- Deslizador de fotos con modal -->
-    <div class="relative mb-12">
-        <div id="carousel" role="region" aria-roledescription="carousel" aria-label="{{ t.ds2000.images.carousel }}"
-            class="relative w-full overflow-hidden rounded-lg shadow-md aspect-[3/2] max-h-[24rem] sm:max-h-[32rem]">
-            <div id="carousel-items" class="flex transition-transform duration-500 ease-in-out">
-                <div class="min-w-full" role="group" aria-roledescription="slide" aria-label="1 / 3">
-                    <button type="button" class="block w-full cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        data-fullscreen="/static/images/DS2000/renders/frente.webp"
-                        aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.front }}">
+        <!-- Gallery -->
+        <div class="flex flex-col gap-4 md:order-1 md:col-span-7" data-gallery>
+            <div class="frame">
+                <div class="frame-plate">
+                    <div class="relative">
                         <img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}"
-                            width="1536" height="1024" fetchpriority="high" decoding="async"
-                            class="w-full h-auto object-contain sm:object-cover">
-                    </button>
-                </div>
-                <div class="min-w-full" role="group" aria-roledescription="slide" aria-label="2 / 3">
-                    <button type="button" class="block w-full cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        data-fullscreen="/static/images/DS2000/renders/trasero.webp"
-                        aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.back }}">
-                        <img src="/static/images/DS2000/renders/trasero.webp" alt="{{ t.ds2000.images.back }}"
-                            width="1536" height="1024" loading="lazy" decoding="async"
-                            class="w-full h-auto object-contain sm:object-cover">
-                    </button>
-                </div>
-                <div class="min-w-full" role="group" aria-roledescription="slide" aria-label="3 / 3">
-                    <button type="button" class="block w-full cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        data-fullscreen="/static/images/DS2000/renders/superior.webp"
-                        aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.top }}">
-                        <img src="/static/images/DS2000/renders/superior.webp" alt="{{ t.ds2000.images.top }}"
-                            width="1536" height="1024" loading="lazy" decoding="async"
-                            class="w-full h-auto object-contain sm:object-cover">
-                    </button>
+                            width="1536" height="1024" fetchpriority="high" decoding="async" data-gallery-main>
+                        <span class="scan" aria-hidden="true"></span>
+                        <button type="button" data-gallery-open
+                            class="absolute right-3 bottom-3 flex h-11 w-11 items-center justify-center bg-ink text-fg hover:text-lime"
+                            aria-label="{{ t.ds2000.images.enlarge }} {{ t.ds2000.images.front }}"
+                            data-label="{{ t.ds2000.images.enlarge }}">
+                            <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <!-- Botones de navegación -->
-            <button id="prev-slide" type="button" aria-label="{{ t.ds2000.images.previous }}"
-                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-                </svg>
-            </button>
-            <button id="next-slide" type="button" aria-label="{{ t.ds2000.images.next }}"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.59 16.59L13.17 12l-4.58-4.59L10 6l6 6-6 6-1.41-1.41z" />
-                </svg>
-            </button>
-        </div>
-        <!-- Modal para imagen ampliada -->
-        <div id="image-modal" role="dialog" aria-modal="true" aria-label="{{ t.ds2000.images.enlarged }}"
-            class="fixed inset-0 bg-black/75 hidden z-50">
-            <div class="flex items-center justify-center min-h-screen">
-                <div class="relative max-w-[90vw] max-h-[90vh]">
-                    <img id="modal-image" src="" alt="{{ t.ds2000.images.enlarged }}"
-                        class="w-full h-auto max-h-[90vh] object-contain rounded-lg">
-                    <button id="close-modal" type="button" aria-label="{{ t.ds2000.images.close }}"
-                        class="absolute top-2 right-2 bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+            <div class="grid grid-cols-3 gap-2.5 md:gap-4" role="group" aria-label="{{ t.ds2000.images.carousel }}">
+                <button type="button" class="border border-lime bg-panel p-1 md:p-1.5" aria-pressed="true"
+                    data-gallery-thumb data-src="/static/images/DS2000/renders/frente.webp" data-alt="{{ t.ds2000.images.front }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-16 w-full object-contain md:h-28"></span>
+                </button>
+                <button type="button" class="border border-line-strong bg-panel p-1 hover:border-lime md:p-1.5" aria-pressed="false"
+                    data-gallery-thumb data-src="/static/images/DS2000/renders/trasero.webp" data-alt="{{ t.ds2000.images.back }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/trasero.webp" alt="{{ t.ds2000.images.back }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-16 w-full object-contain md:h-28"></span>
+                </button>
+                <button type="button" class="border border-line-strong bg-panel p-1 hover:border-lime md:p-1.5" aria-pressed="false"
+                    data-gallery-thumb data-src="/static/images/DS2000/renders/superior.webp" data-alt="{{ t.ds2000.images.top }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/superior.webp" alt="{{ t.ds2000.images.top }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-16 w-full object-contain md:h-28"></span>
+                </button>
+            </div>
+            <p class="caption flex justify-between gap-4">
+                <span>{{ t.labels.figure }} 1 — <span data-gallery-caption>{{ t.ds2000.images.front }}</span></span>
+                <span data-gallery-count>1 / 3</span>
+            </p>
+
+            <dialog id="image-modal" class="m-auto max-h-[92vh] max-w-[92vw] bg-transparent p-0 backdrop:bg-ink/90"
+                aria-label="{{ t.ds2000.images.enlarged }}">
+                <div class="relative border border-line-strong bg-[#f2f3f0]">
+                    <img id="modal-image" src="" alt="" class="block max-h-[88vh] w-auto object-contain">
+                    <button type="button" id="close-modal" aria-label="{{ t.ds2000.images.close }}"
+                        class="absolute top-3 right-3 flex h-11 w-11 items-center justify-center bg-ink text-fg hover:text-lime">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6L6 18" />
                         </svg>
                     </button>
                 </div>
+            </dialog>
+        </div>
+
+        <!-- Summary -->
+        <div class="flex flex-col gap-5 md:order-2 md:col-span-5 md:gap-6 md:pt-2">
+            <p class="eyebrow">{{ t.labels.part_no }} DS2000 · {{ t.labels.usb_box }}</p>
+            <h1 class="flex flex-col gap-2.5">
+                <span class="text-[4.5rem] leading-[0.9] font-semibold tracking-[-0.05em] md:text-[7rem]">DS2000</span>
+                <span class="text-[1.3125rem] font-medium text-fg-2 md:text-[1.625rem]">{{ t.ds2000.title | split(pat="– ") | last }}</span>
+            </h1>
+            <p class="text-base leading-relaxed text-muted md:text-[1.0625rem]">{{ t.ds2000.description }}</p>
+            <dl class="rows font-mono text-[0.8125rem]">
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">K1 · K2 · K3</dt><dd class="text-right">Mute · Deaf · Disconnect</dd></div>
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">LED 1 · LED 2</dt><dd class="text-right">RGB</dd></div>
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">{{ t.ds2000.specs.connection }}</dt><dd class="text-right">USB 2.0</dd></div>
+            </dl>
+            <div class="mt-2 flex flex-col gap-2.5">
+                <a href="{{ buy_url }}" target="_blank" rel="noopener noreferrer" class="btn-lime min-h-14 text-sm">{{ t.ds2000.buy }} <span aria-hidden="true">→</span></a>
+                <a href="#drivers" class="btn-line min-h-14 text-sm">{{ t.ds2000.drivers.title }} ↓</a>
+            </div>
+            <p class="font-mono text-xs text-muted">Windows 10/11 · macOS 10.15+ · Linux</p>
+        </div>
+    </div>
+</section>
+
+<!-- §01 Features -->
+<section class="dots border-t border-line">
+    <div class="wrap pb-14 md:pb-24">
+        <div class="ruler"><span>§01 — {{ t.ds2000.features.title }}</span></div>
+        <h2 class="mt-9 mb-6 text-[1.75rem] font-semibold tracking-tight md:mt-14 md:mb-8 md:text-[2.75rem]">{{ t.ds2000.features.title }}</h2>
+        <div class="grid grid-cols-1 border border-line-strong bg-ink md:grid-cols-4">
+            <div class="flex flex-col gap-3 border-line-strong p-5 transition-colors hover:bg-card md:gap-4 md:px-7 md:py-8 border-b md:border-r md:border-b-0">
+                <div class="flex items-center justify-between">
+                    <svg class="h-7 w-7 text-lime" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="2" y="7" width="6" height="10"/><rect x="9" y="7" width="6" height="10"/><rect x="16" y="7" width="6" height="10"/></svg>
+                    <span class="font-mono text-xs text-dim">01</span>
+                </div>
+                <h3 class="text-lg font-semibold md:text-xl">{{ t.ds2000.features.control.title }}</h3>
+                <p class="text-[0.9375rem] leading-relaxed text-muted">{{ t.ds2000.features.control.description }}</p>
+            </div>
+            <div class="flex flex-col gap-3 border-line-strong p-5 transition-colors hover:bg-card md:gap-4 md:px-7 md:py-8 border-b md:border-r md:border-b-0">
+                <div class="flex items-center justify-between">
+                    <svg class="h-7 w-7 text-lime" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><path d="M7 4v2M7 18v2M17 4v2M17 18v2"/></svg>
+                    <span class="font-mono text-xs text-dim">02</span>
+                </div>
+                <h3 class="text-lg font-semibold md:text-xl">{{ t.ds2000.features.leds.title }}</h3>
+                <p class="text-[0.9375rem] leading-relaxed text-muted">{{ t.ds2000.features.leds.description }}</p>
+            </div>
+            <div class="flex flex-col gap-3 border-line-strong p-5 transition-colors hover:bg-card md:gap-4 md:px-7 md:py-8 border-b md:border-r md:border-b-0">
+                <div class="flex items-center justify-between">
+                    <svg class="h-7 w-7 text-lime" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M12 2v14M8 6l4-4 4 4"/><rect x="8" y="16" width="8" height="6"/></svg>
+                    <span class="font-mono text-xs text-dim">03</span>
+                </div>
+                <h3 class="text-lg font-semibold md:text-xl">{{ t.ds2000.features.usb.title }}</h3>
+                <p class="text-[0.9375rem] leading-relaxed text-muted">{{ t.ds2000.features.usb.description }}</p>
+            </div>
+            <div class="flex flex-col gap-3 border-line-strong p-5 transition-colors hover:bg-card md:gap-4 md:px-7 md:py-8">
+                <div class="flex items-center justify-between">
+                    <svg class="h-7 w-7 text-lime" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="7" width="18" height="10"/><path d="M3 20h18M3 19v2M21 19v2"/></svg>
+                    <span class="font-mono text-xs text-dim">04</span>
+                </div>
+                <h3 class="text-lg font-semibold md:text-xl">{{ t.ds2000.features.design.title }}</h3>
+                <p class="text-[0.9375rem] leading-relaxed text-muted">{{ t.ds2000.features.design.description }}</p>
             </div>
         </div>
     </div>
+</section>
 
-    <p class="text-lg text-gray-700 dark:text-gray-200 mb-12 text-center">
-        {{ t.ds2000.description }}
-    </p>
+<!-- §02 Specs -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    <div class="ruler"><span>§02 — {{ t.ds2000.specs.title }}</span></div>
+    <div class="grid grid-cols-1 gap-6 pt-9 md:grid-cols-12 md:gap-8 md:pt-14">
+        <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:col-span-4 md:text-[2.75rem]">{{ t.ds2000.specs.title }}</h2>
+        <table class="spec md:col-span-8 md:col-start-5 md:text-base">
+            <tbody>
+                <tr><th scope="row">{{ t.ds2000.specs.connection }}</th><td>USB 2.0 · USB 3.0</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.buttons }}</th><td>{{ t.ds2000.specs.buttons_desc }}</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.indicators }}</th><td>{{ t.ds2000.specs.indicators_desc }}</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.compatibility }}</th><td>Windows 10/11, macOS 10.15+, Linux (Ubuntu, Fedora)</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.dimensions }}</th><td class="font-mono">10 × 5 × 2 cm</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.weight }}</th><td class="font-mono">150 g</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.material }}</th><td>{{ t.ds2000.specs.material_desc }}</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.software }}</th><td>{{ t.ds2000.specs.software_desc }}</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
-    <!-- Botón de compra en Mercado Libre -->
-    <section class="mb-12 text-center">
-        <a href="https://www.mercadolibre.com.ar/p/DS2000" target="_blank" rel="noopener noreferrer"
-            class="btn-primary btn-cta text-xl md:text-2xl px-8 py-4">
-            {{ t.ds2000.buy }}
-        </a>
-    </section>
-
-    <!-- Características Principales -->
-    <section class="mb-12">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">{{ t.ds2000.features.title }}
-        </h2>
-        <ul class="space-y-6">
-            <li
-                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-600 dark:text-blue-300 shrink-0" fill="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.22-1.79L9 14v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.91-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 3.08-1.77 5.75-4.1 7.49z" />
-                </svg>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">{{ t.ds2000.features.control.title }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300">{{ t.ds2000.features.control.description }}</p>
-                </div>
-            </li>
-            <li
-                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-600 dark:text-blue-300 shrink-0" fill="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
-                </svg>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">{{ t.ds2000.features.leds.title }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300">{{ t.ds2000.features.leds.description }}</p>
-                </div>
-            </li>
-            <li
-                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-600 dark:text-blue-300 shrink-0" fill="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z" />
-                </svg>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">{{ t.ds2000.features.usb.title }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300">{{ t.ds2000.features.usb.description }}</p>
-                </div>
-            </li>
-            <li
-                class="flex items-start gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl hover:bg-blue-50 dark:hover:bg-blue-900 transition-all duration-300">
-                <svg class="w-8 h-8 text-blue-600 dark:text-blue-300 shrink-0" fill="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z" />
-                </svg>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200">{{ t.ds2000.features.design.title }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300">{{ t.ds2000.features.design.description }}</p>
-                </div>
-            </li>
-        </ul>
-    </section>
-
-    <!-- Información técnica -->
-    <section class="mb-12">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">{{ t.ds2000.specs.title }}</h2>
-        <ul class="list-disc list-inside text-gray-700 dark:text-gray-200 space-y-2">
-            <li><strong>{{ t.ds2000.specs.connection }}</strong>: USB 2.0 (compatible con USB 3.0)</li>
-            <li><strong>{{ t.ds2000.specs.buttons }}</strong>: {{ t.ds2000.specs.buttons_desc }}</li>
-            <li><strong>{{ t.ds2000.specs.indicators }}</strong>: {{ t.ds2000.specs.indicators_desc }}</li>
-            <li><strong>{{ t.ds2000.specs.compatibility }}</strong>: Windows 10/11, macOS 10.15+, Linux (Ubuntu, Fedora)</li>
-            <li><strong>{{ t.ds2000.specs.dimensions }}</strong>: 10 cm x 5 cm x 2 cm (aproximado)</li>
-            <li><strong>{{ t.ds2000.specs.weight }}</strong>: 150 g</li>
-            <li><strong>{{ t.ds2000.specs.material }}</strong>: {{ t.ds2000.specs.material_desc }}</li>
-            <li><strong>{{ t.ds2000.specs.software }}</strong>: {{ t.ds2000.specs.software_desc }}</li>
-        </ul>
-    </section>
-
-    <!-- Sección de controladores -->
-    <section class="mb-12">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">{{ t.ds2000.drivers.title }}</h2>
-        <p class="text-gray-700 dark:text-gray-200 mb-6">{{ t.ds2000.drivers.description }}</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <a href="/static/downloads/ds2000-windows-driver.zip"
-                class="chip">
-                <svg class="w-6 h-6 text-blue-700 dark:text-blue-300 shrink-0" fill="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                </svg>
-                <span class="text-lg font-semibold text-blue-700 dark:text-blue-300">{{ t.ds2000.drivers.windows }}</span>
+<!-- §03 Drivers -->
+<section id="drivers" class="wrap scroll-mt-20 border-t border-line pb-14 md:pb-24">
+    <div class="ruler"><span>§03 — {{ t.ds2000.drivers.title }}</span></div>
+    <div class="grid grid-cols-1 gap-6 pt-9 md:grid-cols-12 md:gap-8 md:pt-14">
+        <div class="flex flex-col gap-4 md:col-span-4">
+            <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:text-[2.75rem]">{{ t.ds2000.drivers.title }}</h2>
+            <p class="leading-relaxed text-muted">{{ t.ds2000.drivers.description }}</p>
+        </div>
+        <div class="flex flex-col gap-3 md:col-span-8 md:col-start-5">
+            <a href="/static/downloads/ds2000-windows-driver.zip" download
+                class="flex items-center justify-between gap-4 border border-line-strong px-5 py-5 transition-colors hover:bg-card md:px-7 md:py-6">
+                <span class="flex flex-col gap-1"><span class="text-lg font-semibold md:text-xl">{{ t.ds2000.drivers.windows }}</span><span class="font-mono text-xs text-muted">Windows 10/11</span></span>
+                <span class="font-mono text-[0.8125rem] tracking-[0.06em] text-lime uppercase">{{ t.labels.download }} ↓</span>
             </a>
-            <a href="/static/downloads/ds2000-macos-driver.zip"
-                class="chip">
-                <svg class="w-6 h-6 text-blue-700 dark:text-blue-300 shrink-0" fill="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                </svg>
-                <span class="text-lg font-semibold text-blue-700 dark:text-blue-300">{{ t.ds2000.drivers.macos }}</span>
+            <a href="/static/downloads/ds2000-macos-driver.zip" download
+                class="flex items-center justify-between gap-4 border border-line-strong px-5 py-5 transition-colors hover:bg-card md:px-7 md:py-6">
+                <span class="flex flex-col gap-1"><span class="text-lg font-semibold md:text-xl">{{ t.ds2000.drivers.macos }}</span><span class="font-mono text-xs text-muted">macOS 10.15+</span></span>
+                <span class="font-mono text-[0.8125rem] tracking-[0.06em] text-lime uppercase">{{ t.labels.download }} ↓</span>
             </a>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- FAQ -->
-    <section class="mb-12">
-        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-6 text-center">{{ t.ds2000.faq.title }}</h2>
-        <div class="space-y-4">
-            <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-                <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">{{ t.ds2000.faq.q1 }}</summary>
-                <p class="text-gray-700 dark:text-gray-300 mt-2">{{ t.ds2000.faq.a1 }}</p>
+<!-- §04 FAQ -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    <div class="ruler"><span>§04 — {{ t.ds2000.faq.title }}</span></div>
+    <div class="grid grid-cols-1 gap-6 pt-9 md:grid-cols-12 md:gap-8 md:pt-14">
+        <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:col-span-4 md:text-[2.75rem]">{{ t.ds2000.faq.title }}</h2>
+        <div class="border-t border-line-strong md:col-span-8 md:col-start-5">
+            <details class="acc" open>
+                <summary class="text-[1.0625rem] font-medium md:text-lg">
+                    <span class="flex gap-4"><span class="hidden pt-1 font-mono text-[0.8125rem] text-lime md:inline" aria-hidden="true">Q1</span>{{ t.ds2000.faq.q1 }}</span>
+                    <span class="acc-plus" aria-hidden="true">+</span>
+                </summary>
+                <p class="pb-6 leading-relaxed text-muted md:pl-11">{{ t.ds2000.faq.a1 }}</p>
             </details>
-            <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-                <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">{{ t.ds2000.faq.q2 }}</summary>
-                <p class="text-gray-700 dark:text-gray-300 mt-2">{{ t.ds2000.faq.a2 }}</p>
+            <details class="acc">
+                <summary class="text-[1.0625rem] font-medium md:text-lg">
+                    <span class="flex gap-4"><span class="hidden pt-1 font-mono text-[0.8125rem] text-lime md:inline" aria-hidden="true">Q2</span>{{ t.ds2000.faq.q2 }}</span>
+                    <span class="acc-plus" aria-hidden="true">+</span>
+                </summary>
+                <p class="pb-6 leading-relaxed text-muted md:pl-11">{{ t.ds2000.faq.a2 }}</p>
             </details>
-            <details class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-                <summary class="text-lg font-semibold text-gray-900 dark:text-gray-200 cursor-pointer">{{ t.ds2000.faq.q3 }}</summary>
-                <p class="text-gray-700 dark:text-gray-300 mt-2">{{ t.ds2000.faq.a3 }}</p>
+            <details class="acc">
+                <summary class="text-[1.0625rem] font-medium md:text-lg">
+                    <span class="flex gap-4"><span class="hidden pt-1 font-mono text-[0.8125rem] text-lime md:inline" aria-hidden="true">Q3</span>{{ t.ds2000.faq.q3 }}</span>
+                    <span class="acc-plus" aria-hidden="true">+</span>
+                </summary>
+                <p class="pb-6 leading-relaxed text-muted md:pl-11">{{ t.ds2000.faq.a3 }}</p>
             </details>
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- Buy bar, phones only: stays on screen while the page scrolls. -->
+<div class="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-line-strong bg-ink/95 px-5 py-3 backdrop-blur md:hidden">
+    <span class="flex flex-col"><span class="font-semibold">DS2000</span><span class="font-mono text-[0.6875rem] text-muted">{{ t.labels.usb_box }}</span></span>
+    <a href="{{ buy_url }}" target="_blank" rel="noopener noreferrer" class="btn-lime min-h-12">{{ t.ds2000.buy }} →</a>
 </div>
 
-<script src="/static/js/carousel.js"></script>
+<script src="/static/js/gallery.js" defer></script>
+{% endblock %}
+
+{% block footer_extra %}
+<nav aria-label="DS2000" class="flex gap-6 uppercase tracking-[0.06em]">
+    <a href="/{{ lang }}/ds2000/terms-of-service" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.terms_of_service }}</a>
+    <a href="/{{ lang }}/ds2000/privacy-policy" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.privacy_policy }}</a>
+</nav>
 {% endblock %}

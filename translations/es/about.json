@@ -327,6 +327,14 @@
         "cta": "repo",
         "featured": false
       }
-    ]
+    ],
+    "general_table": "Características generales",
+    "state": "Estado",
+    "location_label": "Ubicación",
+    "experience_label": "Experiencia",
+    "education_label": "Formación",
+    "education_short": "Ing. Electrónica · FIUBA",
+    "featured": "Destacado",
+    "more_projects": "Más proyectos"
   }
 }
