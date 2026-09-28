@@ -217,7 +217,7 @@ mod tests {
     use super::*;
 
     fn config() -> AppConfig {
-        AppConfig::from_env()
+        AppConfig::for_tests()
     }
 
     #[test]

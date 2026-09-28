@@ -175,7 +175,7 @@ mod tests {
     use std::path::Path;
 
     fn config() -> AppConfig {
-        AppConfig::from_env()
+        AppConfig::for_tests()
     }
 
     fn posts() -> Vec<BlogPost> {

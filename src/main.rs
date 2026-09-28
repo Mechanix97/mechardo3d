@@ -222,3 +222,126 @@ mod tests {
         assert_eq!(parse_log_level("hyper=off"), None);
     }
 }
+
+/// Exercises the real `router()` end to end (routing, the `Lang` extractor,
+/// the fallback and the middleware stack) instead of only the helper
+/// functions it's built from. This is what would have caught `/cv` resolving
+/// to the home page instead of `/{lang}/cv` - see #88.
+#[cfg(test)]
+mod router_tests {
+    use super::*;
+    use axum::body::Body;
+    use axum::http::{Request, header};
+    use tower::ServiceExt;
+
+    fn test_router() -> Router {
+        let state = AppState::build(AppConfig::for_tests()).expect("state should build");
+        router(state)
+    }
+
+    async fn get(uri: &str) -> Response {
+        request(uri, None).await
+    }
+
+    async fn get_with_header(uri: &str, name: &str, value: &str) -> Response {
+        request(uri, Some((name, value))).await
+    }
+
+    async fn request(uri: &str, extra_header: Option<(&str, &str)>) -> Response {
+        let mut builder = Request::builder().uri(uri);
+        if let Some((name, value)) = extra_header {
+            builder = builder.header(name, value);
+        }
+        test_router()
+            .oneshot(builder.body(Body::empty()).expect("valid request"))
+            .await
+            .expect("router should always answer")
+    }
+
+    fn location(response: &Response) -> &str {
+        response
+            .headers()
+            .get(header::LOCATION)
+            .expect("a redirect should carry a Location header")
+            .to_str()
+            .expect("Location should be ASCII")
+    }
+
+    #[tokio::test]
+    async fn root_redirects_by_accept_language() {
+        let response = get_with_header("/", "accept-language", "en").await;
+        assert_eq!(response.status(), StatusCode::TEMPORARY_REDIRECT);
+        assert_eq!(location(&response), "/en");
+        assert_eq!(
+            response
+                .headers()
+                .get(header::VARY)
+                .and_then(|v| v.to_str().ok()),
+            Some("accept-language, cookie")
+        );
+    }
+
+    #[tokio::test]
+    async fn root_defaults_to_spanish_without_hints() {
+        let response = get("/").await;
+        assert_eq!(location(&response), "/es");
+    }
+
+    #[tokio::test]
+    async fn unprefixed_pages_redirect_to_the_visitors_language() {
+        // `/cv` is the regression case for #88: it used to lose its segment
+        // and redirect to `/es` instead of `/es/cv`.
+        for (path, expected) in [("/me", "/es/me"), ("/cv", "/es/cv"), ("/tpp", "/es/tpp")] {
+            let response = get(path).await;
+            assert_eq!(
+                location(&response),
+                expected,
+                "unexpected redirect for {path}"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn unsupported_language_prefix_is_swapped() {
+        let response = get("/fr/blog/4").await;
+        assert_eq!(location(&response), "/es/blog/4");
+    }
+
+    #[tokio::test]
+    async fn trailing_slash_is_stripped_permanently() {
+        for (path, expected) in [("/es/", "/es"), ("/es/blog/", "/es/blog")] {
+            let response = get(path).await;
+            assert_eq!(response.status(), StatusCode::PERMANENT_REDIRECT);
+            assert_eq!(location(&response), expected);
+        }
+    }
+
+    #[tokio::test]
+    async fn unknown_localized_path_renders_a_404_with_the_language_cookie() {
+        let response = get("/es/no-existe").await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+        let cookie = response
+            .headers()
+            .get(header::SET_COOKIE)
+            .expect("404 should still set the language cookie")
+            .to_str()
+            .expect("cookie should be ASCII");
+        assert!(cookie.starts_with("language=es"));
+    }
+
+    #[tokio::test]
+    async fn pages_carry_the_security_headers() {
+        let response = get("/es/contact").await;
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let headers = response.headers();
+        assert_eq!(headers.get("x-content-type-options").unwrap(), "nosniff");
+        assert_eq!(headers.get("x-frame-options").unwrap(), "SAMEORIGIN");
+        assert_eq!(
+            headers.get("referrer-policy").unwrap(),
+            "strict-origin-when-cross-origin"
+        );
+        // hsts_enabled defaults to true in AppConfig::for_tests().
+        assert!(headers.get("strict-transport-security").is_some());
+    }
+}

@@ -88,10 +88,14 @@ pub fn strip_trailing_slash(path: &str) -> Option<&str> {
 
 /// Top-level segments that belong to the site's own routes.
 ///
-/// Some of them are two letters long (`me`), which would otherwise be mistaken
-/// for a language tag and swapped away instead of prefixed.
-const SITE_SEGMENTS: [&str; 10] = [
+/// Some of them are two letters long (`me`, `cv`), which would otherwise be
+/// mistaken for a language tag and swapped away instead of prefixed. `cv` and
+/// `tpp` were missing here, so `/cv` used to redirect to the home page instead
+/// of `/{lang}/cv`.
+const SITE_SEGMENTS: [&str; 12] = [
     "me",
+    "cv",
+    "tpp",
     "blog",
     "contact",
     "contact_success",
@@ -156,9 +160,13 @@ mod tests {
 
     #[test]
     fn keeps_two_letter_routes_intact() {
-        // `/me` is a page, not Montenegrin.
+        // `/me` and `/cv` are pages, not Montenegrin or Czech. See #88: `/cv`
+        // used to redirect to the home page instead of `/{lang}/cv`.
         assert_eq!(localized_target("/me", None, Language::Spanish), "/es/me");
         assert_eq!(localized_target("/me", None, Language::English), "/en/me");
+        assert_eq!(localized_target("/cv", None, Language::Spanish), "/es/cv");
+        assert_eq!(localized_target("/cv", None, Language::English), "/en/cv");
+        assert_eq!(localized_target("/tpp", None, Language::Spanish), "/es/tpp");
     }
 
     #[test]

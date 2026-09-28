@@ -227,6 +227,53 @@ impl AppConfig {
     pub fn template_glob(&self) -> String {
         format!("{}/**/*", self.templates_dir.display())
     }
+
+    /// Config shared by tests across the crate: stable values, no environment
+    /// and no secrets files, so a test's result can't depend on who runs it
+    /// or what `BASE_URL`/`secrets/` happen to hold locally. Data/template/
+    /// translation paths stay the real relative ones, since tests run from
+    /// the crate root and several stores (blog, translations) read real
+    /// fixtures under those directories.
+    #[cfg(test)]
+    pub(crate) fn for_tests() -> Self {
+        Self {
+            bind_addr: SocketAddr::from(([127, 0, 0, 1], 3000)),
+            base_url: "https://example.com".to_string(),
+            cookie_secure: false,
+            trust_proxy_headers: true,
+            content_security_policy: None,
+            hsts_enabled: true,
+            recaptcha: RecaptchaConfig {
+                site_key: "site".to_string(),
+                secret: "secret".to_string(),
+                min_score: 0.6,
+                disabled: false,
+                expected_hostname: "example.com".to_string(),
+            },
+            resume: ReleaseAssetConfig {
+                repo: "owner/repo".to_string(),
+                token: String::new(),
+                asset_es: "cv-es.pdf".to_string(),
+                asset_en: "cv-en.pdf".to_string(),
+                download_name: None,
+                cache_ttl: Duration::from_secs(3600),
+            },
+            report: ReleaseAssetConfig {
+                repo: "owner/report".to_string(),
+                token: String::new(),
+                asset_es: "main.pdf".to_string(),
+                asset_en: "main.pdf".to_string(),
+                download_name: Some("report.pdf".to_string()),
+                cache_ttl: Duration::from_secs(3600),
+            },
+            contact_rate_limit: Duration::from_secs(300),
+            max_message_chars: 5000,
+            data_dir: PathBuf::from("data"),
+            static_dir: PathBuf::from("static"),
+            templates_dir: PathBuf::from("templates"),
+            translations_dir: PathBuf::from("translations"),
+        }
+    }
 }
 
 fn env_string(key: &str, default: &str) -> String {
@@ -361,50 +408,10 @@ mod tests {
     fn builds_absolute_urls() {
         let config = AppConfig {
             base_url: "https://example.com".to_string(),
-            ..test_config()
+            ..AppConfig::for_tests()
         };
         assert_eq!(config.url(""), "https://example.com/");
         assert_eq!(config.url("/en/me"), "https://example.com/en/me");
         assert_eq!(config.url("en/blog"), "https://example.com/en/blog");
-    }
-
-    fn test_config() -> AppConfig {
-        AppConfig {
-            bind_addr: SocketAddr::from(([127, 0, 0, 1], 3000)),
-            base_url: "https://example.com".to_string(),
-            cookie_secure: false,
-            trust_proxy_headers: true,
-            content_security_policy: None,
-            hsts_enabled: true,
-            recaptcha: RecaptchaConfig {
-                site_key: "site".to_string(),
-                secret: "secret".to_string(),
-                min_score: 0.6,
-                disabled: false,
-                expected_hostname: "example.com".to_string(),
-            },
-            resume: ReleaseAssetConfig {
-                repo: "owner/repo".to_string(),
-                token: String::new(),
-                asset_es: "cv-es.pdf".to_string(),
-                asset_en: "cv-en.pdf".to_string(),
-                download_name: None,
-                cache_ttl: Duration::from_secs(3600),
-            },
-            report: ReleaseAssetConfig {
-                repo: "owner/report".to_string(),
-                token: String::new(),
-                asset_es: "main.pdf".to_string(),
-                asset_en: "main.pdf".to_string(),
-                download_name: Some("report.pdf".to_string()),
-                cache_ttl: Duration::from_secs(3600),
-            },
-            contact_rate_limit: Duration::from_secs(300),
-            max_message_chars: 5000,
-            data_dir: PathBuf::from("data"),
-            static_dir: PathBuf::from("static"),
-            templates_dir: PathBuf::from("templates"),
-            translations_dir: PathBuf::from("translations"),
-        }
     }
 }
