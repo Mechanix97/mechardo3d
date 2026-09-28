@@ -879,6 +879,7 @@ dependencies = [
  "serde_json",
  "tera",
  "tokio",
+ "tower",
  "tracing",
  "tracing-subscriber",
 ]
