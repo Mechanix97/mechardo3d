@@ -1,17 +1,13 @@
 {% extends "base.html" %}
+{% import "macros/brand.html" as brand %}
 {% block content %}
 
 <section class="wrap">
     <div class="ruler"><span>§ DS2000 — {{ t.labels.datasheet }}</span><span>Rev A</span></div>
-    <div class="logo3d mt-8 border border-line">
+    <div class="logo3d mt-8">
         <span aria-hidden="true" class="logo3d-glow"></span>
-        <div class="logo3d-spin">
-            {% for i in range(end=12) %}
-            <img src="/static/images/DS2000/logo/ds2000-logo.webp" style="--i: {{ i }}"
-                {% if i == 11 %}alt="DS2000"{% else %}alt="" aria-hidden="true"{% endif %}
-                width="746" height="764" decoding="async" class="logo3d-layer">
-            {% endfor %}
-        </div>
+        <img src="/static/images/DS2000/logo/ds2000-spin.webp" alt="DS2000" width="440" height="440"
+            decoding="async" class="logo3d-img">
     </div>
     <div class="grid grid-cols-1 items-start gap-10 pt-8 pb-14 md:grid-cols-12 md:gap-12 md:pt-16 md:pb-24">
 
@@ -69,7 +65,7 @@
 
         <!-- Summary -->
         <div class="flex flex-col gap-5 md:order-2 md:col-span-5 md:gap-6 md:pt-2">
-            <p class="eyebrow">{{ t.labels.part_no }} DS2000 · {{ t.labels.usb_box }}</p>
+            {{ brand::title_block(t=t) }}
             <h1 class="flex flex-col gap-2.5">
                 <span class="text-[4.5rem] leading-[0.9] font-semibold tracking-[-0.05em] md:text-[7rem]">DS2000</span>
                 <span class="text-[1.3125rem] font-medium text-fg-2 md:text-[1.625rem]">{{ t.ds2000.title | split(pat="– ") | last }}</span>

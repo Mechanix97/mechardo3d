@@ -1,0 +1,16 @@
+{# Title block for the DS2000 pages: the logo in a framed tile with the part
+   number beside it, like the corner block of a technical drawing. The logo is
+   the only image with a text alternative; the label next to it is text. #}
+{% macro title_block(t) %}
+<div class="flex items-stretch gap-4">
+    <span class="relative flex h-16 w-16 shrink-0 items-center justify-center border border-line-strong bg-ink p-2 md:h-[4.5rem] md:w-[4.5rem]">
+        <span aria-hidden="true" class="absolute -top-px -left-px h-2 w-2 border-t-2 border-l-2 border-lime"></span>
+        <img src="/static/images/DS2000/logo/ds2000-logo-mark.webp" alt="DS2000" width="240" height="246"
+            decoding="async" class="h-full w-auto">
+    </span>
+    <p class="eyebrow flex flex-col justify-center gap-1.5">
+        <span>{{ t.labels.part_no }} DS2000</span>
+        <span class="text-muted">{{ t.labels.usb_box }}</span>
+    </p>
+</div>
+{% endmacro title_block %}
