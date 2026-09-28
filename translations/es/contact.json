@@ -18,7 +18,7 @@
       "sending": "Enviando…"
     },
     "channels": "Canales directos",
-    "form_note": "Protegido con reCAPTCHA. Un mensaje cada 5 minutos.",
+    "form_note": "Protegido con reCAPTCHA.",
     "email_label_short": "Correo",
     "reply_by_email": "Respuesta por correo"
   },
