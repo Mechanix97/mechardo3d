@@ -19,6 +19,20 @@
     "linkedin_handle": "in/lucasalexisrack",
     "email": "Email",
     "email_handle": "lucas_rack@live.com.ar",
+    "schema": {
+      "knows_about": [
+        "Electronics",
+        "Embedded Systems",
+        "Artificial Intelligence",
+        "Large Language Models",
+        "Retrieval-Augmented Generation",
+        "Python",
+        "Rust",
+        "Distributed Systems",
+        "Ethereum",
+        "Smart Contracts"
+      ]
+    },
     "education_section": "Education",
     "education_title": "Electronics Engineering",
     "education_school": "Universidad de Buenos Aires · FIUBA",
