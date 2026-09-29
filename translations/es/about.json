@@ -254,7 +254,7 @@
           "USB HID"
         ],
         "url": "https://github.com/Mechanix97/DS2000",
-        "image": "/static/images/DS2000/renders/frente.webp",
+        "image": "/static/images/DS2000/renders/original-frente.webp",
         "image_alt": "Vista frontal de la botonera DS2000",
         "cta": "repo",
         "featured": false

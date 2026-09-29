@@ -54,7 +54,14 @@
     "images": {
       "front": "DS2000 vista frontal",
       "back": "DS2000 vista posterior",
-      "top": "DS2000 conectado",
+      "top": "DS2000 vista superior",
+      "exploded": "DS2000 vista explotada",
+      "colour": "Color",
+      "colours": {
+        "negro": "Negro",
+        "original": "Crema",
+        "snes": "SNES"
+      },
       "enlarged": "Imagen ampliada del DS2000",
       "carousel": "Fotos del DS2000",
       "enlarge": "Ampliar:",
