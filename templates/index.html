@@ -25,6 +25,9 @@
                     <div class="relative">
                         <img src="/static/images/DS2000/renders/{{ colourway }}-frente.webp" alt="{{ t.ds2000.images.front }}"
                             width="1536" height="1024" fetchpriority="high" decoding="async">
+                        {# The key LEDs, under MUTE and DEAFEN, at the render's projected LED positions #}
+                        <span aria-hidden="true" class="led-glow led-glow-mute left-[44.2%] top-[57.9%]"></span>
+                        <span aria-hidden="true" class="led-glow led-glow-deafen left-[57.7%] top-[51%]"></span>
                         <span class="scan" aria-hidden="true"></span>
                         {# Callouts sit on the render at fixed percentages; the
                            render's framing never changes. #}
