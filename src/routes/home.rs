@@ -6,6 +6,7 @@ use crate::extract::Lang;
 use crate::json_ld;
 use crate::models::blog_post::BlogPostView;
 use crate::pages::{self, page_meta};
+use crate::routes::ds2000;
 use crate::state::AppState;
 
 /// Blog posts previewed on the home page.
@@ -44,6 +45,7 @@ pub async fn index(Lang(lang): Lang, Extension(state): Extension<AppState>) -> R
 
     let mut context = pages::base_context(&state, lang, &meta);
     context.insert("posts", &recent);
+    context.insert("colourway", ds2000::random_colourway());
 
     pages::render(&state, "index.html", &context, lang)
 }

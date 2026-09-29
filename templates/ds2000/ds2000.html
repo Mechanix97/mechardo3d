@@ -11,12 +11,12 @@
     </div>
     <div class="grid grid-cols-1 items-start gap-10 pt-8 pb-14 md:grid-cols-12 md:gap-12 md:pt-16 md:pb-24">
 
-        <!-- Gallery -->
-        <div class="flex flex-col gap-4 md:order-1 md:col-span-7" data-gallery>
+        <!-- Gallery: four views, in three colourways; the server picks one at random per visit -->
+        <div class="flex flex-col gap-4 md:order-1 md:col-span-7" data-gallery data-gallery-base="/static/images/DS2000/renders" data-gallery-colour-current="{{ colourway }}">
             <div class="frame">
                 <div class="frame-plate">
                     <div class="relative">
-                        <img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}"
+                        <img src="/static/images/DS2000/renders/{{ colourway }}-frente.webp" alt="{{ t.ds2000.images.front }}"
                             width="1536" height="1024" fetchpriority="high" decoding="async" data-gallery-main>
                         <span class="scan" aria-hidden="true"></span>
                         <button type="button" data-gallery-open
@@ -30,23 +30,45 @@
                     </div>
                 </div>
             </div>
-            <div class="grid grid-cols-3 gap-2.5 md:gap-4" role="group" aria-label="{{ t.ds2000.images.carousel }}">
+            <div class="flex flex-wrap items-center gap-2.5" role="group" aria-label="{{ t.ds2000.images.colour }}" data-gallery-colours hidden>
+                <span class="font-mono text-xs text-muted">{{ t.ds2000.images.colour }}</span>
+                <button type="button" class="flex min-h-11 items-center gap-2.5 border px-3 font-mono text-xs {% if colourway == "negro" %}border-lime text-fg{% else %}border-line-strong text-muted hover:border-lime{% endif %}" aria-pressed="{% if colourway == "negro" %}true{% else %}false{% endif %}" data-gallery-colour="negro"
+                    data-label="{{ t.ds2000.images.colours.negro }}">
+                    <span aria-hidden="true" class="flex h-5 w-5 flex-col border border-line-strong bg-[#141416]"><span class="flex-1"></span><span class="flex h-1.5"><span class="flex-1 bg-[#1b1b1d]"></span><span class="flex-1 bg-[#1b1b1d]"></span><span class="flex-1 bg-[#1b1b1d]"></span></span></span>
+                    {{ t.ds2000.images.colours.negro }}
+                </button>
+                <button type="button" class="flex min-h-11 items-center gap-2.5 border px-3 font-mono text-xs {% if colourway == "original" %}border-lime text-fg{% else %}border-line-strong text-muted hover:border-lime{% endif %}" aria-pressed="{% if colourway == "original" %}true{% else %}false{% endif %}" data-gallery-colour="original"
+                    data-label="{{ t.ds2000.images.colours.original }}">
+                    <span aria-hidden="true" class="flex h-5 w-5 flex-col border border-line-strong bg-[#ede9e1]"><span class="flex-1"></span><span class="flex h-1.5"><span class="flex-1 bg-[#eeeeea]"></span><span class="flex-1 bg-[#eeeeea]"></span><span class="flex-1 bg-[#eeeeea]"></span></span></span>
+                    {{ t.ds2000.images.colours.original }}
+                </button>
+                <button type="button" class="flex min-h-11 items-center gap-2.5 border px-3 font-mono text-xs {% if colourway == "snes" %}border-lime text-fg{% else %}border-line-strong text-muted hover:border-lime{% endif %}" aria-pressed="{% if colourway == "snes" %}true{% else %}false{% endif %}" data-gallery-colour="snes"
+                    data-label="{{ t.ds2000.images.colours.snes }}">
+                    <span aria-hidden="true" class="flex h-5 w-5 flex-col border border-line-strong bg-[#c8c6cd]"><span class="flex-1"></span><span class="flex h-1.5"><span class="flex-1 bg-[#a9a3d3]"></span><span class="flex-1 bg-[#a9a3d3]"></span><span class="flex-1 bg-[#4f3f8f]"></span></span></span>
+                    {{ t.ds2000.images.colours.snes }}
+                </button>
+            </div>
+            <div class="grid grid-cols-4 gap-2 md:gap-3" role="group" aria-label="{{ t.ds2000.images.carousel }}">
                 <button type="button" class="border border-lime bg-panel p-1 md:p-1.5" aria-pressed="true"
-                    data-gallery-thumb data-src="/static/images/DS2000/renders/frente.webp" data-alt="{{ t.ds2000.images.front }}">
-                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/frente.webp" alt="{{ t.ds2000.images.front }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-16 w-full object-contain md:h-28"></span>
+                    data-gallery-thumb data-view="frente" data-src="/static/images/DS2000/renders/{{ colourway }}-frente.webp" data-alt="{{ t.ds2000.images.front }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/{{ colourway }}-frente.webp" alt="{{ t.ds2000.images.front }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-14 w-full object-contain md:h-24" data-gallery-thumb-img></span>
                 </button>
                 <button type="button" class="border border-line-strong bg-panel p-1 hover:border-lime md:p-1.5" aria-pressed="false"
-                    data-gallery-thumb data-src="/static/images/DS2000/renders/trasero.webp" data-alt="{{ t.ds2000.images.back }}">
-                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/trasero.webp" alt="{{ t.ds2000.images.back }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-16 w-full object-contain md:h-28"></span>
+                    data-gallery-thumb data-view="trasera" data-src="/static/images/DS2000/renders/{{ colourway }}-trasera.webp" data-alt="{{ t.ds2000.images.back }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/{{ colourway }}-trasera.webp" alt="{{ t.ds2000.images.back }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-14 w-full object-contain md:h-24" data-gallery-thumb-img></span>
                 </button>
                 <button type="button" class="border border-line-strong bg-panel p-1 hover:border-lime md:p-1.5" aria-pressed="false"
-                    data-gallery-thumb data-src="/static/images/DS2000/renders/superior.webp" data-alt="{{ t.ds2000.images.top }}">
-                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/superior.webp" alt="{{ t.ds2000.images.top }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-16 w-full object-contain md:h-28"></span>
+                    data-gallery-thumb data-view="superior" data-src="/static/images/DS2000/renders/{{ colourway }}-superior.webp" data-alt="{{ t.ds2000.images.top }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/{{ colourway }}-superior.webp" alt="{{ t.ds2000.images.top }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-14 w-full object-contain md:h-24" data-gallery-thumb-img></span>
+                </button>
+                <button type="button" class="border border-line-strong bg-panel p-1 hover:border-lime md:p-1.5" aria-pressed="false"
+                    data-gallery-thumb data-view="explotada" data-src="/static/images/DS2000/renders/{{ colourway }}-explotada.webp" data-alt="{{ t.ds2000.images.exploded }}">
+                    <span class="block bg-[#f2f3f0]"><img src="/static/images/DS2000/renders/{{ colourway }}-explotada.webp" alt="{{ t.ds2000.images.exploded }}" width="1536" height="1024" loading="lazy" decoding="async" class="h-14 w-full object-contain md:h-24" data-gallery-thumb-img></span>
                 </button>
             </div>
             <p class="caption flex justify-between gap-4">
-                <span>{{ t.labels.figure }} 1 — <span data-gallery-caption>{{ t.ds2000.images.front }}</span></span>
-                <span data-gallery-count>1 / 3</span>
+                <span>{{ t.labels.figure }} 1 — <span data-gallery-caption>{{ t.ds2000.images.front }}</span> · <span data-gallery-colour-name>{{ t.ds2000.images.colours[colourway] }}</span></span>
+                <span data-gallery-count>1 / 4</span>
             </p>
 
             <dialog id="image-modal" class="m-auto max-h-[92vh] max-w-[92vw] bg-transparent p-0 backdrop:bg-ink/90"
@@ -74,7 +96,7 @@
             <dl class="rows font-mono text-[0.8125rem]">
                 <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">K1 · K2 · K3</dt><dd class="text-right">Mute · Deaf · Disconnect</dd></div>
                 <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">LED 1 · LED 2</dt><dd class="text-right">RGB</dd></div>
-                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">{{ t.ds2000.specs.connection }}</dt><dd class="text-right">USB 2.0</dd></div>
+                <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">{{ t.ds2000.specs.connection }}</dt><dd class="text-right">USB-C</dd></div>
             </dl>
             <div class="mt-2 flex flex-col gap-2.5">
                 <a href="#drivers" class="btn-lime min-h-14 text-sm">{{ t.ds2000.drivers.title }} <span aria-hidden="true">↓</span></a>
@@ -133,7 +155,7 @@
         <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:col-span-4 md:text-[2.75rem]">{{ t.ds2000.specs.title }}</h2>
         <table class="spec md:col-span-8 md:col-start-5 md:text-base">
             <tbody>
-                <tr><th scope="row">{{ t.ds2000.specs.connection }}</th><td>USB 2.0 · USB 3.0</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.connection }}</th><td>USB-C · USB 2.0</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.buttons }}</th><td>{{ t.ds2000.specs.buttons_desc }}</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.indicators }}</th><td>{{ t.ds2000.specs.indicators_desc }}</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.compatibility }}</th><td>Windows 10/11, macOS 10.15+, Linux (Ubuntu, Fedora)</td></tr>

@@ -104,9 +104,9 @@ pub fn organization_schema(config: &AppConfig, lang: Language) -> Value {
 /// Real product renders, used instead of the site's generic social card so
 /// the DS2000 page's structured data shows an actual photo of the device.
 const DS2000_IMAGES: [&str; 3] = [
-    "static/images/DS2000/renders/frente.webp",
-    "static/images/DS2000/renders/trasero.webp",
-    "static/images/DS2000/renders/superior.webp",
+    "static/images/DS2000/renders/original-frente.webp",
+    "static/images/DS2000/renders/original-trasera.webp",
+    "static/images/DS2000/renders/original-superior.webp",
 ];
 
 /// JSON-LD for the DS2000 project page.
@@ -342,9 +342,9 @@ mod tests {
         assert_eq!(
             schema["image"],
             json!([
-                config.url("static/images/DS2000/renders/frente.webp"),
-                config.url("static/images/DS2000/renders/trasero.webp"),
-                config.url("static/images/DS2000/renders/superior.webp"),
+                config.url("static/images/DS2000/renders/original-frente.webp"),
+                config.url("static/images/DS2000/renders/original-trasera.webp"),
+                config.url("static/images/DS2000/renders/original-superior.webp"),
             ])
         );
     }

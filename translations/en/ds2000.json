@@ -13,8 +13,8 @@
         "description": "Two RGB LEDs to indicate status or customize with colors according to your configuration."
       },
       "usb": {
-        "title": "USB Plug-and-Play Connection",
-        "description": "Connect the DS2000 to your computer via USB and use it without complications on Windows, macOS, or Linux."
+        "title": "USB-C Connection",
+        "description": "Connect the DS2000 to your computer via USB-C and use it without complications on Windows, macOS, or Linux."
       },
       "design": {
         "title": "Compact Design",
@@ -54,7 +54,14 @@
     "images": {
       "front": "DS2000 front view",
       "back": "DS2000 back view",
-      "top": "DS2000 connected",
+      "top": "DS2000 top view",
+      "exploded": "DS2000 exploded view",
+      "colour": "Colour",
+      "colours": {
+        "negro": "Black",
+        "original": "Cream",
+        "snes": "SNES"
+      },
       "enlarged": "Enlarged image of DS2000",
       "carousel": "DS2000 photos",
       "enlarge": "Enlarge:",
