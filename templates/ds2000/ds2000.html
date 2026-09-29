@@ -11,7 +11,7 @@
     </div>
     <div class="grid grid-cols-1 items-start gap-10 pt-8 pb-14 md:grid-cols-12 md:gap-12 md:pt-16 md:pb-24">
 
-        <!-- Gallery: four views, in three colourways; the server picks one at random per visit -->
+        <!-- Gallery: four views, in four colourways; the server picks one at random per visit -->
         <div class="flex flex-col gap-4 md:order-1 md:col-span-7" data-gallery data-gallery-base="/static/images/DS2000/renders" data-gallery-colour-current="{{ colourway }}">
             <div class="frame">
                 <div class="frame-plate">
@@ -46,6 +46,11 @@
                     data-label="{{ t.ds2000.images.colours.snes }}">
                     <span aria-hidden="true" class="flex h-5 w-5 flex-col border border-line-strong bg-[#c8c6cd]"><span class="flex-1"></span><span class="flex h-1.5"><span class="flex-1 bg-[#a9a3d3]"></span><span class="flex-1 bg-[#a9a3d3]"></span><span class="flex-1 bg-[#4f3f8f]"></span></span></span>
                     {{ t.ds2000.images.colours.snes }}
+                </button>
+                <button type="button" class="flex min-h-11 items-center gap-2.5 border px-3 font-mono text-xs {% if colourway == "rosa" %}border-lime text-fg{% else %}border-line-strong text-muted hover:border-lime{% endif %}" aria-pressed="{% if colourway == "rosa" %}true{% else %}false{% endif %}" data-gallery-colour="rosa"
+                    data-label="{{ t.ds2000.images.colours.rosa }}">
+                    <span aria-hidden="true" class="flex h-5 w-5 flex-col border border-line-strong bg-[#ffc0db]"><span class="flex-1"></span><span class="flex h-1.5"><span class="flex-1 bg-[#ff9fc8]"></span><span class="flex-1 bg-[#ff9fc8]"></span><span class="flex-1 bg-[#ff2f86]"></span></span></span>
+                    {{ t.ds2000.images.colours.rosa }}
                 </button>
             </div>
             <div class="grid grid-cols-4 gap-2 md:gap-3" role="group" aria-label="{{ t.ds2000.images.carousel }}">
