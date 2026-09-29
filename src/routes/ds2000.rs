@@ -15,6 +15,10 @@ use crate::state::AppState;
 /// SEO-oriented `<title>` copy).
 const DS2000_CRUMB: &str = "DS2000";
 
+/// Link preview (Open Graph / Twitter card) for the product page: the cream
+/// front render at 1200 x 630, in PNG because not every platform takes WebP.
+const OG_IMAGE: &str = "static/images/og-ds2000.png";
+
 /// The colourways the DS2000 is rendered in; renders are named
 /// `static/images/DS2000/renders/<colourway>-<view>.webp`.
 pub const COLOURWAYS: [&str; 3] = ["negro", "original", "snes"];
@@ -35,7 +39,10 @@ pub async fn ds2000(Lang(lang): Lang, Extension(state): Extension<AppState>) -> 
         lang,
         &[(home_crumb(&state, lang), ""), (DS2000_CRUMB, "ds2000")],
     );
-    let meta = meta.og_type("product").schema(json!([schema, breadcrumbs]));
+    let meta = meta
+        .og_type("product")
+        .og_image(OG_IMAGE)
+        .schema(json!([schema, breadcrumbs]));
 
     let mut context = pages::base_context(&state, lang, &meta);
     context.insert("colourway", random_colourway());
@@ -111,6 +118,14 @@ mod tests {
         for _ in 0..50 {
             assert!(COLOURWAYS.contains(&random_colourway()));
         }
+    }
+
+    #[test]
+    fn link_preview_image_exists() {
+        assert!(
+            std::path::Path::new(OG_IMAGE).is_file(),
+            "missing {OG_IMAGE}"
+        );
     }
 
     #[test]
