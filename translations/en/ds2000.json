@@ -13,8 +13,8 @@
         "description": "Two RGB LEDs to indicate status or customize with colors according to your configuration."
       },
       "usb": {
-        "title": "USB Plug-and-Play Connection",
-        "description": "Connect the DS2000 to your computer via USB and use it without complications on Windows, macOS, or Linux."
+        "title": "USB-C Connection",
+        "description": "Connect the DS2000 to your computer via USB-C and use it without complications on Windows, macOS, or Linux."
       },
       "design": {
         "title": "Compact Design",
