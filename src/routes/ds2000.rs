@@ -21,7 +21,7 @@ const OG_IMAGE: &str = "static/images/og-ds2000.png";
 
 /// The colourways the DS2000 is rendered in; renders are named
 /// `static/images/DS2000/renders/<colourway>-<view>.webp`.
-pub const COLOURWAYS: [&str; 3] = ["negro", "original", "snes"];
+pub const COLOURWAYS: [&str; 4] = ["negro", "original", "snes", "rosa"];
 
 /// A colourway picked at random for each page view, so the home page and the
 /// product page show a different DS2000 on every visit. It is chosen on the
