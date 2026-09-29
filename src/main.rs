@@ -42,8 +42,8 @@ async fn main() {
         Ok(state) => state,
         Err(e) => {
             error!(
-                "Failed to initialize templates: {}",
-                pages::describe_error(&e as &dyn std::error::Error)
+                "Failed to initialize application state: {}",
+                pages::describe_error(e.as_ref())
             );
             std::process::exit(1);
         }

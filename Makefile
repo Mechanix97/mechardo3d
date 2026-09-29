@@ -42,6 +42,6 @@ build-css:
 	@npm run build:css
 
 watch:
-	@start /B npm run watch:css & watchexec -r -e rs,css,html,js -- cargo run
+	@start /B npm run watch:css & watchexec -r -e rs,css,html,js,json -- cargo run
 
 #https://github.com/watchexec/watchexec/releases

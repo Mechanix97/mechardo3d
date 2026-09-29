@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::ops::Deref;
 use std::sync::Arc;
 use std::time::Duration;
@@ -38,13 +39,15 @@ pub struct AppStateInner {
 pub struct AppState(Arc<AppStateInner>);
 
 impl AppState {
-    pub fn build(config: AppConfig) -> Result<Self, tera::Error> {
+    /// Fails on a broken Tera template or a broken `blog_posts.json` /
+    /// post route - both are content bugs worth catching at startup, not on
+    /// whichever request happens to hit them first.
+    pub fn build(config: AppConfig) -> Result<Self, Box<dyn Error>> {
         let mut tera = Tera::new(&config.template_glob())?;
         tera.register_filter("date_format", date_format::date_format);
 
         let translations = Translations::load(&config.translations_dir);
-        let blog = BlogStore::new(&config.data_dir, &config.content_dir);
-        blog.warm();
+        let blog = BlogStore::load(&config.data_dir, &config.content_dir)?;
 
         let messages = MessageStore::new(&config.data_dir);
         info!(

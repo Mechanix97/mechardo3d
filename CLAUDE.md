@@ -106,8 +106,9 @@ through `text`/`text_or` with a dotted path (`page_titles.home`)
 
 **`src/routes/`** - One module per page. Handlers are thin: resolve data, build a `PageMeta`, render
 
-**`src/data/blog_data.rs`** - `BlogStore`: posts and post bodies are parsed once and re-read only
-when the file's modification time changes
+**`src/data/blog_data.rs`** - `BlogStore`: posts and post bodies are parsed once at startup
+(`BlogStore::load`), which fails the same way a broken template does - a broken `blog_posts.json`
+or an unsafe route stop the app from starting
 
 **`src/data/messages.rs`** - `MessageStore`: contact messages, written through a mutex and replaced
 atomically
@@ -230,8 +231,9 @@ Every template receives:
 
 - Cargo.toml shows edition = "2024" (latest Rust edition)
 - Static files are served by `src/static_files.rs`, not by a directory server
-- Blog posts, post bodies and translations are cached in memory; only the first request after a file
-  changes touches the disk
+- Blog posts, post bodies and translations are loaded once at startup, not re-read per request;
+  `make watch` restarts the process on any source/content/data change, which is what picks up an edit
+  during local development
 - Contact form includes reCAPTCHA validation for spam protection, and refuses to accept submissions
   when no secret is configured unless `RECAPTCHA_DISABLED=true`
 - `/me` reads its experience, skills and projects from arrays in `translations/{lang}/about.json`;
