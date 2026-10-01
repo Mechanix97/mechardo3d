@@ -4,7 +4,7 @@ use axum::response::Response;
 use rand::rng;
 use rand::seq::IteratorRandom;
 use serde_json::json;
-use tracing::{error, warn};
+use tracing::error;
 
 use crate::extract::Lang;
 use crate::json_ld;
@@ -19,15 +19,8 @@ const RELATED_POSTS: usize = 2;
 const META_DESCRIPTION_CHARS: usize = 155;
 
 pub async fn blog(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
-    let posts = match state.blog.posts() {
-        Ok(posts) => posts,
-        Err(e) => {
-            error!("Blog index unavailable: {}", e);
-            return pages::server_error(&state, lang);
-        }
-    };
-
-    let posts_view = BlogPostView::from_posts(&posts, lang);
+    let posts = state.blog.posts();
+    let posts_view = BlogPostView::from_posts(posts, lang);
 
     let meta = page_meta(&state, lang, "blog").path("blog");
     let schema = json_ld::webpage_schema(
@@ -51,14 +44,7 @@ pub async fn blog_post(
     Path((_lang, id)): Path<(String, String)>,
     Extension(state): Extension<AppState>,
 ) -> Response {
-    let posts = match state.blog.posts() {
-        Ok(posts) => posts,
-        Err(e) => {
-            error!("Blog post {} unavailable: {}", id, e);
-            return pages::server_error(&state, lang);
-        }
-    };
-
+    let posts = state.blog.posts();
     let Some(post) = posts.iter().find(|post| post.id == id) else {
         return pages::not_found(&state, lang);
     };
@@ -131,20 +117,18 @@ pub async fn blog_post(
 /// Post body in the requested language, falling back to the default language
 /// when a translation has not been written yet.
 fn post_body(state: &AppState, route: &str, lang: Language) -> Option<String> {
-    match state.blog.content(route, lang) {
-        Ok(content) => Some(content.to_string()),
-        Err(e) => {
-            warn!("Missing {} body for post {}: {}", lang.as_str(), route, e);
-            if lang == Language::default() {
-                return None;
-            }
-            match state.blog.content(route, Language::default()) {
-                Ok(content) => Some(content.to_string()),
-                Err(e) => {
-                    error!("No body available for post {}: {}", route, e);
-                    None
-                }
-            }
+    if let Some(content) = state.blog.content(route, lang) {
+        return Some(content.to_string());
+    }
+    if lang == Language::default() {
+        error!("No body available for post {}", route);
+        return None;
+    }
+    match state.blog.content(route, Language::default()) {
+        Some(content) => Some(content.to_string()),
+        None => {
+            error!("No body available for post {} in any language", route);
+            None
         }
     }
 }

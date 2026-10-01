@@ -1,7 +1,6 @@
 use axum::Extension;
 use axum::http::{HeaderValue, StatusCode, header};
 use axum::response::{IntoResponse, Response};
-use tracing::warn;
 
 use crate::config::AppConfig;
 use crate::language::Language;
@@ -24,15 +23,7 @@ const STATIC_PAGES: [(&str, &str, &str); 7] = [
 /// Generated from the routing table and the blog data, so blog posts are
 /// included and entries cannot drift away from the site as it changes.
 pub async fn sitemap(Extension(state): Extension<AppState>) -> Response {
-    let posts = match state.blog.posts() {
-        Ok(posts) => posts,
-        Err(e) => {
-            warn!("Sitemap generated without blog posts: {}", e);
-            Default::default()
-        }
-    };
-
-    let body = render_sitemap(&state.config, &posts);
+    let body = render_sitemap(&state.config, state.blog.posts());
     xml_response(body)
 }
 
@@ -179,8 +170,9 @@ mod tests {
     }
 
     fn posts() -> Vec<BlogPost> {
-        let store = BlogStore::new(Path::new("data"), Path::new("content"));
-        store.posts().expect("posts").as_ref().clone()
+        let store =
+            BlogStore::load(Path::new("data"), Path::new("content")).expect("posts should load");
+        store.posts().to_vec()
     }
 
     #[test]
