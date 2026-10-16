@@ -1,0 +1,230 @@
+{
+  "ds2000_guide": {
+    "tabs": {
+      "label": "DS2000 sections",
+      "product": "Product",
+      "download": "Downloads",
+      "install": "Installation",
+      "discord": "Discord setup",
+      "source": "Source"
+    },
+    "figure_pending": "Screenshot pending",
+    "step": "Step",
+    "next": "Next",
+    "download": {
+      "heading": "Downloads",
+      "intro": "The desktop app and the device firmware are published as GitHub releases. This page always shows the latest one.",
+      "app_title": "Desktop app",
+      "app_desc": "Windows installer. Links the DS2000 to Discord and controls the lights.",
+      "firmware_title": "Firmware",
+      "firmware_desc": "Image for the device. Only needed when the app says the firmware is out of date.",
+      "version": "Version",
+      "published": "Published",
+      "file": "File",
+      "size": "Size",
+      "checksum": "SHA-256",
+      "all_versions": "All versions",
+      "release_notes": "Release notes",
+      "none_yet": "No version has been published yet. In the meantime it can be built from source.",
+      "see_source": "See the source",
+      "board": "Board",
+      "boards": {
+        "rp2350_zero": "Waveshare RP2350-Zero (current prototype)",
+        "pico2": "Raspberry Pi Pico 2",
+        "pico": "Raspberry Pi Pico (RP2040)"
+      },
+      "requirements_title": "Requirements",
+      "requirements": [
+        "64-bit Windows 10 or 11.",
+        "The Discord desktop app running. The web version cannot be controlled.",
+        "A USB data cable, not a charge-only one."
+      ],
+      "verify_title": "Verify the download",
+      "verify_body": "Optional. In PowerShell, the result must match the SHA-256 above:",
+      "next_body": "With the installer downloaded, follow the installation guide."
+    },
+    "install": {
+      "heading": "Installation",
+      "intro": "How to install the app, connect the DS2000 and update the firmware. It takes about five minutes.",
+      "app_title": "Install the app",
+      "app_steps": [
+        {
+          "title": "Download the installer",
+          "body": "Get the <code>.msi</code> file from the Downloads tab."
+        },
+        {
+          "title": "Get past SmartScreen",
+          "body": "The installer is not signed yet, so Windows warns the first time. Click <strong>More info</strong>.",
+          "figure": "install-01-smartscreen",
+          "alt": "Windows SmartScreen warning with the More info link"
+        },
+        {
+          "title": "Run it anyway",
+          "body": "A <strong>Run anyway</strong> button appears. Click it and follow the installer.",
+          "figure": "install-02-smartscreen-run",
+          "alt": "SmartScreen warning with the Run anyway button"
+        },
+        {
+          "title": "Open DS2000",
+          "body": "The app lives in the system tray, next to the clock. Clicking the icon opens the window; closing the window does not quit the app. To quit, right-click the icon and choose <strong>Quit</strong>.",
+          "figure": "install-03-tray",
+          "alt": "DS2000 icon in the system tray with its menu"
+        }
+      ],
+      "device_title": "Connect the DS2000",
+      "device_steps": [
+        {
+          "title": "Plug it in over USB",
+          "body": "The app finds it on its own. No drivers are needed: Windows sees it as a serial port."
+        },
+        {
+          "title": "Check the status",
+          "body": "In the <strong>Settings</strong> tab, the Connections section must read <strong>Serial: Connected</strong>. If it says the firmware is out of date, update it as described below.",
+          "figure": "install-04-connected",
+          "alt": "The app's Settings tab showing Serial: Connected"
+        },
+        {
+          "title": "Connect Discord",
+          "body": "One more step, done once: create your Discord application. It is explained in the Discord setup tab."
+        }
+      ],
+      "firmware_title": "Update the firmware",
+      "firmware_intro": "Only needed when the app says the firmware is out of date. The app will do this on its own in the future.",
+      "firmware_steps": [
+        {
+          "title": "Download the image",
+          "body": "In Downloads, get the <code>.uf2</code> file for your board."
+        },
+        {
+          "title": "Enter upload mode",
+          "body": "Quit the DS2000 app. Unplug the device, hold the board's <strong>BOOT</strong> button and plug it back in. A USB drive called <strong>RP2350</strong> appears (<strong>RPI-RP2</strong> on a Pico).",
+          "figure": "firmware-01-drive",
+          "alt": "Windows Explorer showing the RP2350 drive"
+        },
+        {
+          "title": "Copy the file",
+          "body": "Drag the <code>.uf2</code> onto that drive. The board restarts with the new firmware and the drive disappears. Open the app again."
+        }
+      ],
+      "uninstall_title": "Uninstall",
+      "uninstall_body": "From <strong>Windows Settings → Apps</strong>. The settings stay in <code>%APPDATA%\\Mechardo</code> and the Discord credentials in Windows Credential Manager, under <code>DS2000</code>; delete them by hand if you are not reinstalling."
+    },
+    "discord": {
+      "heading": "Discord setup",
+      "intro": "Discord only lets an application control your microphone if you own that application. That is why DS2000 does not ship one: you create your own in Discord's developer portal. It is free, done once, and needs no programming.",
+      "before_title": "Before you start",
+      "before": [
+        "The DS2000 app installed.",
+        "The Discord desktop app open and signed in.",
+        "A browser to open the developer portal."
+      ],
+      "portal_title": "Create the application in Discord",
+      "portal_steps": [
+        {
+          "title": "Open the developer portal",
+          "body": "Go to <a href=\"https://discord.com/developers/applications\" target=\"_blank\" rel=\"noopener\">discord.com/developers/applications</a> with your Discord account and click <strong>New Application</strong>, top right.",
+          "figure": "discord-01-new-application",
+          "alt": "Discord developer portal with the New Application button"
+        },
+        {
+          "title": "Name it",
+          "body": "Any name works, for example <strong>DS2000</strong>. Accept Discord's terms and click <strong>Create</strong>.",
+          "figure": "discord-02-create",
+          "alt": "Create an application dialog with the name DS2000"
+        },
+        {
+          "title": "Copy the Client ID",
+          "body": "In the left menu, open <strong>OAuth2</strong>. Copy the <strong>Client ID</strong> with the <strong>Copy</strong> button and keep it for the last step.",
+          "figure": "discord-03-client-id",
+          "alt": "OAuth2 page with the Client ID and the Copy button"
+        },
+        {
+          "title": "Generate the Client Secret",
+          "body": "On the same page, click <strong>Reset Secret</strong> and confirm. Discord may ask for your two-factor code. Copy the secret: <strong>Discord shows it only once</strong>. If you lose it, generate another. Do not share it with anyone.",
+          "figure": "discord-04-client-secret",
+          "alt": "A freshly generated Client Secret, blurred, with the Copy button"
+        },
+        {
+          "title": "Add the redirect",
+          "body": "Further down, under <strong>Redirects</strong>, click <strong>Add Redirect</strong>, type exactly <code>http://localhost/</code> (with the trailing slash) and click <strong>Save Changes</strong>. Without it the connection fails.",
+          "figure": "discord-05-redirect",
+          "alt": "Redirects section with http://localhost/ entered and the Save Changes button"
+        }
+      ],
+      "app_title": "Connect the DS2000 app",
+      "app_steps": [
+        {
+          "title": "Paste the credentials",
+          "body": "In DS2000, open the <strong>Discord</strong> tab, paste the Client ID and the Client Secret, and click <strong>Connect</strong>.",
+          "figure": "discord-06-app-credentials",
+          "alt": "The DS2000 app's Discord tab with both fields filled in"
+        },
+        {
+          "title": "Authorise in Discord",
+          "body": "Discord shows an authorisation request with your application's name. Click <strong>Authorize</strong>.",
+          "figure": "discord-07-authorize",
+          "alt": "Discord authorisation request for the DS2000 application"
+        },
+        {
+          "title": "Done",
+          "body": "The Discord tab reads <strong>Connected to Discord.</strong>, and Settings → Connections reads <strong>Discord: Connected</strong>. Try the keys: mute, deafen and disconnect. The credentials are saved, so this is not repeated.",
+          "figure": "discord-08-connected",
+          "alt": "The DS2000 app showing Discord: Connected"
+        }
+      ],
+      "trouble_title": "If something does not work",
+      "trouble": [
+        {
+          "q": "It stays on “Credentials saved. Waiting for Discord…”",
+          "a": "The Discord desktop app has to be running. Open it; DS2000 connects on its own within a few seconds."
+        },
+        {
+          "q": "I accepted the authorisation but it does not connect",
+          "a": "Check that Redirects holds exactly <code>http://localhost/</code>, with the trailing slash, and that the changes were saved."
+        },
+        {
+          "q": "I lost the Client Secret",
+          "a": "Generate another with Reset Secret and paste the new one in DS2000's Discord tab. Leaving the field empty keeps the old one."
+        },
+        {
+          "q": "I want to unlink the application",
+          "a": "In DS2000's Discord tab, <strong>Unlink</strong> deletes the saved credentials. To delete the application as well, remove it from the developer portal."
+        }
+      ],
+      "privacy": "The Client Secret and the tokens are stored in Windows Credential Manager, on your computer. They are sent to nobody but Discord, and never to Mechardo Labs."
+    },
+    "source": {
+      "heading": "Open source",
+      "intro": "All of the DS2000 is open: the app, the firmware, the board and the enclosure. Each part has its own GitHub repository.",
+      "repos": {
+        "app": {
+          "name": "DS2000",
+          "desc": "Windows desktop app: the Discord link, device detection and the lighting controls.",
+          "stack": "Rust · Tauri 2 · JavaScript"
+        },
+        "firmware": {
+          "name": "DS2000-Firmware",
+          "desc": "Device firmware: reads the keys, drives the LEDs and talks to the app over USB.",
+          "stack": "C++ · Arduino · PlatformIO · RP2350"
+        },
+        "pcb": {
+          "name": "DS2000-PCB",
+          "desc": "Schematic and board layout, with the RP2350A and Kailh Choc switches.",
+          "stack": "KiCad"
+        },
+        "enclosure": {
+          "name": "DS2000-Enclosure",
+          "desc": "3D-printed enclosure: the model, print-ready exports and print settings.",
+          "stack": "Fusion 360 · STEP · STL · 3MF"
+        }
+      },
+      "license": "License",
+      "license_value": "AGPL-3.0",
+      "more_title": "More",
+      "protocol": "Serial protocol between the app and the firmware",
+      "roadmap": "What is left for version 1.0",
+      "issues": "Report a problem",
+      "contribute": "Issues and pull requests are welcome. Each repository's README explains how to build it."
+    }
+  }
+}

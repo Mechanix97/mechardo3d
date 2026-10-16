@@ -106,6 +106,9 @@ through `text`/`text_or` with a dotted path (`page_titles.home`)
 
 **`src/routes/`** - One module per page. Handlers are thin: resolve data, build a `PageMeta`, render
 
+**`src/data/github_releases.rs`** - `ReleaseFeed`: the latest public release of the DS2000 app
+and firmware, cached; the DS2000 download page links straight to GitHub
+
 **`src/data/blog_data.rs`** - `BlogStore`: posts and post bodies are parsed once at startup
 (`BlogStore::load`), which fails the same way a broken template does - a broken `blog_posts.json`
 or an unsafe route stop the app from starting
@@ -165,6 +168,9 @@ no download button
 - Set `width`/`height` whenever CSS does not fix the height, so the page does not reflow
 - `loading="lazy"` below the fold, `fetchpriority="high"` on the one image that is the LCP
 - `alt=""` for a thumbnail whose link text already names the destination
+- DS2000 guide screenshots go in `static/images/DS2000/guide/<figure>.webp`, named after the
+  `figure` key of the step in `translations/{lang}/ds2000_guide.json`. The route reads their size
+  from the WebP header; a missing file renders as a "screenshot pending" placeholder
 
 ### Deployment
 - Docker multi-stage build (see `Dockerfile`), with a `HEALTHCHECK` against `/health`

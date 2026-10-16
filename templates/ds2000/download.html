@@ -1,0 +1,92 @@
+{% extends "ds2000/guide_base.html" %}
+{% import "macros/ds2000.html" as guide %}
+{% block guide %}
+{% set d = t.ds2000_guide.download %}
+
+<!-- §01 Desktop app -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="01", title=d.app_title) }}
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
+        <p class="leading-relaxed text-muted md:col-span-4">{{ d.app_desc }}</p>
+        <div class="flex flex-col gap-4 md:col-span-8 md:col-start-5">
+            {% set msi = "" %}
+            {% if app_release %}
+            {% for asset in app_release.assets %}{% if asset.name is ending_with(".msi") %}{% set_global msi = asset %}{% endif %}{% endfor %}
+            {% endif %}
+            {% if msi %}
+            <table class="spec">
+                <tbody>
+                    <tr><th scope="row">{{ d.version }}</th><td class="font-mono">{{ app_release.tag }}</td></tr>
+                    <tr><th scope="row">{{ d.published }}</th><td class="font-mono">{{ app_release.date }}</td></tr>
+                    <tr><th scope="row">{{ d.file }}</th><td class="font-mono break-all">{{ msi.name }}</td></tr>
+                    <tr><th scope="row">{{ d.size }}</th><td class="font-mono">{{ msi.size }}</td></tr>
+                    {% if msi.sha256 %}<tr><th scope="row">{{ d.checksum }}</th><td class="font-mono text-xs break-all">{{ msi.sha256 }}</td></tr>{% endif %}
+                </tbody>
+            </table>
+            <div class="flex flex-col gap-2.5 sm:flex-row">
+                <a href="{{ msi.url }}" class="btn-lime min-h-14 text-sm">{{ t.labels.download }} .msi <span aria-hidden="true">↓</span></a>
+                <a href="{{ app_release.url }}" class="btn-line min-h-14 text-sm" target="_blank" rel="noopener">{{ d.release_notes }}</a>
+            </div>
+            {% else %}
+            {{ guide::none_yet(d=d, lang=lang, repo=app_repo) }}
+            {% endif %}
+            <a href="https://github.com/{{ app_repo }}/releases" class="link-arrow font-mono text-xs text-muted" target="_blank" rel="noopener">{{ d.all_versions }} →</a>
+        </div>
+    </div>
+</section>
+
+<!-- §02 Firmware -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="02", title=d.firmware_title) }}
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
+        <p class="leading-relaxed text-muted md:col-span-4">{{ d.firmware_desc }}</p>
+        <div class="flex flex-col gap-4 md:col-span-8 md:col-start-5">
+            {% set uf2_count = 0 %}
+            {% if firmware_release %}
+            {% for asset in firmware_release.assets %}{% if asset.name is ending_with(".uf2") %}{% set_global uf2_count = uf2_count + 1 %}{% endif %}{% endfor %}
+            {% endif %}
+            {% if uf2_count > 0 %}
+            <p class="font-mono text-xs text-muted">{{ d.version }} {{ firmware_release.tag }} · {{ d.published }} {{ firmware_release.date }}</p>
+            <div class="flex flex-col border-t border-line-strong">
+                {% for board in ["rp2350_zero", "pico2", "pico"] %}
+                {% for asset in firmware_release.assets %}
+                {% if asset.name is ending_with("_" ~ board ~ ".uf2") %}
+                <a href="{{ asset.url }}" class="flex items-center justify-between gap-4 border-b border-line px-1 py-4 transition-colors hover:bg-card md:px-3">
+                    <span class="flex flex-col gap-1">
+                        <span class="font-semibold">{{ d.boards[board] }}</span>
+                        <span class="font-mono text-xs break-all text-muted">{{ asset.name }} · {{ asset.size }}</span>
+                    </span>
+                    <span class="shrink-0 font-mono text-[0.8125rem] tracking-[0.06em] text-lime uppercase">{{ t.labels.download }} ↓</span>
+                </a>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </div>
+            <a href="{{ firmware_release.url }}" class="link-arrow font-mono text-xs text-muted" target="_blank" rel="noopener">{{ d.release_notes }} · {{ d.checksum }} →</a>
+            {% else %}
+            {{ guide::none_yet(d=d, lang=lang, repo=firmware_repo) }}
+            {% endif %}
+            <a href="https://github.com/{{ firmware_repo }}/releases" class="link-arrow font-mono text-xs text-muted" target="_blank" rel="noopener">{{ d.all_versions }} →</a>
+        </div>
+    </div>
+</section>
+
+<!-- §03 Requirements and verification -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="03", title=d.requirements_title) }}
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+        <ul class="flex flex-col border-t border-line-strong">
+            {% for item in d.requirements %}
+            <li class="flex gap-4 border-b border-line py-4"><span class="font-mono text-[0.8125rem] text-lime" aria-hidden="true">✓</span><span>{{ item }}</span></li>
+            {% endfor %}
+        </ul>
+        <div class="flex flex-col gap-3">
+            <h3 class="text-lg font-semibold">{{ d.verify_title }}</h3>
+            <p class="leading-relaxed text-muted">{{ d.verify_body }}</p>
+            <pre class="overflow-x-auto border border-line-strong bg-panel p-4 font-mono text-[0.8125rem] text-fg"><code>Get-FileHash .\DS2000_*.msi -Algorithm SHA256</code></pre>
+            <p class="leading-relaxed text-muted">{{ d.next_body }}</p>
+            <a href="/{{ lang }}/ds2000/install" class="btn-line min-h-12 self-start text-sm">{{ t.ds2000_guide.tabs.install }} <span aria-hidden="true">→</span></a>
+        </div>
+    </div>
+</section>
+{% endblock guide %}

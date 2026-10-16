@@ -1,0 +1,230 @@
+{
+  "ds2000_guide": {
+    "tabs": {
+      "label": "Secciones del DS2000",
+      "product": "Producto",
+      "download": "Descargas",
+      "install": "Instalación",
+      "discord": "Configurar Discord",
+      "source": "Código"
+    },
+    "figure_pending": "Captura pendiente",
+    "step": "Paso",
+    "next": "Siguiente",
+    "download": {
+      "heading": "Descargas",
+      "intro": "La app de escritorio y el firmware del dispositivo se publican como releases en GitHub. Esta página muestra siempre la última versión.",
+      "app_title": "App de escritorio",
+      "app_desc": "Instalador para Windows. Conecta el DS2000 con Discord y controla las luces.",
+      "firmware_title": "Firmware",
+      "firmware_desc": "Imagen para el dispositivo. Solo hace falta si la app te dice que el firmware está desactualizado.",
+      "version": "Versión",
+      "published": "Publicada",
+      "file": "Archivo",
+      "size": "Tamaño",
+      "checksum": "SHA-256",
+      "all_versions": "Todas las versiones",
+      "release_notes": "Notas de la versión",
+      "none_yet": "Todavía no hay una versión publicada. Mientras tanto se puede compilar desde el código.",
+      "see_source": "Ver el código",
+      "board": "Placa",
+      "boards": {
+        "rp2350_zero": "Waveshare RP2350-Zero (prototipo actual)",
+        "pico2": "Raspberry Pi Pico 2",
+        "pico": "Raspberry Pi Pico (RP2040)"
+      },
+      "requirements_title": "Requisitos",
+      "requirements": [
+        "Windows 10 u 11 de 64 bits.",
+        "La app de escritorio de Discord abierta. La versión web no se puede controlar.",
+        "Un cable USB de datos, no solo de carga."
+      ],
+      "verify_title": "Verificar la descarga",
+      "verify_body": "Opcional. En PowerShell, el resultado tiene que coincidir con el SHA-256 de arriba:",
+      "next_body": "Con el instalador descargado, seguí la guía de instalación."
+    },
+    "install": {
+      "heading": "Instalación",
+      "intro": "Cómo instalar la app, conectar el DS2000 y actualizar el firmware. Lleva unos cinco minutos.",
+      "app_title": "Instalar la app",
+      "app_steps": [
+        {
+          "title": "Descargá el instalador",
+          "body": "Bajá el archivo <code>.msi</code> desde la pestaña Descargas."
+        },
+        {
+          "title": "Pasá el aviso de SmartScreen",
+          "body": "El instalador todavía no está firmado, así que Windows avisa la primera vez. Hacé clic en <strong>Más información</strong>.",
+          "figure": "install-01-smartscreen",
+          "alt": "Aviso de Windows SmartScreen con el enlace Más información"
+        },
+        {
+          "title": "Ejecutalo igual",
+          "body": "Aparece el botón <strong>Ejecutar de todas formas</strong>. Hacé clic y seguí el instalador.",
+          "figure": "install-02-smartscreen-run",
+          "alt": "Aviso de SmartScreen con el botón Ejecutar de todas formas"
+        },
+        {
+          "title": "Abrí DS2000",
+          "body": "La app queda en la bandeja del sistema, al lado del reloj. Un clic en el ícono abre la ventana; cerrar la ventana no cierra la app. Para salir, clic derecho en el ícono y <strong>Salir</strong>.",
+          "figure": "install-03-tray",
+          "alt": "Ícono de DS2000 en la bandeja del sistema con su menú"
+        }
+      ],
+      "device_title": "Conectar el DS2000",
+      "device_steps": [
+        {
+          "title": "Enchufalo por USB",
+          "body": "La app lo detecta sola. No hace falta instalar drivers: Windows lo reconoce como un puerto serie."
+        },
+        {
+          "title": "Revisá el estado",
+          "body": "En la pestaña <strong>Configuración</strong>, la sección Conexiones tiene que decir <strong>Serial: Conectado</strong>. Si dice que el firmware está desactualizado, actualizalo como se explica más abajo.",
+          "figure": "install-04-connected",
+          "alt": "Pestaña Configuración de la app con Serial: Conectado"
+        },
+        {
+          "title": "Conectá Discord",
+          "body": "Falta un paso, que se hace una sola vez: crear tu aplicación de Discord. Está explicado en la pestaña Configurar Discord."
+        }
+      ],
+      "firmware_title": "Actualizar el firmware",
+      "firmware_intro": "Solo hace falta cuando la app dice que el firmware está desactualizado. En el futuro la app lo va a hacer sola.",
+      "firmware_steps": [
+        {
+          "title": "Descargá la imagen",
+          "body": "En Descargas, bajá el archivo <code>.uf2</code> de tu placa."
+        },
+        {
+          "title": "Entrá en modo de carga",
+          "body": "Cerrá la app DS2000. Desenchufá el dispositivo, mantené apretado el botón <strong>BOOT</strong> de la placa y volvé a enchufarlo. Aparece una unidad USB llamada <strong>RP2350</strong> (o <strong>RPI-RP2</strong> en una Pico).",
+          "figure": "firmware-01-drive",
+          "alt": "Explorador de Windows mostrando la unidad RP2350"
+        },
+        {
+          "title": "Copiá el archivo",
+          "body": "Arrastrá el <code>.uf2</code> a esa unidad. La placa se reinicia sola con el firmware nuevo y la unidad desaparece. Abrí la app de nuevo."
+        }
+      ],
+      "uninstall_title": "Desinstalar",
+      "uninstall_body": "Desde <strong>Configuración de Windows → Aplicaciones</strong>. La configuración queda en <code>%APPDATA%\\Mechardo</code> y las credenciales de Discord en el Administrador de credenciales de Windows, bajo <code>DS2000</code>; borralas a mano si no vas a volver a instalarla."
+    },
+    "discord": {
+      "heading": "Configurar Discord",
+      "intro": "Discord solo deja que una aplicación controle tu micrófono si esa aplicación es tuya. Por eso DS2000 no trae una: creás la tuya en el portal de desarrolladores de Discord. Es gratis, se hace una sola vez y no hace falta saber programar.",
+      "before_title": "Antes de empezar",
+      "before": [
+        "La app DS2000 instalada.",
+        "La app de escritorio de Discord abierta y con tu cuenta iniciada.",
+        "Un navegador para entrar al portal de desarrolladores."
+      ],
+      "portal_title": "Crear la aplicación en Discord",
+      "portal_steps": [
+        {
+          "title": "Abrí el portal de desarrolladores",
+          "body": "Entrá a <a href=\"https://discord.com/developers/applications\" target=\"_blank\" rel=\"noopener\">discord.com/developers/applications</a> con tu cuenta de Discord y hacé clic en <strong>New Application</strong>, arriba a la derecha.",
+          "figure": "discord-01-new-application",
+          "alt": "Portal de desarrolladores de Discord con el botón New Application"
+        },
+        {
+          "title": "Ponele un nombre",
+          "body": "Cualquier nombre sirve, por ejemplo <strong>DS2000</strong>. Aceptá los términos de Discord y hacé clic en <strong>Create</strong>.",
+          "figure": "discord-02-create",
+          "alt": "Ventana Create an application con el nombre DS2000"
+        },
+        {
+          "title": "Copiá el Client ID",
+          "body": "En el menú de la izquierda entrá a <strong>OAuth2</strong>. Copiá el <strong>Client ID</strong> con el botón <strong>Copy</strong> y guardalo para el último paso.",
+          "figure": "discord-03-client-id",
+          "alt": "Página OAuth2 con el Client ID y el botón Copy"
+        },
+        {
+          "title": "Generá el Client Secret",
+          "body": "En la misma página, hacé clic en <strong>Reset Secret</strong> y confirmá. Discord puede pedirte tu código de verificación en dos pasos. Copiá el secreto: <strong>Discord lo muestra una sola vez</strong>. Si lo perdés, generá otro. No lo compartas con nadie.",
+          "figure": "discord-04-client-secret",
+          "alt": "Client Secret recién generado, tapado, con el botón Copy"
+        },
+        {
+          "title": "Agregá la redirección",
+          "body": "Más abajo, en <strong>Redirects</strong>, hacé clic en <strong>Add Redirect</strong>, escribí exactamente <code>http://localhost/</code> (con la barra final) y guardá con <strong>Save Changes</strong>. Sin esto, la conexión falla.",
+          "figure": "discord-05-redirect",
+          "alt": "Sección Redirects con http://localhost/ cargado y el botón Save Changes"
+        }
+      ],
+      "app_title": "Conectar la app DS2000",
+      "app_steps": [
+        {
+          "title": "Pegá las credenciales",
+          "body": "En DS2000, abrí la pestaña <strong>Discord</strong>, pegá el Client ID y el Client Secret y hacé clic en <strong>Conectar</strong>.",
+          "figure": "discord-06-app-credentials",
+          "alt": "Pestaña Discord de la app DS2000 con los dos campos completos"
+        },
+        {
+          "title": "Autorizá en Discord",
+          "body": "Discord muestra un pedido de autorización con el nombre de tu aplicación. Hacé clic en <strong>Autorizar</strong>.",
+          "figure": "discord-07-authorize",
+          "alt": "Pedido de autorización de Discord para la aplicación DS2000"
+        },
+        {
+          "title": "Listo",
+          "body": "La pestaña Discord muestra <strong>Conectado a Discord.</strong>, y en Configuración → Conexiones dice <strong>Discord: Conectado</strong>. Probá las teclas: mutear, ensordecer y desconectar. Las credenciales quedan guardadas y no hace falta repetir esto.",
+          "figure": "discord-08-connected",
+          "alt": "App DS2000 con Discord: Conectado"
+        }
+      ],
+      "trouble_title": "Si algo no funciona",
+      "trouble": [
+        {
+          "q": "Se queda en «Credenciales guardadas. Esperando a Discord…»",
+          "a": "La app de escritorio de Discord tiene que estar abierta. Abrila; DS2000 se conecta sola en unos segundos."
+        },
+        {
+          "q": "Acepté la autorización pero no conecta",
+          "a": "Revisá que en Redirects esté exactamente <code>http://localhost/</code>, con la barra final, y que hayas guardado los cambios."
+        },
+        {
+          "q": "Perdí el Client Secret",
+          "a": "Generá otro con Reset Secret, y en la pestaña Discord de DS2000 pegá el nuevo. Si dejás el campo vacío, se mantiene el anterior."
+        },
+        {
+          "q": "Quiero desvincular la aplicación",
+          "a": "En la pestaña Discord de DS2000, <strong>Desvincular</strong> borra las credenciales guardadas. Para borrar también la aplicación, eliminala desde el portal de desarrolladores."
+        }
+      ],
+      "privacy": "El Client Secret y los tokens se guardan en el Administrador de credenciales de Windows, en tu computadora. No se envían a Mechardo Labs ni a nadie más que a Discord."
+    },
+    "source": {
+      "heading": "Código abierto",
+      "intro": "Todo el DS2000 es abierto: la app, el firmware, la placa y la carcasa. Cada parte vive en su propio repositorio de GitHub.",
+      "repos": {
+        "app": {
+          "name": "DS2000",
+          "desc": "App de escritorio para Windows: conexión con Discord, detección del dispositivo y control de las luces.",
+          "stack": "Rust · Tauri 2 · JavaScript"
+        },
+        "firmware": {
+          "name": "DS2000-Firmware",
+          "desc": "Firmware del dispositivo: lee las teclas, maneja los LEDs y habla con la app por USB.",
+          "stack": "C++ · Arduino · PlatformIO · RP2350"
+        },
+        "pcb": {
+          "name": "DS2000-PCB",
+          "desc": "Esquemático y diseño de la placa, con el RP2350A y los switches Kailh Choc.",
+          "stack": "KiCad"
+        },
+        "enclosure": {
+          "name": "DS2000-Enclosure",
+          "desc": "Carcasa impresa en 3D: modelo, exportaciones para imprimir y parámetros de impresión.",
+          "stack": "Fusion 360 · STEP · STL · 3MF"
+        }
+      },
+      "license": "Licencia",
+      "license_value": "AGPL-3.0",
+      "more_title": "Más información",
+      "protocol": "Protocolo serie entre la app y el firmware",
+      "roadmap": "Qué falta para la versión 1.0",
+      "issues": "Reportar un problema",
+      "contribute": "Los issues y los pull requests son bienvenidos. Cada repositorio explica cómo compilarlo en su README."
+    }
+  }
+}

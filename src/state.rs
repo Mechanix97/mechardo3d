@@ -9,6 +9,7 @@ use tracing::{info, warn};
 
 use crate::config::AppConfig;
 use crate::data::blog_data::BlogStore;
+use crate::data::github_releases::ReleaseFeed;
 use crate::data::messages::MessageStore;
 use crate::data::release_asset::ReleaseAssetStore;
 use crate::date_format;
@@ -28,6 +29,9 @@ pub struct AppStateInner {
     pub contact_rate_limit: RateLimiter,
     pub resume: ReleaseAssetStore,
     pub report: ReleaseAssetStore,
+    /// Latest releases of the DS2000 app and firmware, for the download page.
+    pub ds2000_app_release: ReleaseFeed,
+    pub ds2000_firmware_release: ReleaseFeed,
     pub http: Client,
 }
 
@@ -66,6 +70,10 @@ impl AppState {
 
         let resume = ReleaseAssetStore::new(config.resume.clone(), http.clone());
         let report = ReleaseAssetStore::new(config.report.clone(), http.clone());
+        let releases = &config.ds2000_releases;
+        let ds2000_app_release = ReleaseFeed::new(&releases.app_repo, releases, http.clone());
+        let ds2000_firmware_release =
+            ReleaseFeed::new(&releases.firmware_repo, releases, http.clone());
 
         Ok(Self(Arc::new(AppStateInner {
             config,
@@ -76,6 +84,8 @@ impl AppState {
             contact_rate_limit,
             resume,
             report,
+            ds2000_app_release,
+            ds2000_firmware_release,
             http,
         })))
     }

@@ -81,6 +81,9 @@ default, so `cargo run` works with nothing set.
 | `REPORT_ASSET` | `main.pdf` | Release asset for the report, the same in both languages |
 | `REPORT_DOWNLOAD_NAME` | `Lucas_Rack_TPP_Medicion_IoT.pdf` | Name the browser saves the report under |
 | `REPORT_CACHE_SECS` | `21600` | How long the report PDF is reused before GitHub is asked again |
+| `DS2000_APP_REPO` | `Mechanix97/DS2000` | Public repository whose latest release the DS2000 download page shows |
+| `DS2000_FIRMWARE_REPO` | `Mechanix97/DS2000-Firmware` | Same, for the firmware images |
+| `DS2000_RELEASES_CACHE_SECS` | `900` | How long release metadata is reused; works without `GITHUB_TOKEN`, which only raises the rate limit |
 | `MAX_MESSAGE_CHARS` | `5000` | Longest accepted contact message |
 | `DATA_DIR` | `data` | Blog posts and stored messages |
 | `STATIC_DIR` | `static` | Served under `/static` |

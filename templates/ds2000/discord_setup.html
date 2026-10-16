@@ -1,0 +1,46 @@
+{% extends "ds2000/guide_base.html" %}
+{% import "macros/ds2000.html" as guide %}
+{% block guide %}
+{% set g = t.ds2000_guide.discord %}
+
+<!-- Before you start -->
+<section class="wrap pb-14 md:pb-20">
+    <div class="grid grid-cols-1 gap-6 border border-line-strong bg-panel p-5 md:grid-cols-12 md:gap-8 md:p-8">
+        <h2 class="text-lg font-semibold md:col-span-4 md:text-xl">{{ g.before_title }}</h2>
+        <ul class="flex flex-col gap-3 md:col-span-8">
+            {% for item in g.before %}
+            <li class="flex gap-4"><span class="font-mono text-[0.8125rem] text-lime" aria-hidden="true">✓</span><span>{{ item }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+<!-- §01 Developer portal -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="01", title=g.portal_title) }}
+    {{ guide::steps(steps=g.portal_steps, figures=figures, t=t) }}
+</section>
+
+<!-- §02 DS2000 app -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="02", title=g.app_title) }}
+    {{ guide::steps(steps=g.app_steps, figures=figures, t=t, start=g.portal_steps | length + 1) }}
+    <p class="mt-8 max-w-3xl border-l-2 border-lime pl-4 text-sm leading-relaxed text-muted">{{ g.privacy }}</p>
+</section>
+
+<!-- §03 Troubleshooting -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="03", title=g.trouble_title) }}
+    <div class="border-t border-line-strong">
+        {% for item in g.trouble %}
+        <details class="acc" {% if loop.first %}open{% endif %}>
+            <summary class="text-[1.0625rem] font-medium md:text-lg">
+                <span class="flex gap-4"><span class="hidden pt-1 font-mono text-[0.8125rem] text-lime md:inline" aria-hidden="true">Q{{ loop.index }}</span>{{ item.q }}</span>
+                <span class="acc-plus" aria-hidden="true">+</span>
+            </summary>
+            <p class="pb-6 leading-relaxed text-muted md:pl-11 {{ guide::rich() }}">{{ item.a | safe }}</p>
+        </details>
+        {% endfor %}
+    </div>
+</section>
+{% endblock guide %}

@@ -132,6 +132,13 @@ fn router(state: AppState) -> Router {
             "/{lang}/ds2000/privacy-policy",
             get(routes::ds2000::privacy_policy),
         )
+        .route("/{lang}/ds2000/download", get(routes::ds2000::download))
+        .route("/{lang}/ds2000/install", get(routes::ds2000::install))
+        .route(
+            "/{lang}/ds2000/discord-setup",
+            get(routes::ds2000::discord_setup),
+        )
+        .route("/{lang}/ds2000/source", get(routes::ds2000::source))
         .route("/{lang}/ds2000", get(routes::ds2000::ds2000))
         .route("/{lang}", get(routes::home::index))
         .fallback(not_found)

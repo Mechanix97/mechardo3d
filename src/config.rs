@@ -21,6 +21,8 @@ const DEFAULT_REPORT_REPO: &str = "Mechanix97/Informe-Trabajo-Practico-Profesion
 /// The report is one Spanish document, so both languages get the same asset.
 const DEFAULT_REPORT_ASSET: &str = "main.pdf";
 const DEFAULT_REPORT_DOWNLOAD: &str = "Lucas_Rack_TPP_Medicion_IoT.pdf";
+const DEFAULT_DS2000_APP_REPO: &str = "Mechanix97/DS2000";
+const DEFAULT_DS2000_FIRMWARE_REPO: &str = "Mechanix97/DS2000-Firmware";
 
 /// Runtime configuration, resolved once at startup.
 ///
@@ -49,6 +51,7 @@ pub struct AppConfig {
     pub recaptcha: RecaptchaConfig,
     pub resume: ReleaseAssetConfig,
     pub report: ReleaseAssetConfig,
+    pub ds2000_releases: ReleaseFeedConfig,
     /// Minimum delay between two contact submissions from the same client.
     pub contact_rate_limit: Duration,
     /// Largest accepted contact message, in characters.
@@ -94,6 +97,22 @@ impl ReleaseAssetConfig {
     pub fn enabled(&self) -> bool {
         !self.token.is_empty() && !self.repo.is_empty()
     }
+}
+
+/// Where the DS2000 download page reads its releases from.
+///
+/// Both repositories are public, so this works without a token; the shared
+/// GitHub token, when there is one, only raises the API rate limit.
+#[derive(Debug, Clone)]
+pub struct ReleaseFeedConfig {
+    /// `owner/name` of the desktop app repository.
+    pub app_repo: String,
+    /// `owner/name` of the firmware repository.
+    pub firmware_repo: String,
+    /// Optional GitHub token.
+    pub token: String,
+    /// How long release metadata is reused before GitHub is asked again.
+    pub cache_ttl: Duration,
 }
 
 #[derive(Debug, Clone)]
@@ -160,6 +179,7 @@ impl AppConfig {
             .unwrap_or_default();
         // Both downloads read the same repositories' releases with the same token.
         let github_token_report = github_token.clone();
+        let github_token_ds2000 = github_token.clone();
 
         let config = Self {
             bind_addr,
@@ -192,6 +212,12 @@ impl AppConfig {
                 asset_en: env_string("REPORT_ASSET", DEFAULT_REPORT_ASSET),
                 download_name: Some(env_string("REPORT_DOWNLOAD_NAME", DEFAULT_REPORT_DOWNLOAD)),
                 cache_ttl: Duration::from_secs(env_parse("REPORT_CACHE_SECS", 21600)),
+            },
+            ds2000_releases: ReleaseFeedConfig {
+                app_repo: env_string("DS2000_APP_REPO", DEFAULT_DS2000_APP_REPO),
+                firmware_repo: env_string("DS2000_FIRMWARE_REPO", DEFAULT_DS2000_FIRMWARE_REPO),
+                token: github_token_ds2000,
+                cache_ttl: Duration::from_secs(env_parse("DS2000_RELEASES_CACHE_SECS", 900)),
             },
             contact_rate_limit: Duration::from_secs(env_parse("CONTACT_RATE_LIMIT_SECS", 300)),
             max_message_chars: env_parse("MAX_MESSAGE_CHARS", 5000),
@@ -274,6 +300,12 @@ impl AppConfig {
                 asset_en: "main.pdf".to_string(),
                 download_name: Some("report.pdf".to_string()),
                 cache_ttl: Duration::from_secs(3600),
+            },
+            ds2000_releases: ReleaseFeedConfig {
+                app_repo: "owner/app".to_string(),
+                firmware_repo: "owner/firmware".to_string(),
+                token: String::new(),
+                cache_ttl: Duration::from_secs(900),
             },
             contact_rate_limit: Duration::from_secs(300),
             max_message_chars: 5000,

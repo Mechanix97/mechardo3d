@@ -21,6 +21,18 @@
     "ds2000": {
       "description": "DS2000: USB Discord button box with 3 programmable buttons and RGB LEDs. Mute, deafen and disconnect with one click."
     },
+    "ds2000_download": {
+      "description": "Download the latest DS2000 desktop app for Windows and the device firmware."
+    },
+    "ds2000_install": {
+      "description": "How to install the DS2000 app, connect the device over USB and update its firmware."
+    },
+    "ds2000_discord": {
+      "description": "Step by step with screenshots: create your application in the Discord developer portal and connect it to the DS2000."
+    },
+    "ds2000_source": {
+      "description": "The DS2000 repositories: desktop app, firmware, board and enclosure, all open source."
+    },
     "terms_of_service": {
       "description": "Terms of service for the DS2000, the USB Discord button box by Mechardo Labs."
     },

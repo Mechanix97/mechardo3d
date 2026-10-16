@@ -8,10 +8,14 @@ use crate::models::blog_post::BlogPost;
 use crate::state::AppState;
 
 /// Pages that exist in every language, with their crawl hints.
-const STATIC_PAGES: [(&str, &str, &str); 7] = [
+const STATIC_PAGES: [(&str, &str, &str); 11] = [
     ("", "weekly", "1.0"),
     ("me", "monthly", "0.9"),
     ("ds2000", "monthly", "0.9"),
+    ("ds2000/download", "weekly", "0.8"),
+    ("ds2000/install", "monthly", "0.7"),
+    ("ds2000/discord-setup", "monthly", "0.7"),
+    ("ds2000/source", "monthly", "0.6"),
     ("blog", "weekly", "0.8"),
     ("contact", "yearly", "0.7"),
     ("ds2000/terms-of-service", "yearly", "0.5"),

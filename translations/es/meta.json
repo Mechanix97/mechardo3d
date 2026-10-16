@@ -21,6 +21,18 @@
     "ds2000": {
       "description": "DS2000: botonera USB para Discord con 3 botones programables y LEDs RGB. Muteá, ensordecé y desconectate con un clic."
     },
+    "ds2000_download": {
+      "description": "Descargá la última versión de la app de escritorio del DS2000 para Windows y el firmware del dispositivo."
+    },
+    "ds2000_install": {
+      "description": "Cómo instalar la app del DS2000, conectar el dispositivo por USB y actualizar su firmware."
+    },
+    "ds2000_discord": {
+      "description": "Paso a paso con capturas: cómo crear tu aplicación en el portal de desarrolladores de Discord y conectarla con el DS2000."
+    },
+    "ds2000_source": {
+      "description": "Repositorios del DS2000: app de escritorio, firmware, placa y carcasa, todo de código abierto."
+    },
     "terms_of_service": {
       "description": "Términos del servicio del DS2000, la botonera USB para Discord de Mechardo Labs."
     },
