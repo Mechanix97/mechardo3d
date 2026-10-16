@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% import "macros/brand.html" as brand %}
+{% import "macros/ds2000.html" as guide %}
 {% block content %}
 
 <section class="wrap">
     <div class="ruler"><span>§ DS2000 — {{ t.labels.datasheet }}</span><span>Rev A</span></div>
+    {{ guide::tabs(tabs=tabs, active=active_tab, lang=lang, t=t) }}
     <div class="logo3d mt-8">
         <span aria-hidden="true" class="logo3d-glow"></span>
         <img src="/static/images/DS2000/logo/ds2000-spin.webp" alt="DS2000" width="440" height="440"
@@ -104,9 +106,9 @@
                 <div class="flex justify-between gap-4 border-b border-line py-3"><dt class="text-muted">{{ t.ds2000.specs.connection }}</dt><dd class="text-right">USB-C</dd></div>
             </dl>
             <div class="mt-2 flex flex-col gap-2.5">
-                <a href="#drivers" class="btn-lime min-h-14 text-sm">{{ t.ds2000.drivers.title }} <span aria-hidden="true">↓</span></a>
+                <a href="/{{ lang }}/ds2000/download" class="btn-lime min-h-14 text-sm">{{ t.ds2000_guide.tabs.download }} <span aria-hidden="true">→</span></a>
             </div>
-            <p class="font-mono text-xs text-muted">Windows 10/11 · macOS 10.15+ · Linux</p>
+            <p class="font-mono text-xs text-muted">Windows 10/11</p>
         </div>
     </div>
 </section>
@@ -163,7 +165,7 @@
                 <tr><th scope="row">{{ t.ds2000.specs.connection }}</th><td>USB-C · USB 2.0</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.buttons }}</th><td>{{ t.ds2000.specs.buttons_desc }}</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.indicators }}</th><td>{{ t.ds2000.specs.indicators_desc }}</td></tr>
-                <tr><th scope="row">{{ t.ds2000.specs.compatibility }}</th><td>Windows 10/11, macOS 10.15+, Linux (Ubuntu, Fedora)</td></tr>
+                <tr><th scope="row">{{ t.ds2000.specs.compatibility }}</th><td>Windows 10/11</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.dimensions }}</th><td class="font-mono">10 × 5 × 2 cm</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.weight }}</th><td class="font-mono">150 g</td></tr>
                 <tr><th scope="row">{{ t.ds2000.specs.material }}</th><td>{{ t.ds2000.specs.material_desc }}</td></tr>
@@ -181,17 +183,13 @@
             <h2 class="text-[1.75rem] leading-tight font-semibold tracking-tight md:text-[2.75rem]">{{ t.ds2000.drivers.title }}</h2>
             <p class="leading-relaxed text-muted">{{ t.ds2000.drivers.description }}</p>
         </div>
-        <div class="flex flex-col gap-3 md:col-span-8 md:col-start-5">
-            <a href="/static/downloads/ds2000-windows-driver.zip" download
-                class="flex items-center justify-between gap-4 border border-line-strong px-5 py-5 transition-colors hover:bg-card md:px-7 md:py-6">
-                <span class="flex flex-col gap-1"><span class="text-lg font-semibold md:text-xl">{{ t.ds2000.drivers.windows }}</span><span class="font-mono text-xs text-muted">Windows 10/11</span></span>
-                <span class="font-mono text-[0.8125rem] tracking-[0.06em] text-lime uppercase">{{ t.labels.download }} ↓</span>
+        <div class="flex flex-col border-t border-line-strong md:col-span-8 md:col-start-5">
+            {% for tab in tabs %}{% if not loop.first %}
+            <a href="/{{ lang }}/{{ tab.path }}" class="flex items-center justify-between gap-4 border-b border-line px-1 py-5 transition-colors hover:bg-card md:px-3 md:py-6">
+                <span class="flex items-center gap-4"><span class="font-mono text-xs text-dim" aria-hidden="true">0{{ loop.index }}</span><span class="text-lg font-semibold md:text-xl">{{ t.ds2000_guide.tabs[tab.key] }}</span></span>
+                <span class="text-lime" aria-hidden="true">→</span>
             </a>
-            <a href="/static/downloads/ds2000-macos-driver.zip" download
-                class="flex items-center justify-between gap-4 border border-line-strong px-5 py-5 transition-colors hover:bg-card md:px-7 md:py-6">
-                <span class="flex flex-col gap-1"><span class="text-lg font-semibold md:text-xl">{{ t.ds2000.drivers.macos }}</span><span class="font-mono text-xs text-muted">macOS 10.15+</span></span>
-                <span class="font-mono text-[0.8125rem] tracking-[0.06em] text-lime uppercase">{{ t.labels.download }} ↓</span>
-            </a>
+            {% endif %}{% endfor %}
         </div>
     </div>
 </section>

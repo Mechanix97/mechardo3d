@@ -1,0 +1,32 @@
+{% extends "ds2000/guide_base.html" %}
+{% import "macros/ds2000.html" as guide %}
+{% block guide %}
+{% set g = t.ds2000_guide.install %}
+
+<!-- §01 App -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="01", title=g.app_title) }}
+    {{ guide::steps(steps=g.app_steps, figures=figures, t=t) }}
+    <a href="/{{ lang }}/ds2000/download" class="btn-line mt-8 min-h-12 text-sm">{{ t.ds2000_guide.tabs.download }} <span aria-hidden="true">→</span></a>
+</section>
+
+<!-- §02 Device -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="02", title=g.device_title) }}
+    {{ guide::steps(steps=g.device_steps, figures=figures, t=t) }}
+    <a href="/{{ lang }}/ds2000/discord-setup" class="btn-lime mt-8 min-h-14 text-sm">{{ t.ds2000_guide.tabs.discord }} <span aria-hidden="true">→</span></a>
+</section>
+
+<!-- §03 Firmware -->
+<section id="firmware" class="wrap scroll-mt-20 border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="03", title=g.firmware_title) }}
+    <p class="mb-8 max-w-3xl leading-relaxed text-muted">{{ g.firmware_intro }}</p>
+    {{ guide::steps(steps=g.firmware_steps, figures=figures, t=t) }}
+</section>
+
+<!-- §04 Uninstall -->
+<section class="wrap border-t border-line pb-14 md:pb-24">
+    {{ guide::section_title(number="04", title=g.uninstall_title) }}
+    <p class="max-w-3xl leading-relaxed text-muted {{ guide::rich() }}">{{ g.uninstall_body | safe }}</p>
+</section>
+{% endblock guide %}

@@ -14,7 +14,7 @@
       },
       "usb": {
         "title": "Conexión USB-C",
-        "description": "Conectá el DS2000 a tu computadora por USB-C y usalo sin complicaciones en Windows, macOS o Linux."
+        "description": "Conectá el DS2000 a tu computadora por USB y usalo en Windows 10 u 11, sin drivers."
       },
       "design": {
         "title": "Diseño Compacto",
@@ -34,22 +34,20 @@
       "material": "Material",
       "material_desc": "Plástico ABS de alta resistencia",
       "software": "Software",
-      "software_desc": "Controladores opcionales para personalización avanzada"
+      "software_desc": "App de escritorio para Windows, de código abierto"
     },
     "drivers": {
-      "title": "Controladores y Software",
-      "description": "Descargá los controladores y el software de configuración para personalizar tu DS2000.",
-      "windows": "Controlador para Windows",
-      "macos": "Controlador para macOS"
+      "title": "Software",
+      "description": "La app de escritorio conecta el DS2000 con Discord. Windows reconoce el dispositivo solo: no hace falta instalar drivers."
     },
     "faq": {
       "title": "Preguntas Frecuentes",
       "q1": "¿Es compatible con Discord?",
       "a1": "Sí, el DS2000 está diseñado para integrarse con aplicaciones como Discord permitiendo controlar funciones de audio y conexión.",
       "q2": "¿Necesito instalar controladores?",
-      "a2": "Si, dentro del software de DS2000 se contienen los controladores del dispositivo.",
-      "q3": "¿Puedo usar el DS2000 en Linux?",
-      "a3": "Sí, es compatible con distribuciones como Ubuntu y Fedora utilizando el software controlador."
+      "a2": "No. Windows reconoce el DS2000 solo; lo único que hay que instalar es la app DS2000.",
+      "q3": "¿Funciona en macOS o Linux?",
+      "a3": "Por ahora no: la app es solo para Windows 10 y 11. El código es abierto, así que se puede portar."
     },
     "images": {
       "front": "DS2000 vista frontal",

@@ -1,0 +1,93 @@
+{# Shared pieces of the DS2000 section: the tab bar under the section ruler,
+   numbered guide steps, and their screenshots. #}
+
+{# The tab bar. Each tab is its own page, so this is plain navigation: the
+   current one carries aria-current. It scrolls sideways inside itself on a
+   phone instead of widening the page. #}
+{% macro tabs(tabs, active, lang, t) %}
+<nav aria-label="{{ t.ds2000_guide.tabs.label }}" class="-mx-4 overflow-x-auto border-b border-line px-4 md:mx-0 md:px-0">
+    <ul class="flex min-w-max gap-1">
+        {% for tab in tabs %}
+        <li>
+            <a href="/{{ lang }}/{{ tab.path }}"
+                class="flex min-h-11 items-center border-b-2 px-3 font-mono text-xs tracking-[0.06em] uppercase transition-colors md:px-4 {% if tab.key == active %}border-lime text-fg{% else %}border-transparent text-muted hover:text-fg{% endif %}"
+                {% if tab.key == active %}aria-current="page"{% endif %}>
+                <span class="mr-2 text-dim" aria-hidden="true">0{{ loop.index }}</span>{{ t.ds2000_guide.tabs[tab.key] }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endmacro tabs %}
+
+{# Heading block of a guide page. #}
+{% macro header(heading, intro) %}
+<div class="flex max-w-3xl flex-col gap-4 pt-9 pb-10 md:pt-14 md:pb-14">
+    <h1 class="text-[2.25rem] leading-tight font-semibold tracking-tight md:text-[3.5rem]">{{ heading }}</h1>
+    <p class="text-base leading-relaxed text-muted md:text-[1.0625rem]">{{ intro }}</p>
+</div>
+{% endmacro header %}
+
+{# A screenshot, or a placeholder naming the file it waits for. #}
+{% macro figure(figures, name, alt, t) %}
+{% if name in figures %}
+{% set fig = figures[name] %}
+<figure class="flex flex-col gap-2">
+    <a href="{{ fig.src }}" target="_blank" rel="noopener" class="block border border-line-strong bg-panel p-1.5 transition-colors hover:border-lime">
+        <img src="{{ fig.src }}" alt="{{ alt }}" width="{{ fig.width }}" height="{{ fig.height }}" loading="lazy" decoding="async" class="h-auto w-full">
+    </a>
+    <figcaption class="caption">{{ t.labels.figure }} — {{ alt }}</figcaption>
+</figure>
+{% else %}
+<figure class="flex aspect-[16/9] flex-col items-center justify-center gap-2 border border-dashed border-line-strong bg-panel px-6 text-center">
+    <span class="font-mono text-xs tracking-[0.06em] text-muted uppercase">{{ t.ds2000_guide.figure_pending }}</span>
+    <figcaption class="text-sm text-muted">{{ alt }}</figcaption>
+    <span class="font-mono text-xs text-dim">{{ name }}.webp</span>
+</figure>
+{% endif %}
+{% endmacro figure %}
+
+{# Numbered steps. `start` continues the numbering from an earlier list.
+   Step bodies are trusted copy from the translation files and may hold
+   inline markup (<strong>, <code>, links). #}
+{% macro steps(steps, figures, t, start=1) %}
+<ol class="flex flex-col border-t border-line-strong">
+    {% for step in steps %}
+    <li class="grid grid-cols-1 gap-4 border-b border-line py-7 md:grid-cols-12 md:gap-8 md:py-9">
+        <div class="flex gap-4 md:col-span-5">
+            {% set n = loop.index0 + start %}
+            <span class="pt-1 font-mono text-[0.8125rem] text-lime" aria-hidden="true">{% if n < 10 %}0{% endif %}{{ n }}</span>
+            <div class="flex flex-col gap-2">
+                <h3 class="text-lg font-semibold md:text-xl">{{ step.title }}</h3>
+                <p class="leading-relaxed text-muted {{ self::rich() }}">{{ step.body | safe }}</p>
+            </div>
+        </div>
+        {% if step.figure %}
+        <div class="md:col-span-7">
+            {{ self::figure(figures=figures, name=step.figure, alt=step.alt, t=t) }}
+        </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ol>
+{% endmacro steps %}
+
+{# Classes for copy that carries inline markup from the translation files. #}
+{% macro rich() %}[&_a]:text-lime [&_a]:underline [&_a]:underline-offset-4 [&_code]:bg-card [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.875em] [&_code]:text-fg [&_strong]:font-semibold [&_strong]:text-fg{% endmacro rich %}
+
+{# A section of a guide page, opened by the shared ruler. #}
+{% macro section_title(number, title) %}
+<div class="ruler"><span>§{{ number }} — {{ title }}</span></div>
+<h2 class="mt-9 mb-6 text-[1.75rem] font-semibold tracking-tight md:mt-12 md:mb-8 md:text-[2.25rem]">{{ title }}</h2>
+{% endmacro section_title %}
+
+{# Shown on the download page while a repository has no published release. #}
+{% macro none_yet(d, lang, repo) %}
+<div class="flex flex-col gap-4 border border-dashed border-line-strong bg-panel p-5 md:p-7">
+    <p class="leading-relaxed text-muted">{{ d.none_yet }}</p>
+    <div class="flex flex-col gap-2.5 sm:flex-row">
+        <a href="/{{ lang }}/ds2000/source" class="btn-line min-h-12 text-sm">{{ d.see_source }} <span aria-hidden="true">→</span></a>
+        <a href="https://github.com/{{ repo }}" class="btn-line min-h-12 text-sm" target="_blank" rel="noopener">github.com/{{ repo }}</a>
+    </div>
+</div>
+{% endmacro none_yet %}
