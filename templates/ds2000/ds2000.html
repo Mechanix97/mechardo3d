@@ -228,9 +228,4 @@
 <script src="/static/js/gallery.js" defer></script>
 {% endblock %}
 
-{% block footer_extra %}
-<nav aria-label="DS2000" class="flex gap-6 uppercase tracking-[0.06em]">
-    <a href="/{{ lang }}/ds2000/terms-of-service" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.terms_of_service }}</a>
-    <a href="/{{ lang }}/ds2000/privacy-policy" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.privacy_policy }}</a>
-</nav>
-{% endblock %}
+{% block footer_extra %}{{ guide::legal_links(lang=lang, t=t) }}{% endblock %}

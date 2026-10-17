@@ -30,7 +30,10 @@
             {% else %}
             {{ guide::none_yet(d=d, lang=lang, repo=app_repo) }}
             {% endif %}
-            <a href="https://github.com/{{ app_repo }}/releases" class="link-arrow font-mono text-xs text-muted" target="_blank" rel="noopener">{{ d.all_versions }} →</a>
+            <div class="flex flex-wrap gap-x-6 gap-y-2">
+                <a href="https://github.com/{{ app_repo }}/releases" class="link-arrow font-mono text-xs text-muted" target="_blank" rel="noopener">{{ d.all_versions }} →</a>
+                <a href="/{{ lang }}/ds2000/code-signing" class="link-arrow font-mono text-xs text-muted">{{ t.page_titles.code_signing }} →</a>
+            </div>
         </div>
     </div>
 </section>

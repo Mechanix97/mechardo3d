@@ -1,0 +1,300 @@
+{
+  "ds2000_legal": {
+    "updated_label": "Updated",
+    "updated": "17 Oct 2026",
+    "terms": {
+      "label": "Terms",
+      "heading": "Terms of service",
+      "intro": "The DS2000 is an open-source USB button box for Discord: the device, its firmware and a Windows desktop app. These terms explain what you can do with it and what Mechardo Labs is and is not responsible for.",
+      "sections": [
+        {
+          "title": "What the DS2000 is",
+          "body": [
+            "The DS2000 has three keys (mute, deafen, disconnect) and RGB status lights. The desktop app talks to the device over USB and to the Discord desktop app on the same computer through Discord's local RPC, so the keys control your voice state and the lights follow it."
+          ],
+          "items": [
+            "<strong>Desktop app</strong>: <a href=\"https://github.com/Mechanix97/DS2000\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000</a>",
+            "<strong>Firmware</strong>: <a href=\"https://github.com/Mechanix97/DS2000-Firmware\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000-Firmware</a>",
+            "<strong>Board and enclosure</strong>: <a href=\"https://github.com/Mechanix97/DS2000-PCB\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000-PCB</a> and <a href=\"https://github.com/Mechanix97/DS2000-Enclosure\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000-Enclosure</a>"
+          ],
+          "after": []
+        },
+        {
+          "title": "Open-source license",
+          "body": [
+            "The app, the firmware and the hardware designs are published under the <a href=\"https://www.gnu.org/licenses/agpl-3.0.html\" target=\"_blank\" rel=\"noopener\">GNU Affero General Public License v3.0</a>. You may use, study, modify and redistribute them under that license; the license file in each repository is the binding text.",
+            "Nothing in these terms takes away a right the license gives you. Where the two disagree, the license wins."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Name and logo",
+          "body": [
+            "The license covers the code and the designs, not the DS2000 name or the Mechardo Labs logos. You can publish a modified version under a name of its own; how the name and logos may be used is in the <a href=\"/en/ds2000/trademark\">trademark policy</a>."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Discord",
+          "body": [
+            "The DS2000 is an independent project. It is not made, endorsed or sponsored by Discord Inc.",
+            "To use it you register your own application in the Discord developer portal and enter its client ID and client secret in the app. That application is yours: you are responsible for keeping its secret private and for following Discord's <a href=\"https://discord.com/terms\" target=\"_blank\" rel=\"noopener\">Terms of Service</a> and <a href=\"https://support-dev.discord.com/hc/articles/8562894815383\" target=\"_blank\" rel=\"noopener\">Developer Terms</a>. Discord may change or restrict its local RPC at any time, and that can stop the DS2000 from controlling it."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Updates",
+          "body": [
+            "The app can update itself and the device's firmware from the About tab. It only installs app installers and firmware images signed with the project's keys, and checks every download before using it.",
+            "Do not unplug the device while its firmware is being written. Firmware you build or flash yourself is at your own risk."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "No warranty",
+          "body": [
+            "The software and the designs are provided \"as is\", without warranty of any kind, as sections 15 and 16 of the license state. To the extent the law allows, Mechardo Labs is not liable for damage or loss that comes from using them.",
+            "If you bought a DS2000 device, nothing here limits the rights you have as a consumer under the law that applies to you."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Changes to these terms",
+          "body": [
+            "These terms may change. The current version is always on this page, with the date it was last updated at the top. A version of the software you already have stays under the license it was published with."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Contact and governing law",
+          "body": [
+            "Questions about these terms go through the <a href=\"/en/contact\">contact form</a>; bugs go to <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">GitHub issues</a>.",
+            "These terms are governed by the laws of the Argentine Republic."
+          ],
+          "items": [],
+          "after": []
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Privacy",
+      "heading": "Privacy policy",
+      "intro": "The DS2000 has no accounts, no telemetry and no servers of its own. Mechardo Labs receives nothing from the app, the firmware or the device. This page lists what stays on your computer and the only services the app connects to.",
+      "sections": [
+        {
+          "title": "What the app keeps on your computer",
+          "body": [
+            "Everything the app stores stays on your computer:"
+          ],
+          "items": [
+            "<code>%APPDATA%\\Mechardo\\config.json</code>: your Discord application's client ID, the last serial port used, the light settings, the language and the startup options.",
+            "Windows Credential Manager, under the name <code>DS2000</code>: your Discord application's client secret and the access and refresh tokens Discord issues to it. They are never written to the configuration file or the logs."
+          ],
+          "after": [
+            "The app does not log to a file, collect usage statistics or report crashes."
+          ]
+        },
+        {
+          "title": "What the device keeps",
+          "body": [
+            "The device has no network connection. It talks only to the app, over USB: which key was pressed, the voice state to show and the light settings. It stores no personal data."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Who the app connects to",
+          "body": [
+            "The app opens these connections, and no others:"
+          ],
+          "items": [
+            "<strong>The Discord app on your computer</strong>, through Discord's local RPC. This connection does not leave your computer. The app reads your mute and deafen state and sends the mute, deafen and disconnect commands.",
+            "<strong>discord.com</strong>, when you authorize the app and when its access token is renewed. It sends your application's client ID and secret and the authorization code or refresh token, to get a token for your own application. Discord's <a href=\"https://discord.com/privacy\" target=\"_blank\" rel=\"noopener\">privacy policy</a> applies.",
+            "<strong>github.com</strong>, when you press <em>Check for updates</em> in the About tab, to read the latest version and download the installer if you choose to install it.",
+            "<strong>api.github.com</strong> and <strong>github.com</strong>, to look for device firmware: when you press the firmware check in the About tab, and on its own when you connect a device whose firmware is too old to work with the app. It downloads an image only when you choose to install it."
+          ],
+          "after": [
+            "GitHub sees your IP address and the app's version in those requests, as it does for any download; <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\" target=\"_blank\" rel=\"noopener\">GitHub's privacy statement</a> applies. The links in the app (this site, the setup guide, Discord and social networks) open in your browser and are covered by those sites' own policies."
+          ]
+        },
+        {
+          "title": "Removing your data",
+          "body": [
+            "<strong>Unlink</strong> in the app's Discord tab deletes the client secret and the tokens from Credential Manager. Uninstalling the app from Windows Settings removes the program; to remove its settings too, delete the <code>%APPDATA%\\Mechardo</code> folder. You can also revoke the app's access from your Discord application in the developer portal."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "This website",
+          "body": [
+            "This page describes the DS2000. The website it is published on keeps a cookie with your language choice. It counts visits with Plausible, which uses no cookies and stores no personal data. Messages you send through the contact form, with the address you enter, are stored so they can be answered, and the form is protected with Google reCAPTCHA. Installers and firmware are downloaded from GitHub."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Changes and contact",
+          "body": [
+            "If the app ever needs a new connection, this page will list it before a release ships with it, and the date at the top will change. Questions go through the <a href=\"/en/contact\">contact form</a>. This policy is governed by the laws of the Argentine Republic."
+          ],
+          "items": [],
+          "after": []
+        }
+      ]
+    },
+    "signing": {
+      "label": "Code signing policy",
+      "heading": "Code signing policy",
+      "intro": "How the DS2000 Windows installer is signed, who can sign it and how to check a signature.",
+      "sections": [
+        {
+          "title": "Who signs",
+          "body": [
+            "<strong>Free code signing provided by <a href=\"https://signpath.io\" target=\"_blank\" rel=\"noopener\">SignPath.io</a>, certificate by <a href=\"https://signpath.org\" target=\"_blank\" rel=\"noopener\">SignPath Foundation</a>.</strong>",
+            "Releases up to and including v0.2.0 are not signed. Signing applies from the first release after the project's application to SignPath Foundation is approved."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "What is signed",
+          "body": [
+            "Only files built from the public <a href=\"https://github.com/Mechanix97/DS2000\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000</a> repository:"
+          ],
+          "items": [
+            "The Windows installer, <code>DS2000_&lt;version&gt;_x64_en-US.msi</code>, attached to each <a href=\"https://github.com/Mechanix97/DS2000/releases\" target=\"_blank\" rel=\"noopener\">release</a>.",
+            "The app's executable, <code>DS2000.exe</code>, inside it."
+          ],
+          "after": [
+            "Third-party libraries are compiled into the app from source; no third-party binary is signed under this certificate. Device firmware is not signed with it either: firmware images are signed with the project's own minisign key (<code>minisign.pub</code> in <a href=\"https://github.com/Mechanix97/DS2000-Firmware\" target=\"_blank\" rel=\"noopener\">DS2000-Firmware</a>), and the app refuses images that do not match it."
+          ]
+        },
+        {
+          "title": "How a release is signed",
+          "body": [],
+          "items": [
+            "A version tag on the repository starts the release workflow on a GitHub-hosted runner. Nothing built on a developer's computer is signed.",
+            "The workflow builds the installer from the tagged source and submits it to SignPath.",
+            "An approver checks the request and approves it by hand. No release is signed automatically.",
+            "The signed installer is attached to a draft release, which is published only after it has been checked."
+          ],
+          "after": []
+        },
+        {
+          "title": "Team roles",
+          "body": [
+            "Every member uses multi-factor authentication on GitHub and on SignPath."
+          ],
+          "items": [
+            "<strong>Committers and reviewers</strong>: <a href=\"https://github.com/Mechanix97\" target=\"_blank\" rel=\"noopener\">Mechanix97</a>. The main branch is protected: changes reach it only through pull requests whose checks pass.",
+            "<strong>Approvers</strong>: <a href=\"https://github.com/Mechanix97\" target=\"_blank\" rel=\"noopener\">Mechanix97</a>."
+          ],
+          "after": []
+        },
+        {
+          "title": "Privacy",
+          "body": [
+            "The app only connects to the services listed in the <a href=\"/en/ds2000/privacy-policy\">privacy policy</a>, and none of them belongs to Mechardo Labs. It collects no telemetry."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Checking a signature",
+          "body": [
+            "Right-click the downloaded <code>.msi</code>, choose <em>Properties</em> and open <em>Digital Signatures</em>; the signer must be SignPath Foundation. In PowerShell:"
+          ],
+          "items": [],
+          "after": [
+            "<code>Get-AuthenticodeSignature .\\DS2000_*.msi | Format-List</code>",
+            "If you find a signed file that was not built from this repository, or a signed release that misbehaves, report it through <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">GitHub issues</a> or the <a href=\"/en/contact\">contact form</a>."
+          ]
+        }
+      ]
+    },
+    "trademark": {
+      "label": "Trademark",
+      "heading": "Trademark policy",
+      "intro": "The DS2000's code, firmware and hardware designs are free software under the AGPL-3.0. Its name and logos are not: this page says how you may use them. Forks are welcome; they just need a name of their own.",
+      "sections": [
+        {
+          "title": "Why",
+          "body": [
+            "Someone who downloads, installs or buys something called DS2000 should be getting the real thing, or know clearly that they are not. That is all this policy protects."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "The marks",
+          "body": [],
+          "items": [
+            "The name <strong>DS2000</strong>, used for the device, its app and its firmware.",
+            "The <strong>DS2000 logo</strong>.",
+            "The name <strong>Mechardo Labs</strong> and its logos, including the <code>mechardolabs</code> wordmark and the <code>m</code> mark."
+          ],
+          "after": [
+            "They belong to Mechardo Labs. The logo files in the repositories are covered by this policy, not by the AGPL."
+          ]
+        },
+        {
+          "title": "Additional term under the AGPL",
+          "body": [
+            "Under section 7(e) of the GNU Affero General Public License v3.0, the license of the DS2000 repositories does not grant rights under trademark law to use the marks above; their use is governed by this policy. The license text itself is unchanged, and every other right it gives you stands. Each repository carries this policy as <code>TRADEMARKS.md</code>."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "What you may do without asking",
+          "body": [],
+          "items": [
+            "<strong>Talk about the project.</strong> Name DS2000 in articles, videos, reviews, tutorials, talks and course material, and use the logo next to it, as long as it is clear who made what.",
+            "<strong>Redistribute official releases unchanged</strong>, under their name.",
+            "<strong>Say what your work is for.</strong> \"Compatible with DS2000\", \"for DS2000\", \"based on DS2000\" and \"a fork of DS2000\" are fine when they are true.",
+            "<strong>Build and sell devices from the unmodified designs</strong> running the official firmware, and describe them as \"built from the open-source DS2000 design\". Say who built them, and do not present them as made, sold or supported by Mechardo Labs.",
+            "<strong>Fork the repositories to contribute.</strong> A fork made to send changes back can keep the name while it is used for that.",
+            "<strong>Use the logo to link to the project</strong>, unchanged."
+          ],
+          "after": []
+        },
+        {
+          "title": "What needs written permission",
+          "body": [],
+          "items": [
+            "Calling a <strong>modified</strong> version of the app, the firmware or the hardware \"DS2000\", or a name that can be confused with it (for example \"DS2000 Pro\" or \"DS-2000\"). Modified includes different code, different firmware and a changed board or enclosure.",
+            "Using the logos on, or as the icon of, a modified version or another product, or altering the logos.",
+            "Saying or implying that Mechardo Labs made, endorses, certifies or supports something it did not.",
+            "Publishing installers, firmware or devices under the name that were not built from the official sources, or signing them so they look like official releases.",
+            "Using the marks in a domain name, an app store listing, a company or product name, or a social media account that could pass for the official one."
+          ],
+          "after": []
+        },
+        {
+          "title": "Renaming a fork",
+          "body": [
+            "A fork published under another name changes the name and the logos, and also anything that would make it pass for, or update itself from, the official project: the app's identifier, updater endpoint and signing keys, the firmware's USB name and signing key, and the logos on the board's silkscreen. Each repository's <code>TRADEMARKS.md</code> lists exactly what to change in it."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Asking",
+          "body": [
+            "To ask for permission, or to report a use that looks wrong, write through the <a href=\"/en/contact\">contact form</a> or open an issue on <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">GitHub</a>. This policy may be updated; the date at the top says when it last was.",
+            "This policy is not legal advice. Where it disagrees with the law that applies to you, the law wins."
+          ],
+          "items": [],
+          "after": []
+        }
+      ]
+    }
+  }
+}

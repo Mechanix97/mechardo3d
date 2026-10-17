@@ -149,7 +149,7 @@ no download button
 - Use v4 utility names (`shrink-0`, `bg-black/75`), not the v3 spellings
   (`flex-shrink-0`, `bg-opacity-75`) - those silently generate nothing
 - Dark only ("datasheet" design): `<html>` always carries `.dark`, there is no theme toggle. The
-  `dark:` variants left inside blog post bodies and the DS2000 legal pages still resolve to dark colours
+  `dark:` variants left inside blog post bodies still resolve to dark colours
 - Colours and fonts are `@theme` tokens in `static/tailwind.css`: `ink`, `panel`, `card`, `line`,
   `line-strong`, `fg`, `fg-2`, `muted`, `dim`, `lime`; `font-sans` (IBM Plex Sans), `font-mono`
   (IBM Plex Mono), `font-display` (Sora, logo only). Use them (`bg-ink`, `text-muted`), not raw greys

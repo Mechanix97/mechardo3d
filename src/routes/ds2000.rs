@@ -202,7 +202,7 @@ pub async fn privacy_policy(Lang(lang): Lang, Extension(state): Extension<AppSta
         lang,
         "privacy_policy",
         "ds2000/privacy-policy",
-        "ds2000/privacy_policy.html",
+        "privacy",
     )
 }
 
@@ -212,21 +212,34 @@ pub async fn terms_of_service(Lang(lang): Lang, Extension(state): Extension<AppS
         lang,
         "terms_of_service",
         "ds2000/terms-of-service",
-        "ds2000/terms_of_service.html",
+        "terms",
     )
 }
 
-/// The DS2000's terms of service and privacy policy describe the site's own
-/// legal terms, not the device itself, so they get a plain `WebPage` (like
-/// any other content page) rather than `ds2000_schema` - and a breadcrumb one
-/// level deeper, under DS2000.
-fn legal_page(
-    state: &AppState,
-    lang: Language,
-    page: &str,
-    path: &str,
-    template: &str,
-) -> Response {
+/// The code signing policy SignPath Foundation requires of the projects it
+/// signs for; the product and download pages link to it by that name.
+pub async fn code_signing(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
+    legal_page(
+        &state,
+        lang,
+        "code_signing",
+        "ds2000/code-signing",
+        "signing",
+    )
+}
+
+/// How the DS2000 name and logos may be used: an additional term under AGPL-3.0
+/// section 7(e), which each repository's `TRADEMARKS.md` points to.
+pub async fn trademark(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
+    legal_page(&state, lang, "trademark", "ds2000/trademark", "trademark")
+}
+
+/// The DS2000's terms of service, privacy policy, code signing policy and
+/// trademark policy are legal text rather than a product page, so they get a
+/// plain `WebPage` (like any other content page) rather than `ds2000_schema` -
+/// and a breadcrumb one level deeper, under DS2000. They share
+/// `ds2000/legal.html`; `doc` picks the copy under `ds2000_legal`.
+fn legal_page(state: &AppState, lang: Language, page: &str, path: &str, doc: &str) -> Response {
     let meta = page_meta(state, lang, page).path(path);
 
     let schema = json_ld::webpage_schema(
@@ -248,8 +261,9 @@ fn legal_page(
     );
     let meta = meta.schema(json!([schema, breadcrumbs]));
 
-    let context = pages::base_context(state, lang, &meta);
-    pages::render(state, template, &context, lang)
+    let mut context = pages::base_context(state, lang, &meta);
+    context.insert("doc", doc);
+    pages::render(state, "ds2000/legal.html", &context, lang)
 }
 
 fn home_crumb(state: &AppState, lang: Language) -> &str {
