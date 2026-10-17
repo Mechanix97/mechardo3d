@@ -31,7 +31,7 @@
         {
           "title": "Nombre y logo",
           "body": [
-            "La licencia cubre el código y los diseños, no el nombre DS2000 ni los logos de Mechardo Labs. Podés publicar una versión modificada, pero no la presentes como una versión oficial del DS2000 ni la firmes para que lo parezca."
+            "La licencia cubre el código y los diseños, no el nombre DS2000 ni los logos de Mechardo Labs. Podés publicar una versión modificada con un nombre propio; cómo se pueden usar el nombre y los logos está en la <a href=\"/es/ds2000/trademark\">política de marca</a>."
           ],
           "items": [],
           "after": []
@@ -216,6 +216,83 @@
             "<code>Get-AuthenticodeSignature .\\DS2000_*.msi | Format-List</code>",
             "Si encontrás un archivo firmado que no se compiló desde este repositorio, o una versión firmada que se comporta mal, avisá por los <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">issues de GitHub</a> o por el <a href=\"/es/contact\">formulario de contacto</a>."
           ]
+        }
+      ]
+    },
+    "trademark": {
+      "label": "Marca",
+      "heading": "Política de marca",
+      "intro": "El código, el firmware y los diseños de hardware del DS2000 son software libre bajo la AGPL-3.0. El nombre y los logos no: esta página explica cómo podés usarlos. Los forks son bienvenidos; solo necesitan un nombre propio.",
+      "sections": [
+        {
+          "title": "Por qué",
+          "body": [
+            "Quien descarga, instala o compra algo llamado DS2000 tiene que estar recibiendo lo original, o saber con claridad que no. Eso es todo lo que protege esta política."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Las marcas",
+          "body": [],
+          "items": [
+            "El nombre <strong>DS2000</strong>, usado para el dispositivo, su app y su firmware.",
+            "El <strong>logo del DS2000</strong>.",
+            "El nombre <strong>Mechardo Labs</strong> y sus logos, incluidos el logotipo <code>mechardolabs</code> y la marca <code>m</code>."
+          ],
+          "after": [
+            "Pertenecen a Mechardo Labs. Los archivos de logos de los repositorios los cubre esta política, no la AGPL."
+          ]
+        },
+        {
+          "title": "Término adicional de la AGPL",
+          "body": [
+            "Según la sección 7(e) de la GNU Affero General Public License v3.0, la licencia de los repositorios del DS2000 no otorga derechos de marca sobre las marcas de arriba; su uso se rige por esta política. El texto de la licencia no cambia, y todos los demás derechos que te da siguen en pie. Cada repositorio incluye esta política como <code>TRADEMARKS.md</code>."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Qué podés hacer sin pedir permiso",
+          "body": [],
+          "items": [
+            "<strong>Hablar del proyecto.</strong> Nombrar el DS2000 en artículos, videos, reseñas, tutoriales, charlas y material de cursos, y usar el logo al lado, siempre que quede claro quién hizo qué.",
+            "<strong>Redistribuir las versiones oficiales sin cambios</strong>, con su nombre.",
+            "<strong>Decir para qué es tu trabajo.</strong> \"Compatible con DS2000\", \"para DS2000\", \"basado en DS2000\" y \"un fork del DS2000\" están bien cuando son ciertos.",
+            "<strong>Armar y vender dispositivos con los diseños sin modificar</strong> y el firmware oficial, y describirlos como \"construido con el diseño abierto del DS2000\", aclarando quién los armó y sin presentarlos como hechos, vendidos o soportados por Mechardo Labs.",
+            "<strong>Hacer forks de los repositorios para contribuir.</strong> Un fork hecho para mandar cambios de vuelta puede conservar el nombre mientras se use para eso.",
+            "<strong>Usar el logo para enlazar al proyecto</strong>, sin cambios."
+          ],
+          "after": []
+        },
+        {
+          "title": "Qué necesita permiso por escrito",
+          "body": [],
+          "items": [
+            "Llamar \"DS2000\" a una versión <strong>modificada</strong> de la app, del firmware o del hardware, o usar un nombre que se pueda confundir (por ejemplo \"DS2000 Pro\" o \"DS-2000\"). Modificada incluye otro código, otro firmware y una placa o un gabinete cambiados.",
+            "Usar los logos en una versión modificada u otro producto, o como su ícono, o alterar los logos.",
+            "Decir o dar a entender que Mechardo Labs hizo, respalda, certifica o soporta algo que no.",
+            "Publicar con el nombre instaladores, firmware o dispositivos que no se construyeron desde las fuentes oficiales, o firmarlos para que parezcan versiones oficiales.",
+            "Usar las marcas en un dominio, una ficha de tienda de apps, el nombre de una empresa o producto, o una cuenta de redes sociales que pueda pasar por la oficial."
+          ],
+          "after": []
+        },
+        {
+          "title": "Renombrar un fork",
+          "body": [
+            "Un fork publicado con otro nombre cambia el nombre y los logos, y también todo lo que lo haría pasar por el proyecto oficial o actualizarse desde él: el identificador de la app, el endpoint del actualizador y las claves de firma, el nombre USB y la clave de firma del firmware, y los logos de la serigrafía de la placa. El <code>TRADEMARKS.md</code> de cada repositorio detalla qué cambiar en él."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Consultas",
+          "body": [
+            "Para pedir permiso, o avisar de un uso que parece incorrecto, escribí por el <a href=\"/es/contact\">formulario de contacto</a> o abrí un issue en <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">GitHub</a>. Esta política puede actualizarse; la fecha de arriba indica la última vez.",
+            "Esta política no es asesoramiento legal. Si no coincide con la ley que te corresponde, manda la ley."
+          ],
+          "items": [],
+          "after": []
         }
       ]
     }

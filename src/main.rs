@@ -136,6 +136,7 @@ fn router(state: AppState) -> Router {
             "/{lang}/ds2000/code-signing",
             get(routes::ds2000::code_signing),
         )
+        .route("/{lang}/ds2000/trademark", get(routes::ds2000::trademark))
         .route("/{lang}/ds2000/download", get(routes::ds2000::download))
         .route("/{lang}/ds2000/install", get(routes::ds2000::install))
         .route(

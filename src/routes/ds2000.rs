@@ -228,11 +228,17 @@ pub async fn code_signing(Lang(lang): Lang, Extension(state): Extension<AppState
     )
 }
 
-/// The DS2000's terms of service, privacy policy and code signing policy are
-/// legal text rather than a product page, so they get a plain `WebPage` (like
-/// any other content page) rather than `ds2000_schema` - and a breadcrumb one
-/// level deeper, under DS2000. They share `ds2000/legal.html`; `doc` picks the
-/// copy under `ds2000_legal`.
+/// How the DS2000 name and logos may be used: an additional term under AGPL-3.0
+/// section 7(e), which each repository's `TRADEMARKS.md` points to.
+pub async fn trademark(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
+    legal_page(&state, lang, "trademark", "ds2000/trademark", "trademark")
+}
+
+/// The DS2000's terms of service, privacy policy, code signing policy and
+/// trademark policy are legal text rather than a product page, so they get a
+/// plain `WebPage` (like any other content page) rather than `ds2000_schema` -
+/// and a breadcrumb one level deeper, under DS2000. They share
+/// `ds2000/legal.html`; `doc` picks the copy under `ds2000_legal`.
 fn legal_page(state: &AppState, lang: Language, page: &str, path: &str, doc: &str) -> Response {
     let meta = page_meta(state, lang, page).path(path);
 

@@ -39,6 +39,9 @@
     "privacy_policy": {
       "description": "Política de privacidad del DS2000: sin cuentas, sin telemetría, y los únicos servicios a los que se conecta la app."
     },
+    "trademark": {
+      "description": "Cómo se pueden usar el nombre y los logos del DS2000: hablar del proyecto, vender equipos del diseño sin modificar y renombrar tu fork."
+    },
     "code_signing": {
       "description": "Cómo se firma el instalador de Windows del DS2000 a través de SignPath Foundation, quién aprueba cada firma y cómo verificarla."
     },
