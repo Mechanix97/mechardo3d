@@ -41,7 +41,8 @@
       ],
       "verify_title": "Verify the download",
       "verify_body": "Optional. In PowerShell, the result must match the SHA-256 above:",
-      "next_body": "With the installer downloaded, follow the installation guide."
+      "next_body": "With the installer downloaded, follow the installation guide.",
+      "signing": "Free code signing provided by SignPath.io, certificate by SignPath Foundation. Installers are signed from the first release after v0.2.0."
     },
     "install": {
       "heading": "Installation",
