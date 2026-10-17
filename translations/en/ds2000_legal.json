@@ -94,10 +94,11 @@
           ],
           "items": [
             "<code>%APPDATA%\\Mechardo\\config.json</code>: your Discord application's client ID, the last serial port used, the light settings, the language and the startup options.",
-            "Windows Credential Manager, under the name <code>DS2000</code>: your Discord application's client secret and the access and refresh tokens Discord issues to it. They are never written to the configuration file or the logs."
+            "Windows Credential Manager, under the name <code>DS2000</code>: your Discord application's client secret and the access and refresh tokens Discord issues to it. They are never written to the configuration file or the logs.",
+            "<code>%APPDATA%\\Mechardo\\logs</code>: a log of what the app did (device and Discord connections, updates and errors), 5 MB at most; older lines are overwritten. It holds no secrets and is never sent anywhere. <em>Open logs folder</em> in the About tab shows it, so you can attach it to a bug report if you choose to."
           ],
           "after": [
-            "The app does not log to a file, collect usage statistics or report crashes."
+            "The app does not collect usage statistics or report crashes."
           ]
         },
         {

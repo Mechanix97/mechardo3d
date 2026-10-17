@@ -94,10 +94,11 @@
           ],
           "items": [
             "<code>%APPDATA%\\Mechardo\\config.json</code>: el client ID de tu aplicación de Discord, el último puerto serie usado, la configuración de las luces, el idioma y las opciones de inicio.",
-            "El Administrador de credenciales de Windows, con el nombre <code>DS2000</code>: el client secret de tu aplicación de Discord y los tokens de acceso y de renovación que Discord le emite. Nunca se escriben en el archivo de configuración ni en los registros."
+            "El Administrador de credenciales de Windows, con el nombre <code>DS2000</code>: el client secret de tu aplicación de Discord y los tokens de acceso y de renovación que Discord le emite. Nunca se escriben en el archivo de configuración ni en los registros.",
+            "<code>%APPDATA%\\Mechardo\\logs</code>: un registro de lo que hizo la app (conexiones con el dispositivo y con Discord, actualizaciones y errores), de 5 MB como máximo; las líneas más viejas se pisan. No contiene secretos y nunca se envía a ningún lado. <em>Abrir carpeta de logs</em>, en la pestaña Acerca, lo muestra, para que lo adjuntes a un reporte de error si querés."
           ],
           "after": [
-            "La app no escribe registros en archivos, no junta estadísticas de uso y no envía reportes de errores."
+            "La app no junta estadísticas de uso y no envía reportes de errores."
           ]
         },
         {
