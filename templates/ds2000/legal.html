@@ -1,0 +1,32 @@
+{# The DS2000's legal pages: terms of service, privacy policy and code signing
+   policy. The copy lives in `ds2000_legal.<doc>`: numbered sections, each with
+   paragraphs (`body`), an optional list (`items`) and paragraphs after it
+   (`after`). The copy is trusted and may hold inline markup. #}
+{% extends "base.html" %}
+{% import "macros/ds2000.html" as guide %}
+{% block content %}
+{% set page = t.ds2000_legal[doc] %}
+<section class="wrap">
+    <div class="ruler"><span>§ DS2000 — {{ page.label }}</span><span>{{ t.ds2000_legal.updated_label }} {{ t.ds2000_legal.updated }}</span></div>
+    {{ guide::header(heading=page.heading, intro=page.intro) }}
+</section>
+
+<div class="wrap border-t border-line pb-14 md:pb-24">
+    <div class="prose-dark max-w-3xl">
+        {% for section in page.sections %}
+        <div>
+            <h2 id="s{{ loop.index }}"><span class="h-index" aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>{{ section.title }}</h2>
+            {% for paragraph in section.body %}<p>{{ paragraph | safe }}</p>{% endfor %}
+            {% if section.items %}
+            <ul>
+                {% for item in section.items %}<li>{{ item | safe }}</li>{% endfor %}
+            </ul>
+            {% endif %}
+            {% for paragraph in section.after %}<p>{{ paragraph | safe }}</p>{% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block footer_extra %}{{ guide::legal_links(lang=lang, t=t) }}{% endblock footer_extra %}

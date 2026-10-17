@@ -8,7 +8,7 @@ use crate::models::blog_post::BlogPost;
 use crate::state::AppState;
 
 /// Pages that exist in every language, with their crawl hints.
-const STATIC_PAGES: [(&str, &str, &str); 11] = [
+const STATIC_PAGES: [(&str, &str, &str); 12] = [
     ("", "weekly", "1.0"),
     ("me", "monthly", "0.9"),
     ("ds2000", "monthly", "0.9"),
@@ -20,6 +20,7 @@ const STATIC_PAGES: [(&str, &str, &str); 11] = [
     ("contact", "yearly", "0.7"),
     ("ds2000/terms-of-service", "yearly", "0.5"),
     ("ds2000/privacy-policy", "yearly", "0.5"),
+    ("ds2000/code-signing", "yearly", "0.5"),
 ];
 
 /// `GET /sitemap.xml`

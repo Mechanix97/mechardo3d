@@ -1,0 +1,223 @@
+{
+  "ds2000_legal": {
+    "updated_label": "Actualizado",
+    "updated": "17 oct 2026",
+    "terms": {
+      "label": "Términos",
+      "heading": "Términos del servicio",
+      "intro": "El DS2000 es una botonera USB de código abierto para Discord: el dispositivo, su firmware y una app de escritorio para Windows. Estos términos explican qué podés hacer con él y de qué se hace responsable Mechardo Labs y de qué no.",
+      "sections": [
+        {
+          "title": "Qué es el DS2000",
+          "body": [
+            "El DS2000 tiene tres teclas (silenciar, ensordecer, desconectar) y luces RGB de estado. La app de escritorio se comunica con el dispositivo por USB y con la app de Discord de la misma computadora a través del RPC local de Discord, así las teclas controlan tu estado de voz y las luces lo reflejan."
+          ],
+          "items": [
+            "<strong>App de escritorio</strong>: <a href=\"https://github.com/Mechanix97/DS2000\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000</a>",
+            "<strong>Firmware</strong>: <a href=\"https://github.com/Mechanix97/DS2000-Firmware\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000-Firmware</a>",
+            "<strong>Placa y gabinete</strong>: <a href=\"https://github.com/Mechanix97/DS2000-PCB\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000-PCB</a> y <a href=\"https://github.com/Mechanix97/DS2000-Enclosure\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000-Enclosure</a>"
+          ],
+          "after": []
+        },
+        {
+          "title": "Licencia de código abierto",
+          "body": [
+            "La app, el firmware y los diseños de hardware se publican bajo la <a href=\"https://www.gnu.org/licenses/agpl-3.0.html\" target=\"_blank\" rel=\"noopener\">GNU Affero General Public License v3.0</a>. Podés usarlos, estudiarlos, modificarlos y redistribuirlos según esa licencia; el texto que vale es el archivo de licencia de cada repositorio.",
+            "Nada de estos términos te quita un derecho que te da la licencia. Si los dos no coinciden, manda la licencia."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Nombre y logo",
+          "body": [
+            "La licencia cubre el código y los diseños, no el nombre DS2000 ni los logos de Mechardo Labs. Podés publicar una versión modificada, pero no la presentes como una versión oficial del DS2000 ni la firmes para que lo parezca."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Discord",
+          "body": [
+            "El DS2000 es un proyecto independiente. Discord Inc. no lo hace, no lo respalda y no lo patrocina.",
+            "Para usarlo registrás tu propia aplicación en el portal de desarrolladores de Discord y cargás su client ID y su client secret en la app. Esa aplicación es tuya: sos responsable de mantener su secreto en privado y de cumplir los <a href=\"https://discord.com/terms\" target=\"_blank\" rel=\"noopener\">Términos del servicio</a> y los <a href=\"https://support-dev.discord.com/hc/articles/8562894815383\" target=\"_blank\" rel=\"noopener\">Términos para desarrolladores</a> de Discord. Discord puede cambiar o restringir su RPC local en cualquier momento, y eso puede impedir que el DS2000 lo controle."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Actualizaciones",
+          "body": [
+            "La app puede actualizarse a sí misma y actualizar el firmware del dispositivo desde la pestaña Acerca. Solo instala instaladores e imágenes de firmware firmados con las claves del proyecto, y verifica cada descarga antes de usarla.",
+            "No desconectes el dispositivo mientras se escribe su firmware. El firmware que compiles o grabes por tu cuenta corre por tu cuenta y riesgo."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Sin garantía",
+          "body": [
+            "El software y los diseños se ofrecen \"tal cual\", sin garantía de ningún tipo, como dicen las secciones 15 y 16 de la licencia. En la medida en que la ley lo permita, Mechardo Labs no responde por daños o pérdidas que vengan de usarlos.",
+            "Si compraste un dispositivo DS2000, nada de esto limita los derechos que tenés como consumidor según la ley que te corresponda."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Cambios en estos términos",
+          "body": [
+            "Estos términos pueden cambiar. La versión vigente está siempre en esta página, con la fecha de su última actualización arriba. Una versión del software que ya tenés sigue bajo la licencia con la que se publicó."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Contacto y ley aplicable",
+          "body": [
+            "Las consultas sobre estos términos van por el <a href=\"/es/contact\">formulario de contacto</a>; los errores, a los <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">issues de GitHub</a>.",
+            "Estos términos se rigen por las leyes de la República Argentina."
+          ],
+          "items": [],
+          "after": []
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Privacidad",
+      "heading": "Política de privacidad",
+      "intro": "El DS2000 no tiene cuentas, ni telemetría, ni servidores propios. Mechardo Labs no recibe nada de la app, del firmware ni del dispositivo. Esta página detalla qué queda en tu computadora y los únicos servicios a los que se conecta la app.",
+      "sections": [
+        {
+          "title": "Qué guarda la app en tu computadora",
+          "body": [
+            "Todo lo que guarda la app queda en tu computadora:"
+          ],
+          "items": [
+            "<code>%APPDATA%\\Mechardo\\config.json</code>: el client ID de tu aplicación de Discord, el último puerto serie usado, la configuración de las luces, el idioma y las opciones de inicio.",
+            "El Administrador de credenciales de Windows, con el nombre <code>DS2000</code>: el client secret de tu aplicación de Discord y los tokens de acceso y de renovación que Discord le emite. Nunca se escriben en el archivo de configuración ni en los registros."
+          ],
+          "after": [
+            "La app no escribe registros en archivos, no junta estadísticas de uso y no envía reportes de errores."
+          ]
+        },
+        {
+          "title": "Qué guarda el dispositivo",
+          "body": [
+            "El dispositivo no tiene conexión de red. Solo habla con la app, por USB: qué tecla se apretó, el estado de voz a mostrar y la configuración de las luces. No guarda datos personales."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "A quién se conecta la app",
+          "body": [
+            "La app abre estas conexiones, y ninguna otra:"
+          ],
+          "items": [
+            "<strong>La app de Discord de tu computadora</strong>, a través del RPC local de Discord. Esta conexión no sale de tu computadora. La app lee si estás silenciado o ensordecido y envía las órdenes de silenciar, ensordecer y desconectar.",
+            "<strong>discord.com</strong>, cuando autorizás la app y cuando se renueva su token de acceso. Envía el client ID y el secreto de tu aplicación y el código de autorización o el token de renovación, para obtener un token para tu propia aplicación. Rige la <a href=\"https://discord.com/privacy\" target=\"_blank\" rel=\"noopener\">política de privacidad</a> de Discord.",
+            "<strong>github.com</strong>, cuando apretás <em>Buscar actualizaciones</em> en la pestaña Acerca, para leer la última versión y descargar el instalador si elegís instalarla.",
+            "<strong>api.github.com</strong> y <strong>github.com</strong>, para buscar firmware del dispositivo: cuando apretás la búsqueda de firmware en la pestaña Acerca, y sola cuando conectás un dispositivo con un firmware demasiado viejo para funcionar con la app. Descarga una imagen solo si elegís instalarla."
+          ],
+          "after": [
+            "En esas solicitudes GitHub ve tu dirección IP y la versión de la app, como en cualquier descarga; rige la <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\" target=\"_blank\" rel=\"noopener\">declaración de privacidad de GitHub</a>. Los enlaces de la app (este sitio, la guía de configuración, Discord y redes sociales) se abren en tu navegador y los cubren las políticas de esos sitios."
+          ]
+        },
+        {
+          "title": "Borrar tus datos",
+          "body": [
+            "<strong>Desvincular</strong>, en la pestaña Discord de la app, borra el client secret y los tokens del Administrador de credenciales. Desinstalar la app desde Configuración de Windows quita el programa; para borrar también su configuración, eliminá la carpeta <code>%APPDATA%\\Mechardo</code>. También podés revocar el acceso desde tu aplicación en el portal de desarrolladores de Discord."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Este sitio",
+          "body": [
+            "Esta página describe el DS2000. El sitio donde está publicada guarda una cookie con el idioma que elegiste. Cuenta visitas con Plausible, que no usa cookies ni guarda datos personales. Los mensajes que mandás por el formulario de contacto, con la dirección que ingresás, se guardan para poder responderlos, y el formulario está protegido con Google reCAPTCHA. Los instaladores y el firmware se descargan desde GitHub."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Cambios y contacto",
+          "body": [
+            "Si la app alguna vez necesita una conexión nueva, esta página la va a detallar antes de que salga una versión que la use, y va a cambiar la fecha de arriba. Las consultas van por el <a href=\"/es/contact\">formulario de contacto</a>. Esta política se rige por las leyes de la República Argentina."
+          ],
+          "items": [],
+          "after": []
+        }
+      ]
+    },
+    "signing": {
+      "label": "Code signing policy",
+      "heading": "Política de firma de código",
+      "intro": "Cómo se firma el instalador de Windows del DS2000, quién puede firmarlo y cómo verificar una firma.",
+      "sections": [
+        {
+          "title": "Quién firma",
+          "body": [
+            "<strong>Firma de código gratuita provista por <a href=\"https://signpath.io\" target=\"_blank\" rel=\"noopener\">SignPath.io</a>, certificado de <a href=\"https://signpath.org\" target=\"_blank\" rel=\"noopener\">SignPath Foundation</a>.</strong>",
+            "Las versiones hasta la v0.2.0 inclusive no están firmadas. La firma se aplica desde la primera versión posterior a que SignPath Foundation apruebe la solicitud del proyecto."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Qué se firma",
+          "body": [
+            "Solo archivos compilados desde el repositorio público <a href=\"https://github.com/Mechanix97/DS2000\" target=\"_blank\" rel=\"noopener\">Mechanix97/DS2000</a>:"
+          ],
+          "items": [
+            "El instalador de Windows, <code>DS2000_&lt;versión&gt;_x64_en-US.msi</code>, adjunto a cada <a href=\"https://github.com/Mechanix97/DS2000/releases\" target=\"_blank\" rel=\"noopener\">versión</a>.",
+            "El ejecutable de la app, <code>DS2000.exe</code>, que va adentro."
+          ],
+          "after": [
+            "Las bibliotecas de terceros se compilan dentro de la app desde su código fuente; con este certificado no se firma ningún binario de terceros. Tampoco el firmware del dispositivo: las imágenes de firmware se firman con la clave minisign propia del proyecto (<code>minisign.pub</code> en <a href=\"https://github.com/Mechanix97/DS2000-Firmware\" target=\"_blank\" rel=\"noopener\">DS2000-Firmware</a>), y la app rechaza las que no coinciden."
+          ]
+        },
+        {
+          "title": "Cómo se firma una versión",
+          "body": [],
+          "items": [
+            "Una etiqueta de versión en el repositorio inicia el flujo de publicación en un runner de GitHub. No se firma nada compilado en la computadora de un desarrollador.",
+            "El flujo compila el instalador desde el código etiquetado y lo envía a SignPath.",
+            "Un aprobador revisa la solicitud y la aprueba a mano. Ninguna versión se firma de forma automática.",
+            "El instalador firmado se adjunta a un borrador de versión, que se publica recién después de revisarlo."
+          ],
+          "after": []
+        },
+        {
+          "title": "Roles del equipo",
+          "body": [
+            "Todos los miembros usan autenticación de varios factores en GitHub y en SignPath."
+          ],
+          "items": [
+            "<strong>Autores y revisores</strong>: <a href=\"https://github.com/Mechanix97\" target=\"_blank\" rel=\"noopener\">Mechanix97</a>. La rama principal está protegida: los cambios llegan solo por pull requests cuyos controles pasan.",
+            "<strong>Aprobadores</strong>: <a href=\"https://github.com/Mechanix97\" target=\"_blank\" rel=\"noopener\">Mechanix97</a>."
+          ],
+          "after": []
+        },
+        {
+          "title": "Privacidad",
+          "body": [
+            "La app solo se conecta a los servicios detallados en la <a href=\"/es/ds2000/privacy-policy\">política de privacidad</a>, y ninguno es de Mechardo Labs. No junta telemetría."
+          ],
+          "items": [],
+          "after": []
+        },
+        {
+          "title": "Verificar una firma",
+          "body": [
+            "Hacé clic derecho en el <code>.msi</code> descargado, elegí <em>Propiedades</em> y abrí <em>Firmas digitales</em>; el firmante tiene que ser SignPath Foundation. En PowerShell:"
+          ],
+          "items": [],
+          "after": [
+            "<code>Get-AuthenticodeSignature .\\DS2000_*.msi | Format-List</code>",
+            "Si encontrás un archivo firmado que no se compiló desde este repositorio, o una versión firmada que se comporta mal, avisá por los <a href=\"https://github.com/Mechanix97/DS2000/issues\" target=\"_blank\" rel=\"noopener\">issues de GitHub</a> o por el <a href=\"/es/contact\">formulario de contacto</a>."
+          ]
+        }
+      ]
+    }
+  }
+}

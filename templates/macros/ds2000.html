@@ -91,3 +91,13 @@
     </div>
 </div>
 {% endmacro none_yet %}
+
+{# Footer links to the legal pages, on every DS2000 page. SignPath requires
+   "Code signing policy" to be reachable from the product and download pages. #}
+{% macro legal_links(lang, t) %}
+<nav aria-label="DS2000" class="flex flex-wrap gap-x-6 uppercase tracking-[0.06em]">
+    <a href="/{{ lang }}/ds2000/terms-of-service" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.terms_of_service }}</a>
+    <a href="/{{ lang }}/ds2000/privacy-policy" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.privacy_policy }}</a>
+    <a href="/{{ lang }}/ds2000/code-signing" class="muted-link flex min-h-11 items-center md:min-h-0">{{ t.page_titles.code_signing }}</a>
+</nav>
+{% endmacro legal_links %}
