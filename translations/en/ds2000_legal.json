@@ -159,7 +159,7 @@
           "title": "Who signs",
           "body": [
             "<strong>Free code signing provided by <a href=\"https://signpath.io\" target=\"_blank\" rel=\"noopener\">SignPath.io</a>, certificate by <a href=\"https://signpath.org\" target=\"_blank\" rel=\"noopener\">SignPath Foundation</a>.</strong>",
-            "Releases up to and including v0.2.0 are not signed. Signing applies from the first release after the project's application to SignPath Foundation is approved."
+            "Releases are not signed yet. Signing starts with the first release after the project's application to SignPath Foundation is approved."
           ],
           "items": [],
           "after": []

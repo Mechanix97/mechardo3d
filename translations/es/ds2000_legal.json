@@ -159,7 +159,7 @@
           "title": "Quién firma",
           "body": [
             "<strong>Firma de código gratuita provista por <a href=\"https://signpath.io\" target=\"_blank\" rel=\"noopener\">SignPath.io</a>, certificado de <a href=\"https://signpath.org\" target=\"_blank\" rel=\"noopener\">SignPath Foundation</a>.</strong>",
-            "Las versiones hasta la v0.2.0 inclusive no están firmadas. La firma se aplica desde la primera versión posterior a que SignPath Foundation apruebe la solicitud del proyecto."
+            "Las versiones todavía no están firmadas. La firma empieza con la primera versión después de que SignPath Foundation apruebe la solicitud del proyecto."
           ],
           "items": [],
           "after": []

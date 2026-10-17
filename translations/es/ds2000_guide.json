@@ -42,7 +42,7 @@
       "verify_title": "Verificar la descarga",
       "verify_body": "Opcional. En PowerShell, el resultado tiene que coincidir con el SHA-256 de arriba:",
       "next_body": "Con el instalador descargado, seguí la guía de instalación.",
-      "signing": "Firma de código gratuita provista por SignPath.io, certificado de SignPath Foundation. Los instaladores se firman desde la primera versión posterior a la v0.2.0."
+      "signing": "Firma de código gratuita provista por SignPath.io, certificado de SignPath Foundation. Los instaladores todavía no están firmados; la firma empieza con la primera versión después de que SignPath Foundation apruebe el proyecto."
     },
     "install": {
       "heading": "Instalación",
