@@ -1,6 +1,6 @@
 use axum::Extension;
 use axum::extract::Path;
-use axum::response::Response;
+use axum::response::{IntoResponse, Redirect, Response};
 use rand::rng;
 use rand::seq::IteratorRandom;
 use serde_json::json;
@@ -17,6 +17,9 @@ use crate::state::AppState;
 const RELATED_POSTS: usize = 2;
 /// Search engines cut descriptions around this length.
 const META_DESCRIPTION_CHARS: usize = 155;
+/// Posts taken down in #45. Search engines had already indexed them, so they
+/// move permanently to the blog index instead of answering 404.
+const REMOVED_POSTS: [&str; 3] = ["1", "2", "3"];
 
 pub async fn blog(Lang(lang): Lang, Extension(state): Extension<AppState>) -> Response {
     let posts = state.blog.posts();
@@ -46,6 +49,9 @@ pub async fn blog_post(
 ) -> Response {
     let posts = state.blog.posts();
     let Some(post) = posts.iter().find(|post| post.id == id) else {
+        if REMOVED_POSTS.contains(&id.as_str()) {
+            return Redirect::permanent(&format!("/{}/blog", lang.as_str())).into_response();
+        }
         return pages::not_found(&state, lang);
     };
 

@@ -12,20 +12,22 @@
     <meta name="description" content="{{ meta_description | default(value='Mechardo Labs - Software Engineer | Rust, Blockchain, Electronics') }}">
     <meta name="author" content="Lucas Rack">
     <meta name="robots" content="{{ robots | default(value='index, follow') }}">
-    <link rel="canonical" href="{{ canonical_url | default(value=base_url) }}">
+    {# The page URLs are built server-side from BASE_URL and known paths, so they
+       skip autoescaping: Tera would otherwise write every "/" as "&#x2F;". #}
+    <link rel="canonical" href="{{ canonical_url | default(value=base_url) | safe }}">
     {% for alternate in alternates %}
-    <link rel="alternate" hreflang="{{ alternate.lang }}" href="{{ alternate.url }}">
+    <link rel="alternate" hreflang="{{ alternate.lang }}" href="{{ alternate.url | safe }}">
     {% endfor %}
     {% if x_default_url %}
-    <link rel="alternate" hreflang="x-default" href="{{ x_default_url }}">
+    <link rel="alternate" hreflang="x-default" href="{{ x_default_url | safe }}">
     {% endif %}
 
     <!-- Open Graph Tags -->
     <meta property="og:title" content="{{ og_title }}">
     <meta property="og:description" content="{{ og_description | default(value=meta_description) }}">
     <meta property="og:type" content="{{ og_type | default(value='website') }}">
-    <meta property="og:url" content="{{ canonical_url | default(value=base_url) }}">
-    <meta property="og:image" content="{{ og_image }}">
+    <meta property="og:url" content="{{ canonical_url | default(value=base_url) | safe }}">
+    <meta property="og:image" content="{{ og_image | safe }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Mechardo Labs">
@@ -35,7 +37,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ og_title }}">
     <meta name="twitter:description" content="{{ og_description | default(value=meta_description) }}">
-    <meta name="twitter:image" content="{{ og_image }}">
+    <meta name="twitter:image" content="{{ og_image | safe }}">
 
     <!-- JSON-LD Structured Data -->
     {% if json_ld_schema %}
