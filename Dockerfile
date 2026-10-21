@@ -21,7 +21,7 @@ COPY templates ./templates
 COPY content ./content
 # The JS toggles class names too (DS2000 gallery), so Tailwind has to scan it.
 COPY static/js ./static/js
-RUN npx tailwindcss -i static/tailwind.css -o static/style.css
+RUN npx tailwindcss -i static/tailwind.css -o static/style.css --minify
 
 FROM chef AS planner
 COPY src ./src

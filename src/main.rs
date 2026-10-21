@@ -350,6 +350,10 @@ mod router_tests {
         assert_eq!(headers.get("x-content-type-options").unwrap(), "nosniff");
         assert_eq!(headers.get("x-frame-options").unwrap(), "SAMEORIGIN");
         assert_eq!(
+            headers.get("cross-origin-opener-policy").unwrap(),
+            "same-origin"
+        );
+        assert_eq!(
             headers.get("referrer-policy").unwrap(),
             "strict-origin-when-cross-origin"
         );
