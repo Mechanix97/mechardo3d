@@ -320,6 +320,31 @@ mod router_tests {
     }
 
     #[tokio::test]
+    async fn removed_posts_move_to_the_blog_index() {
+        for (path, expected) in [("/es/blog/3", "/es/blog"), ("/en/blog/1", "/en/blog")] {
+            let response = get(path).await;
+            assert_eq!(response.status(), StatusCode::PERMANENT_REDIRECT);
+            assert_eq!(location(&response), expected);
+        }
+        assert_eq!(get("/es/blog/99").await.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn seo_urls_are_not_html_escaped() {
+        let response = get("/es/blog/4").await;
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .expect("body should be readable");
+        let html = String::from_utf8(body.to_vec()).expect("page should be UTF-8");
+        let base_url = AppConfig::for_tests().base_url;
+        assert!(html.contains(&format!(
+            "<link rel=\"canonical\" href=\"{base_url}/es/blog/4\">"
+        )));
+        let head = html.split("</head>").next().unwrap_or_default();
+        assert!(!head.contains("&#x2F;"));
+    }
+
+    #[tokio::test]
     async fn trailing_slash_is_stripped_permanently() {
         for (path, expected) in [("/es/", "/es"), ("/es/blog/", "/es/blog")] {
             let response = get(path).await;
