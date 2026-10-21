@@ -169,8 +169,10 @@ no download button
 - `loading="lazy"` below the fold, `fetchpriority="high"` on the one image that is the LCP
 - `alt=""` for a thumbnail whose link text already names the destination
 - DS2000 guide screenshots go in `static/images/DS2000/guide/<figure>.webp`, named after the
-  `figure` key of the step in `translations/{lang}/ds2000_guide.json`. The route reads their size
-  from the WebP header; a missing file renders as a "screenshot pending" placeholder
+  `figure` key of the step in `translations/{lang}/ds2000_guide.json`. A screenshot of a translated
+  UI (the Discord portal, the DS2000 app) comes as `<figure>.es.webp` and `<figure>.en.webp`; a
+  language's file wins over the plain one on its page. The route reads their size from the WebP
+  header; a missing file renders as a "screenshot pending" placeholder
 
 ### Deployment
 - Docker multi-stage build (see `Dockerfile`), with a `HEALTHCHECK` against `/health`
