@@ -65,7 +65,9 @@ pub const TABS: [(&str, &str); 5] = [
 ];
 
 /// Screenshots for the guides live here, one WebP per figure, named after the
-/// figure (`discord-03-oauth2.webp`). A figure whose file is missing renders
+/// figure (`discord-03-oauth2.webp`). A screenshot of a translated UI can come
+/// in one file per language (`discord-03-oauth2.es.webp`), which wins over the
+/// plain one on that language's page. A figure whose file is missing renders
 /// as a labelled placeholder, so a guide can ship before its screenshots.
 const GUIDE_IMAGES: &str = "static/images/DS2000/guide";
 
@@ -143,7 +145,7 @@ fn guide_context(state: &AppState, lang: Language, tab: &str) -> tera::Context {
     let mut context = pages::base_context(state, lang, &meta);
     context.insert("tabs", &tabs());
     context.insert("active_tab", tab);
-    context.insert("figures", &guide_figures(Path::new(GUIDE_IMAGES)));
+    context.insert("figures", &guide_figures(Path::new(GUIDE_IMAGES), lang));
     context
 }
 
@@ -151,27 +153,46 @@ fn tabs() -> Vec<Tab> {
     TABS.iter().map(|&(key, path)| Tab { key, path }).collect()
 }
 
-/// Every screenshot in `dir`, keyed by file stem, with its pixel size so the
-/// page reserves its space before it loads. Read per request: there are a
-/// handful, and a new screenshot shows up without a restart.
-fn guide_figures(dir: &Path) -> HashMap<String, Figure> {
+/// The screenshots in `dir` for a page in `lang`, keyed by figure name, with
+/// their pixel size so the page reserves their space before they load. A
+/// figure's `<name>.<lang>.webp` wins over `<name>.webp`, and another
+/// language's file is skipped. Read per request: there are a handful, and a
+/// new screenshot shows up without a restart.
+fn guide_figures(dir: &Path, lang: Language) -> HashMap<String, Figure> {
+    let mut figures = HashMap::new();
     let Ok(entries) = std::fs::read_dir(dir) else {
-        return HashMap::new();
+        return figures;
     };
-    entries
-        .flatten()
-        .filter_map(|entry| {
-            let path = entry.path();
-            if path.extension()? != "webp" {
-                return None;
+    let mut localized = Vec::new();
+    for path in entries.flatten().map(|entry| entry.path()) {
+        let Some((stem, figure)) = read_figure(&path) else {
+            continue;
+        };
+        match stem.rsplit_once('.') {
+            Some((name, suffix)) if suffix == lang.as_str() => {
+                localized.push((name.to_string(), figure))
             }
-            let stem = path.file_stem()?.to_str()?.to_string();
-            let bytes = std::fs::read(&path).ok()?;
-            let (width, height) = webp_size(&bytes)?;
-            let src = format!("/{}/{}.webp", GUIDE_IMAGES, stem);
-            Some((stem, Figure { src, width, height }))
-        })
-        .collect()
+            Some(_) => {}
+            None => {
+                figures.insert(stem, figure);
+            }
+        }
+    }
+    figures.extend(localized);
+    figures
+}
+
+/// A WebP screenshot's file stem and figure, or `None` for any other file or
+/// a WebP whose header cannot be read.
+fn read_figure(path: &Path) -> Option<(String, Figure)> {
+    if path.extension()? != "webp" {
+        return None;
+    }
+    let stem = path.file_stem()?.to_str()?.to_string();
+    let bytes = std::fs::read(path).ok()?;
+    let (width, height) = webp_size(&bytes)?;
+    let src = format!("/{GUIDE_IMAGES}/{stem}.webp");
+    Some((stem, Figure { src, width, height }))
 }
 
 /// Width and height of a WebP image, read from its header (lossy, lossless
@@ -294,12 +315,42 @@ mod tests {
         // A screenshot the header parser cannot read would silently render as
         // a placeholder instead of the image.
         if let Ok(entries) = std::fs::read_dir(GUIDE_IMAGES) {
-            let webps = entries
-                .flatten()
-                .filter(|e| e.path().extension().is_some_and(|ext| ext == "webp"))
-                .count();
-            assert_eq!(guide_figures(Path::new(GUIDE_IMAGES)).len(), webps);
+            for path in entries.flatten().map(|entry| entry.path()) {
+                if path.extension().is_some_and(|ext| ext == "webp") {
+                    assert!(
+                        read_figure(&path).is_some(),
+                        "{} is not readable",
+                        path.display()
+                    );
+                }
+            }
         }
+    }
+
+    #[test]
+    fn a_localized_screenshot_wins_over_the_plain_one() {
+        let dir = std::env::temp_dir().join(format!("ds2000-guide-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let webp = std::fs::read("static/images/DS2000/renders/original-frente.webp").unwrap();
+        for name in [
+            "portal.webp",
+            "app.webp",
+            "app.es.webp",
+            "authorize.en.webp",
+        ] {
+            std::fs::write(dir.join(name), &webp).unwrap();
+        }
+
+        let es = guide_figures(&dir, Language::Spanish);
+        let en = guide_figures(&dir, Language::English);
+        std::fs::remove_dir_all(&dir).unwrap();
+
+        assert_eq!(es["portal"].src, en["portal"].src);
+        assert!(es["app"].src.ends_with("/app.es.webp"));
+        assert!(en["app"].src.ends_with("/app.webp"));
+        assert!(en["authorize"].src.ends_with("/authorize.en.webp"));
+        assert!(!es.contains_key("authorize"));
+        assert_eq!(es.len(), 2);
     }
 
     #[test]
