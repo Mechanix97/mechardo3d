@@ -17,6 +17,20 @@ services:
       - BASE_URL=https://mechardo3d.xyz
       - COOKIE_SECURE=true
       - TRUST_PROXY_HEADERS=true
+      # Scripts come from the site, Plausible and reCAPTCHA only; reCAPTCHA
+      # also needs its frames. Inline styles stay allowed (base.html, badge).
+      - >-
+        CONTENT_SECURITY_POLICY=default-src 'self';
+        script-src 'self' https://analytics.mechardo3d.xyz https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:;
+        font-src 'self';
+        connect-src 'self' https://analytics.mechardo3d.xyz;
+        frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        frame-ancestors 'self'
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/health"]
       interval: 30s

@@ -10,9 +10,10 @@ use crate::state::AppState;
 
 /// Baseline security headers for every response.
 ///
-/// `Content-Security-Policy` is opt-in through configuration because the pages
-/// load reCAPTCHA and Plausible and use inline bootstrap scripts; a policy has
-/// to be written for that mix before it is turned on.
+/// `Content-Security-Policy` comes from configuration because it names the
+/// hosts of a deployment (Plausible, reCAPTCHA); production sets it in
+/// `docker-compose.yml`. The pages have no inline scripts, so the policy does
+/// not need `'unsafe-inline'` for scripts.
 pub async fn security_headers(
     Extension(state): Extension<AppState>,
     request: Request,
@@ -32,6 +33,10 @@ pub async fn security_headers(
     headers.insert(
         header::REFERRER_POLICY,
         HeaderValue::from_static("strict-origin-when-cross-origin"),
+    );
+    headers.insert(
+        HeaderName::from_static("cross-origin-opener-policy"),
+        HeaderValue::from_static("same-origin"),
     );
     headers.insert(
         HeaderName::from_static("permissions-policy"),
