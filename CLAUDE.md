@@ -161,7 +161,8 @@ no download button
 - Blog post bodies render inside `.prose-dark`, whose rules are unlayered on purpose: they override the
   old utility classes inside the post fragments. New posts only need plain `h2`/`h3`/`p`/`ul`/`pre`
 - `static/js/post.js` builds the post's table of contents from its `h2`s, the reading progress bar and
-  the code block copy buttons; `menu.js` drives the phone menu; `gallery.js` the DS2000 gallery
+  the code block copy buttons; `menu.js` drives the phone menu; `gallery.js` the DS2000 gallery;
+  `figure-viewer.js` opens the DS2000 guide screenshots full size in a `<dialog>`
 
 ### Images
 - Ship WebP; keep the source file out of `static/`

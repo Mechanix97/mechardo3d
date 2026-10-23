@@ -9,6 +9,10 @@
       "source": "Código"
     },
     "figure_pending": "Captura pendiente",
+    "viewer": {
+      "label": "Captura ampliada",
+      "close": "Cerrar la captura"
+    },
     "step": "Paso",
     "next": "Siguiente",
     "download": {

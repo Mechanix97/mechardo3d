@@ -11,6 +11,23 @@
     {{ guide::header(heading=page.heading, intro=page.intro) }}
 </section>
 {% block guide %}{% endblock guide %}
+
+{# The guide screenshots open here, full size, over the page. #}
+<dialog id="figure-viewer" class="m-auto max-h-[96vh] max-w-[96vw] bg-transparent p-0 backdrop:bg-ink/90"
+    aria-label="{{ t.ds2000_guide.viewer.label }}">
+    <div class="flex flex-col border border-line-strong bg-panel">
+        <div class="flex justify-end border-b border-line-strong">
+            <button type="button" data-viewer-close aria-label="{{ t.ds2000_guide.viewer.close }}"
+                class="flex h-11 w-11 items-center justify-center text-fg hover:text-lime">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+            </button>
+        </div>
+        <img data-viewer-image src="" alt="" class="block h-auto max-h-[calc(96vh-3rem)] w-auto max-w-full object-contain">
+    </div>
+</dialog>
+<script src="/static/js/figure-viewer.js" defer></script>
 {% endblock content %}
 
 {% block footer_extra %}{{ guide::legal_links(lang=lang, t=t) }}{% endblock footer_extra %}
