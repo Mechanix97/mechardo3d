@@ -28,13 +28,17 @@
 </div>
 {% endmacro header %}
 
-{# A screenshot, or a placeholder naming the file it waits for. #}
+{# A screenshot, or a placeholder naming the file it waits for. A click on
+   the screenshot opens it full size in the page's viewer (figure-viewer.js);
+   without JS the link opens the image itself, in the same tab. #}
 {% macro figure(figures, name, alt, t) %}
 {% if name in figures %}
 {% set fig = figures[name] %}
 <figure class="flex flex-col gap-2">
-    <a href="{{ fig.src }}" target="_blank" rel="noopener" class="block border border-line-strong bg-panel p-1.5 transition-colors hover:border-lime">
-        <img src="{{ fig.src }}" alt="{{ alt }}" width="{{ fig.width }}" height="{{ fig.height }}" loading="lazy" decoding="async" class="h-auto w-full">
+    {# Never wider than the screenshot itself: a small capture (a dialog)
+       stretched to the column turns blurry. #}
+    <a href="{{ fig.src }}" data-figure-viewer class="block max-w-full self-start border border-line-strong bg-panel p-1.5 transition-colors hover:border-lime">
+        <img src="{{ fig.src }}" alt="{{ alt }}" width="{{ fig.width }}" height="{{ fig.height }}" loading="lazy" decoding="async" class="h-auto w-auto max-w-full">
     </a>
     <figcaption class="caption">{{ t.labels.figure }} — {{ alt }}</figcaption>
 </figure>

@@ -9,6 +9,10 @@
       "source": "Source"
     },
     "figure_pending": "Screenshot pending",
+    "viewer": {
+      "label": "Enlarged screenshot",
+      "close": "Close the screenshot"
+    },
     "step": "Step",
     "next": "Next",
     "download": {
