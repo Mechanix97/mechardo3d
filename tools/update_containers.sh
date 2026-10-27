@@ -38,6 +38,14 @@ cd "$REPO_DIR" || {
     exit 1
 }
 
+# On any other branch, the pull below would merge master into it and the
+# branch's HEAD would get deployed: prod only ever runs master.
+CURRENT_BRANCH=$(git symbolic-ref --short -q HEAD)
+[ "$CURRENT_BRANCH" = "master" ] || {
+    log "ERROR: checkout is on '${CURRENT_BRANCH:-detached HEAD}', not master; skipping deploy"
+    exit 1
+}
+
 log "Doing git pull"
 git pull --ff-only origin master >> "$LOG_FILE" 2>&1
 [ $? -eq 0 ] || {
